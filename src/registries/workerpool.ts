@@ -20,7 +20,7 @@ import {
 
 export function handlePolicyUpdate(event: PolicyUpdateEvent): void
 {
-	let workerpool = Workerpool.load(event.address.toHex())
+	let workerpool = new Workerpool(event.address.toHex())
 	workerpool.workerStakeRatio     = event.params.newWorkerStakeRatioPolicy
 	workerpool.schedulerRewardRatio = event.params.newSchedulerRewardRatioPolicy
 	workerpool.save()
