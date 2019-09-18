@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: iExecPoCoV3
-repository: https://github.com/iExecBlockchainComputing/PoCo-dev
+repository: https://github.com/iExecBlockchainComputing/PoCo-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
