@@ -65,18 +65,8 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
 	c.save()
 
 	let t = Task.load(event.params.taskid.toHex())
-
-	log.warning("handleTaskContribute: {}", [t.id])
-	log.warning("deal: {}, deal {}, index {}, contributionDeadline {}, finalDeadline {}", [
-		t.deal.toString(),
-		t.index.toString(),
-		t.contributionDeadline.toString(),
-		t.finalDeadline.toString(),
-	])
-	log.warning("contribution: {}", [c.id])
 	let cs = t.contributions
 	cs.push(c.id)
-	log.warning("pushed", [])
 	t.contributions = cs
 	t.save()
 
@@ -131,16 +121,12 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 	let contract = IexecHubContract.bind(event.address)
 
 	let t = Task.load(event.params.taskid.toHex())
-
-	log.warning("handleTaskReopen: {}", [t.id])
 	let cs = t.contributions;
 	for (let i = 0;  i < cs.length; ++i)
 	{
 		let c = Contribution.load(cs[i]);
-		log.warning("contribution: {}", [c.id])
 		if (c.hash.toHex() == t.consensus.toHex())
 		{
-			log.warning("rejected", [])
 			c.status = 'REJECTED'
 			c.save()
 		}
@@ -153,6 +139,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 	// 	contribution.status = 'REJECTED'
 	// 	contribution.save()
 	// })
+
 	t.status         = 'ACTIVE'
 	t.consensus      = null
 	t.revealDeadline = null
@@ -168,7 +155,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 	let contract = IexecHubContract.bind(event.address)
 
-	let t = Task.load(event.params.taskid.toHex())
+	let t = new Task(event.params.taskid.toHex())
 	t.status  = 'COMPLETED'
 	t.results = event.params.results
 	t.save()
@@ -184,7 +171,7 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
 	let contract = IexecHubContract.bind(event.address)
 
-	let t = Task.load(event.params.taskid.toHex())
+	let t = new Task(event.params.taskid.toHex())
 	t.status = 'FAILLED'
 	t.save()
 
