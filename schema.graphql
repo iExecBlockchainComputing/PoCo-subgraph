@@ -9,6 +9,7 @@ type Transaction @entity {
 	blockNumber:                  BigInt!
 	accountEvents:                [AccountEvent!]! @derivedFrom(field: "transaction")
 	taskEvents:                   [TaskEvent!]! @derivedFrom(field: "transaction")
+	workerpoolEvents:             [WorkerpoolEvent!]! @derivedFrom(field: "transaction")
 }
 
 # ============================== Address objects ==============================
