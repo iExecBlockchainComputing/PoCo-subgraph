@@ -1,3 +1,14 @@
-# Example Subgraph
+# iExec PoCo v3 - subgraph
 
-An example to help you get started with The Graph. For more information see the docs on https://thegraph.com/docs/.
+
+## Usefull commands
+* authentification (only once per machine)
+	`npm run auth <accesstoken>`
+
+* compilation
+	`npm run codegen && npm run build`
+
+* deployment
+	`npm run deploy`
+
+
