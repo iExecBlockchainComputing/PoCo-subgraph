@@ -6,7 +6,7 @@ import {
 	Seize      as SeizeEvent,
 	Lock       as LockEvent,
 	Unlock     as UnlockEvent,
-} from '../../generated/IexecClerk/Escrow'
+} from '../../generated/IexecClerk/IexecClerk'
 
 import {
 	Deposit,
