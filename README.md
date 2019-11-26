@@ -4,7 +4,7 @@
 ## Usefull commands
 * authentification (only once per machine)
 
-	`npm run auth <accesstoken>`
+	`graph auth https://api.thegraph.com/deploy/ <accesstoken>`
 
 * compilation
 

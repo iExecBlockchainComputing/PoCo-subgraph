@@ -2,7 +2,6 @@
   "name": "iExecGraph",
   "version": "0.1.0",
   "scripts": {
-    "auth": "graph auth https://api.thegraph.com/deploy/ --",
     "codegen": "graph codegen",
     "build": "graph build",
     "make": "npm run codegen && npm run build",
