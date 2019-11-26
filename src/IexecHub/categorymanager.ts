@@ -4,7 +4,7 @@ import {
 
 import {
 	CreateCategory as CreateCategoryEvent,
-} from '../../generated/IexecHub/CategoryManager'
+} from '../../generated/IexecHub/IexecHub'
 
 import {
 	Category

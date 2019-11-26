@@ -9,8 +9,9 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x1383c16c927c4A853684d1a9c676986f25E22111'
+      address: '0x1383c16c927c4A853684d1a9c676986f25E22111' # hub.iexec.eth
       abi: IexecHub
+      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -28,9 +29,7 @@ dataSources:
         - TaskClaimed
       abis:
         - name: IexecHub
-          file: node_modules/iexec-poco/build/contracts-min/IexecHub.json
-        - name: CategoryManager
-          file: node_modules/iexec-poco/build/contracts-min/CategoryManager.json
+          file: node_modules/iexec-poco-interface/build/contracts/IexecHub.json
       eventHandlers:
         - event: CreateCategory(uint256,string,string,uint256)
           handler: handleCreateCategory
@@ -48,14 +47,15 @@ dataSources:
           handler: handleTaskFinalize
         - event: TaskClaimed(indexed bytes32)
           handler: handleTaskClaimed
-      file: ./src/IexecHub
+      file: ./src/IexecHub/index.ts
 # ================================ IexecClerk =================================
   - name: IexecClerk
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3780d894DB2cB84135bBa025ba9ef0Ac518DC311'
+      address: '0x3780d894DB2cB84135bBa025ba9ef0Ac518DC311' # clerk.iexec.eth
       abi: IexecClerk
+      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -76,11 +76,7 @@ dataSources:
         - Unlock
       abis:
         - name: IexecClerk
-          file: node_modules/iexec-poco/build/contracts-min/IexecClerk.json
-        - name: Relay
-          file: node_modules/iexec-poco/build/contracts-min/Relay.json
-        - name: Escrow
-          file: node_modules/iexec-poco/build/contracts-min/Escrow.json
+          file: node_modules/iexec-poco-interface/build/contracts/IexecClerk.json
       eventHandlers:
         - event: OrdersMatched(bytes32,bytes32,bytes32,bytes32,bytes32,uint256)
           handler: handleOrdersMatched
@@ -116,14 +112,15 @@ dataSources:
           handler: handleLock
         - event: Unlock(address,uint256)
           handler: handleUnlock
-      file: ./src/IexecClerk
+      file: ./src/IexecClerk/index.ts
 # =============================== App registry ================================
   - name: AppRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3322D449A43E01178672A5FBEA9E7aF3b8c7bB29'
+      address: '0x3322D449A43E01178672A5FBEA9E7aF3b8c7bB29' # apps.iexec.eth
       abi: AppRegistry
+      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -132,20 +129,21 @@ dataSources:
         - App
       abis:
         - name: App
-          file: node_modules/iexec-poco/build/contracts-min/App.json
+          file: node_modules/iexec-poco-interface/build/contracts/App.json
         - name: AppRegistry
-          file: node_modules/iexec-poco/build/contracts-min/AppRegistry.json
+          file: node_modules/iexec-poco-interface/build/contracts/AppRegistry.json
       eventHandlers:
         - event: CreateApp(indexed address,address)
           handler: handleCreateApp
-      file: ./src/registries
+      file: ./src/registries/index.ts
 # ============================= Dataset registry ==============================
   - name: DatasetRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xC28F63b8379087F02E09da1BC62148874E730Ffd'
+      address: '0xC28F63b8379087F02E09da1BC62148874E730Ffd' # datasets.iexec.eth
       abi: DatasetRegistry
+      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -154,20 +152,21 @@ dataSources:
         - Dataset
       abis:
         - name: Dataset
-          file: node_modules/iexec-poco/build/contracts-min/Dataset.json
+          file: node_modules/iexec-poco-interface/build/contracts/Dataset.json
         - name: DatasetRegistry
-          file: node_modules/iexec-poco/build/contracts-min/DatasetRegistry.json
+          file: node_modules/iexec-poco-interface/build/contracts/DatasetRegistry.json
       eventHandlers:
         - event: CreateDataset(indexed address,address)
           handler: handleCreateDataset
-      file: ./src/registries
+      file: ./src/registries/index.ts
 # ============================ Workerpool registry ============================
   - name: WorkerpoolRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xc398052563469e6Ea7C442aBf124aADE7ec2CC92'
+      address: '0xc398052563469e6Ea7C442aBf124aADE7ec2CC92' # workerpool.iexec.eth
       abi: WorkerpoolRegistry
+      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -176,13 +175,13 @@ dataSources:
         - Workerpool
       abis:
         - name: Workerpool
-          file: node_modules/iexec-poco/build/contracts-min/Workerpool.json
+          file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
         - name: WorkerpoolRegistry
-          file: node_modules/iexec-poco/build/contracts-min/WorkerpoolRegistry.json
+          file: node_modules/iexec-poco-interface/build/contracts/WorkerpoolRegistry.json
       eventHandlers:
         - event: CreateWorkerpool(indexed address,indexed address,string)
           handler: handleCreateWorkerpool
-      file: ./src/registries
+      file: ./src/registries/index.ts
 templates:
   - name: Workerpool
     kind: ethereum/contract
@@ -198,8 +197,8 @@ templates:
         - PolicyChange
       abis:
         - name: Workerpool
-          file: node_modules/iexec-poco/build/contracts-min/Workerpool.json
+          file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
       eventHandlers:
         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
           handler: handlePolicyUpdate
-      file: ./src/registries
+      file: ./src/registries/index.ts
