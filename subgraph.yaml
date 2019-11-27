@@ -7,7 +7,7 @@ dataSources:
 # ================================= IexecHub ==================================
   - name: IexecHub
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       address: '0x99d8717a84d1e97422d04d9a2a82694038470753' # hub.iexec.eth
       abi: IexecHub
@@ -50,7 +50,7 @@ dataSources:
 # ================================ IexecClerk =================================
   - name: IexecClerk
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       address: '0x56d07b25a3a21a6abefdf777aaa8f886ecfdb43a' # clerk.iexec.eth
       abi: IexecClerk
@@ -114,7 +114,7 @@ dataSources:
 # =============================== App registry ================================
   - name: AppRegistry
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       address: '0x221b9a91320a601b30992610425a960b1949b22d' # apps.iexec.eth
       abi: AppRegistry
@@ -136,7 +136,7 @@ dataSources:
 # ============================= Dataset registry ==============================
   - name: DatasetRegistry
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       address: '0x8dc0a7d917aef68e340dbf68ef4ecb36d1ca941b' # datasets.iexec.eth
       abi: DatasetRegistry
@@ -158,7 +158,7 @@ dataSources:
 # ============================ Workerpool registry ============================
   - name: WorkerpoolRegistry
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       address: '0xdad30aab14f569830bfd26edf72df876dc30d20c' # workerpool.iexec.eth
       abi: WorkerpoolRegistry
@@ -180,7 +180,7 @@ dataSources:
 templates:
   - name: Workerpool
     kind: ethereum/contract
-    network: mainnet
+    network: goerli
     source:
       abi: Workerpool
     mapping:
