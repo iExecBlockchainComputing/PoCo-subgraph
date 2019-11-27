@@ -9,9 +9,8 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x1383c16c927c4A853684d1a9c676986f25E22111' # hub.iexec.eth
+      address: '0x99d8717a84d1e97422d04d9a2a82694038470753' # hub.iexec.eth
       abi: IexecHub
-      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -53,9 +52,8 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3780d894DB2cB84135bBa025ba9ef0Ac518DC311' # clerk.iexec.eth
+      address: '0x56d07b25a3a21a6abefdf777aaa8f886ecfdb43a' # clerk.iexec.eth
       abi: IexecClerk
-      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -118,9 +116,8 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3322D449A43E01178672A5FBEA9E7aF3b8c7bB29' # apps.iexec.eth
+      address: '0x221b9a91320a601b30992610425a960b1949b22d' # apps.iexec.eth
       abi: AppRegistry
-      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -141,9 +138,8 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xC28F63b8379087F02E09da1BC62148874E730Ffd' # datasets.iexec.eth
+      address: '0x8dc0a7d917aef68e340dbf68ef4ecb36d1ca941b' # datasets.iexec.eth
       abi: DatasetRegistry
-      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -164,9 +160,8 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xc398052563469e6Ea7C442aBf124aADE7ec2CC92' # workerpool.iexec.eth
+      address: '0xdad30aab14f569830bfd26edf72df876dc30d20c' # workerpool.iexec.eth
       abi: WorkerpoolRegistry
-      startBlock: 7688000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
