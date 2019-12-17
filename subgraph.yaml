@@ -26,6 +26,8 @@ dataSources:
         - TaskReopen
         - TaskFinalize
         - TaskClaimed
+        - AccurateContribution
+        - FaultyContribution
       abis:
         - name: IexecHub
           file: node_modules/iexec-poco-interface/build/contracts/IexecHub.json
@@ -46,6 +48,10 @@ dataSources:
           handler: handleTaskFinalize
         - event: TaskClaimed(indexed bytes32)
           handler: handleTaskClaimed
+        - event: AccurateContribution(indexed address,indexed bytes32)
+          handler: handleAccurateContribution
+        - event: FaultyContribution(indexed address,indexed bytes32)
+          handler: handleFaultyContribution
       file: ./src/IexecHub/index.ts
 # ================================ IexecClerk =================================
   - name: IexecClerk

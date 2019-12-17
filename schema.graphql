@@ -17,6 +17,7 @@ type Account @entity {
 	id:                           ID!
 	balance:                      BigDecimal!
 	frozen:                       BigDecimal!
+	score:                        BigInt!
 	events:                       [AccountEvent!]! @derivedFrom(field: "account")
 	contributions:                [Contribution!]! @derivedFrom(field: "worker")
 	apps:                         [App!]! @derivedFrom(field: "owner")
@@ -349,4 +350,20 @@ type Unlock implements AccountEvent @entity {
 	timestamp:                    BigInt!
 	account:                      Account!
 	value:                        BigDecimal!
+}
+
+type AccurateContribution @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	contribution:                 Contribution!
+	score:                        BigInt!
+}
+
+type FaultyContribution @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	contribution:                 Contribution!
+	score:                        BigInt!
 }

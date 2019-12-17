@@ -27,6 +27,7 @@ export function fetchAccount(id: string): Account
 		account = new Account(id)
 		account.balance = BigDecimal.fromString('0')
 		account.frozen  = BigDecimal.fromString('0')
+		account.score   = BigInt.fromI32(0)
 	}
 	return account as Account
 }
