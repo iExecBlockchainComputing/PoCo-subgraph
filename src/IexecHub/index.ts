@@ -6,6 +6,8 @@ export {
 	handleTaskReopen,
 	handleTaskFinalize,
 	handleTaskClaimed,
+	handleAccurateContribution,
+	handleFaultyContribution,
 } from './hub'
 
 export {

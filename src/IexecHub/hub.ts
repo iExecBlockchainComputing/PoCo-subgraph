@@ -1,14 +1,16 @@
 import { log } from '@graphprotocol/graph-ts'
 
 import {
-	IexecHub       as IexecHubContract,
-	TaskInitialize as TaskInitializeEvent,
-	TaskContribute as TaskContributeEvent,
-	TaskConsensus  as TaskConsensusEvent,
-	TaskReveal     as TaskRevealEvent,
-	TaskReopen     as TaskReopenEvent,
-	TaskFinalize   as TaskFinalizeEvent,
-	TaskClaimed    as TaskClaimedEvent,
+	IexecHub             as IexecHubContract,
+	TaskInitialize       as TaskInitializeEvent,
+	TaskContribute       as TaskContributeEvent,
+	TaskConsensus        as TaskConsensusEvent,
+	TaskReveal           as TaskRevealEvent,
+	TaskReopen           as TaskReopenEvent,
+	TaskFinalize         as TaskFinalizeEvent,
+	TaskClaimed          as TaskClaimedEvent,
+	AccurateContribution as AccurateContributionEvent,
+	FaultyContribution   as FaultyContributionEvent,
 } from '../../generated/IexecHub/IexecHub'
 
 import {
@@ -21,11 +23,14 @@ import {
 	TaskReopen,
 	TaskFinalize,
 	TaskClaimed,
+	AccurateContribution,
+	FaultyContribution,
 } from '../../generated/schema'
 
 import {
 	createEventID,
 	createContributionID,
+	fetchAccount,
 	logTransaction,
 } from '../utils'
 
@@ -182,5 +187,32 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
 	e.save()
 }
 
-// event AccurateContribution(address indexed worker, bytes32 indexed taskid);
-// event FaultyContribution  (address indexed worker, bytes32 indexed taskid);
+export function handleAccurateContribution(event: AccurateContributionEvent): void {
+	let contract = IexecHubContract.bind(event.address)
+
+	let e = new AccurateContribution(createEventID(event));
+	e.transaction  = logTransaction(event).id
+	e.timestamp    = event.block.timestamp
+	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
+	e.score        = contract.viewScore(event.params.worker)
+	e.save()
+
+	let w = fetchAccount(event.params.worker.toHex())
+	w.score = e.score
+	w.save()
+}
+
+export function handleFaultyContribution(event: FaultyContributionEvent): void {
+	let contract = IexecHubContract.bind(event.address)
+
+	let e = new FaultyContribution(createEventID(event));
+	e.transaction  = logTransaction(event).id
+	e.timestamp    = event.block.timestamp
+	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
+	e.score        = contract.viewScore(event.params.worker)
+	e.save()
+
+	let w = fetchAccount(event.params.worker.toHex())
+	w.score = e.score
+	w.save()
+}
