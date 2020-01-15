@@ -13,8 +13,8 @@
     "deploy-iexec":    "graph deploy iexecblockchaincomputing/iexec-poco-v3-goerli --node http://thegraph.iex.ec:8020      --ipfs http://thegraph.iex.ec:5001"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.16.2",
-    "@graphprotocol/graph-ts": "^0.16.0"
+    "@graphprotocol/graph-cli": "^0.17.1",
+    "@graphprotocol/graph-ts": "^0.17.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

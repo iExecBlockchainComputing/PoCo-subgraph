@@ -23,9 +23,12 @@ type Account @entity {
 	apps:                         [App!]! @derivedFrom(field: "owner")
 	datasets:                     [Dataset!]! @derivedFrom(field: "owner")
 	workerpools:                  [Workerpool!]! @derivedFrom(field: "owner")
-	isRequester:                  [Deal!]! @derivedFrom(field: "requester")
-	isBeneficiary:                [Deal!]! @derivedFrom(field: "beneficiary")
-	isCallback:                   [Deal!]! @derivedFrom(field: "callback")
+	dealRequester:                [Deal!]! @derivedFrom(field: "requester")
+	dealBeneficiary:              [Deal!]! @derivedFrom(field: "beneficiary")
+	dealCallback:                 [Deal!]! @derivedFrom(field: "callback")
+	orderRequester:               [RequestOrder!]! @derivedFrom(field: "requester")
+	orderBeneficiary:             [RequestOrder!]! @derivedFrom(field: "beneficiary")
+	orderCallback:                [RequestOrder!]! @derivedFrom(field: "callback")
 	transactions:                 [Transaction!]! @derivedFrom(field: "from")
 }
 
@@ -39,6 +42,7 @@ type App @entity {
 	checksum:                     Bytes!
 	mrenclave:                    Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "app")
+	orders:                       [AppOrder!]! @derivedFrom(field: "app")
 }
 
 type Dataset @entity {
@@ -48,6 +52,7 @@ type Dataset @entity {
 	multiaddr:                    Bytes!
 	checksum:                     Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "dataset")
+	orders:                       [DatasetOrder!]! @derivedFrom(field: "dataset")
 }
 
 type Workerpool @entity {
@@ -57,6 +62,7 @@ type Workerpool @entity {
 	workerStakeRatio:             BigInt!
 	schedulerRewardRatio:         BigInt!
 	usages:                       [Deal!]! @derivedFrom(field: "workerpool")
+	orders:                       [WorkerpoolOrder!]! @derivedFrom(field: "workerpool")
 	events:                       [WorkerpoolEvent!]! @derivedFrom(field: "workerpool")
 }
 
@@ -65,61 +71,65 @@ type AppOrder @entity {
 	id:                           ID!
 	app:                          App!
 	appprice:                     BigDecimal!
-	volume:                       BigInt!
-	tag:                          Bytes!
-	datasetrestrict:              Bytes!
-	workerpoolrestrict:           Bytes!
-	requesterrestrict:            Bytes!
-	salt:                         Bytes!
+	volume:                       BigInt
+	tag:                          Bytes
+	datasetrestrict:              Bytes
+	workerpoolrestrict:           Bytes
+	requesterrestrict:            Bytes
+	salt:                         Bytes
 	sign:                         Bytes # could be null
+	deals:                        [Deal!]! @derivedFrom(field: "apporder")
 }
 
 type DatasetOrder @entity {
 	id:                           ID!
-	dataset:                      App!
+	dataset:                      Dataset!
 	datasetprice:                 BigDecimal!
-	volume:                       BigInt!
-	tag:                          Bytes!
-	apprestrict:                  Bytes!
-	workerpoolrestrict:           Bytes!
-	requesterrestrict:            Bytes!
-	salt:                         Bytes!
+	volume:                       BigInt
+	tag:                          Bytes
+	apprestrict:                  Bytes
+	workerpoolrestrict:           Bytes
+	requesterrestrict:            Bytes
+	salt:                         Bytes
 	sign:                         Bytes # could be null
+	deals:                        [Deal!]! @derivedFrom(field: "datasetorder")
 }
 
 type WorkerpoolOrder @entity {
 	id:                           ID!
 	workerpool:                   Workerpool!
 	workerpoolprice:              BigDecimal!
-	volume:                       BigInt!
-	tag:                          Bytes!
-	category:                     Category!
-	trust:                        BigInt!
-	apprestrict:                  Bytes!
-	datasetrestrict:              Bytes!
-	requesterrestrict:            Bytes!
-	salt:                         Bytes!
+	volume:                       BigInt
+	tag:                          Bytes
+	category:                     Category
+	trust:                        BigInt
+	apprestrict:                  Bytes
+	datasetrestrict:              Bytes
+	requesterrestrict:            Bytes
+	salt:                         Bytes
 	sign:                         Bytes # could be null
+	deals:                        [Deal!]! @derivedFrom(field: "workerpoolorder")
 }
 
-type RequesterOrder @entity {
+type RequestOrder @entity {
 	id:                           ID!
-	app:                          App!
-	appmaxprice:                  BigDecimal!
+	app:                          App
+	appmaxprice:                  BigDecimal
 	dataset:                      Dataset # could be null or whitelist
-	datasetmaxprice:              BigDecimal!
+	datasetmaxprice:              BigDecimal
 	workerpool:                   Workerpool # could be null or whitelist
-	workerpoolmaxprice:           BigDecimal!
+	workerpoolmaxprice:           BigDecimal
 	requester:                    Account!
-	volume:                       BigInt!
-	tag:                          Bytes!
-	category:                     Category!
-	trust:                        BigInt!
-	beneficiary:                  Account!
-	callback:                     Account!
-	params:                       String!
-	salt:                         Bytes!
+	volume:                       BigInt
+	tag:                          Bytes
+	category:                     Category
+	trust:                        BigInt
+	beneficiary:                  Account
+	callback:                     Account
+	params:                       String
+	salt:                         Bytes
 	sign:                         Bytes # could be null
+	deals:                        [Deal!]! @derivedFrom(field: "requestorder")
 }
 
 # =================================== PoCo ====================================
@@ -155,6 +165,10 @@ type Deal @entity {
 	botSize:                      BigInt!
 	workerStake:                  BigInt!
 	schedulerRewardRatio:         BigInt!
+	apporder:                     AppOrder # todo: not available if not broadcasted
+	datasetorder:                 DatasetOrder # todo: not available if not broadcasted
+	workerpoolorder:              WorkerpoolOrder # todo: not available if not broadcasted
+	requestorder:                 RequestOrder # todo: not available if not broadcasted
 }
 
 enum TaskStatus {

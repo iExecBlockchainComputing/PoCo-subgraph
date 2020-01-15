@@ -14,10 +14,10 @@ import {
 
 import {
 	Account,
-	// AppOrder,
-	// DatasetOrder,
-	// WorkerpoolOrder,
-	// RequestOrder,
+	AppOrder,
+	DatasetOrder,
+	WorkerpoolOrder,
+	RequestOrder,
 	Deal,
 	SchedulerNotice,
 } from '../../generated/schema'
@@ -59,7 +59,30 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
 	d.botSize              = deal.botSize
 	d.workerStake          = deal.workerStake
 	d.schedulerRewardRatio = deal.schedulerRewardRatio
+	d.apporder             = event.params.appHash.toHex()
+	d.datasetorder         = event.params.datasetHash.toHex()
+	d.workerpoolorder      = event.params.workerpoolHash.toHex()
+	d.requestorder         = event.params.requestHash.toHex()
 	d.save()
+
+	let apporder = new AppOrder(event.params.appHash.toHex())
+	apporder.app      = d.app
+	apporder.appprice = d.appPrice
+	apporder.save()
+
+	let datasetorder = new DatasetOrder(event.params.datasetHash.toHex())
+	datasetorder.dataset      = d.dataset
+	datasetorder.datasetprice = d.datasetPrice
+	datasetorder.save()
+
+	let workerpoolorder = new WorkerpoolOrder(event.params.workerpoolHash.toHex())
+	workerpoolorder.workerpool      = d.workerpool
+	workerpoolorder.workerpoolprice = d.workerpoolPrice
+	workerpoolorder.save()
+
+	let requestorder = new RequestOrder(event.params.requestHash.toHex())
+	requestorder.requester = deal.requester.toHex()
+	requestorder.save()
 }
 
 export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
@@ -71,28 +94,73 @@ export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
 	e.save()
 }
 
+
+
+
+
 // export function handleBroadcastAppOrder(event: BroadcastAppOrderEvent): void {
 // 	let orderID = "<TODO>"
 // 	let order = new AppOrder(orderID)
-// 	// order
+// 	order.app                = App!
+// 	order.appprice           = BigDecimal!
+// 	order.volume             = BigInt!
+// 	order.tag                = Bytes!
+// 	order.datasetrestrict    = Bytes!
+// 	order.workerpoolrestrict = Bytes!
+// 	order.requesterrestrict  = Bytes!
+// 	order.salt               = Bytes!
+// 	order.sign               = Bytes
 // 	order.save()
 // }
 // export function handleBroadcastDatasetOrder(event: BroadcastDatasetOrderEvent): void {
 // 	let orderID = "<TODO>"
 // 	let order = new DatasetOrder(orderID)
-// 	// order
+// 	order.dataset            = App!
+// 	order.datasetprice       = BigDecimal!
+// 	order.volume             = BigInt!
+// 	order.tag                = Bytes!
+// 	order.apprestrict        = Bytes!
+// 	order.workerpoolrestrict = Bytes!
+// 	order.requesterrestrict  = Bytes!
+// 	order.salt               = Bytes!
+// 	order.sign               = Bytes
 // 	order.save()
 // }
 // export function handleBroadcastWorkerpoolOrder(event: BroadcastWorkerpoolOrderEvent): void {
 // 	let orderID = "<TODO>"
 // 	let order = new WorkerpoolOrder(orderID)
-// 	// order
+// 	order.workerpool        = Workerpool!
+// 	order.workerpoolprice   = BigDecimal!
+// 	order.volume            = BigInt!
+// 	order.tag               = Bytes!
+// 	order.category          = Category!
+// 	order.trust             = BigInt!
+// 	order.apprestrict       = Bytes!
+// 	order.datasetrestrict   = Bytes!
+// 	order.requesterrestrict = Bytes!
+// 	order.salt              = Bytes!
+// 	order.sign              = Bytes
 // 	order.save()
 // }
 // export function handleBroadcastRequestOrder(event: BroadcastRequestOrderEvent): void {
 // 	let orderID = "<TODO>"
 // 	let order = new RequestOrder(orderID)
-// 	// order
+// 	app                = App!
+// 	appmaxprice        = BigDecimal!
+// 	dataset            = Dataset # could be null or whitelist
+// 	datasetmaxprice    = BigDecimal!
+// 	workerpool         = Workerpool # could be null or whitelist
+// 	workerpoolmaxprice = BigDecimal!
+// 	requester          = Account!
+// 	volume             = BigInt!
+// 	tag                = Bytes!
+// 	category           = Category!
+// 	trust              = BigInt!
+// 	beneficiary        = Account!
+// 	callback           = Account!
+// 	params             = String!
+// 	salt               = Bytes!
+// 	sign               = Bytes
 // 	order.save()
 // }
 //
