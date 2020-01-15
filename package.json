@@ -5,16 +5,16 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "make": "npm run codegen && npm run build",
-    "create-local":    "graph create iexecblockchaincomputing/iexec-poco-v3 --node http://localhost:8020",
+    "create-local": "graph create iexecblockchaincomputing/iexec-poco-v3 --node http://localhost:8020",
     "create-thegraph": "graph create iexecblockchaincomputing/iexec-poco-v3 --node https://api.thegraph.com/deploy/",
-    "create-iexec":    "graph create iexecblockchaincomputing/iexec-poco-v3 --node http://thegraph.iex.ec:8020",
-    "deploy-local":    "graph deploy iexecblockchaincomputing/iexec-poco-v3 --node http://localhost:8020            --ipfs http://localhost:5001",
+    "create-iexec": "graph create iexecblockchaincomputing/iexec-poco-v3 --node http://thegraph.iex.ec:8020",
+    "deploy-local": "graph deploy iexecblockchaincomputing/iexec-poco-v3 --node http://localhost:8020            --ipfs http://localhost:5001",
     "deploy-thegraph": "graph deploy iexecblockchaincomputing/iexec-poco-v3 --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy-iexec":    "graph deploy iexecblockchaincomputing/iexec-poco-v3 --node http://thegraph.iex.ec:8020      --ipfs http://thegraph.iex.ec:5001"
+    "deploy-iexec": "graph deploy iexecblockchaincomputing/iexec-poco-v3 --node http://thegraph.iex.ec:8020      --ipfs http://thegraph.iex.ec:5001"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.16.2",
-    "@graphprotocol/graph-ts": "^0.16.0"
+    "@graphprotocol/graph-cli": "^0.17.1",
+    "@graphprotocol/graph-ts": "^0.17.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
