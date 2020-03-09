@@ -1,19 +1,28 @@
 import { log } from '@graphprotocol/graph-ts'
 
 import {
-	IexecHub             as IexecHubContract,
-	TaskInitialize       as TaskInitializeEvent,
-	TaskContribute       as TaskContributeEvent,
-	TaskConsensus        as TaskConsensusEvent,
-	TaskReveal           as TaskRevealEvent,
-	TaskReopen           as TaskReopenEvent,
-	TaskFinalize         as TaskFinalizeEvent,
-	TaskClaimed          as TaskClaimedEvent,
-	AccurateContribution as AccurateContributionEvent,
-	FaultyContribution   as FaultyContributionEvent,
-} from '../../generated/IexecHub/IexecHub'
+	IexecInterfaceTokenABILegacy as IexecInterfaceTokenABILegacyContract,
+	OrdersMatched                as OrdersMatchedEvent,
+	SchedulerNotice              as SchedulerNoticeEvent,
+	TaskInitialize               as TaskInitializeEvent,
+	TaskContribute               as TaskContributeEvent,
+	TaskConsensus                as TaskConsensusEvent,
+	TaskReveal                   as TaskRevealEvent,
+	TaskReopen                   as TaskReopenEvent,
+	TaskFinalize                 as TaskFinalizeEvent,
+	TaskClaimed                  as TaskClaimedEvent,
+	AccurateContribution         as AccurateContributionEvent,
+	FaultyContribution           as FaultyContributionEvent,
+} from '../../generated/Core/IexecInterfaceTokenABILegacy'
 
 import {
+	Account,
+	AppOrder,
+	DatasetOrder,
+	WorkerpoolOrder,
+	RequestOrder,
+	Deal,
+	SchedulerNotice,
 	Task,
 	Contribution,
 	TaskInitialize,
@@ -32,10 +41,77 @@ import {
 	createContributionID,
 	fetchAccount,
 	logTransaction,
+	toRLC,
 } from '../utils'
 
+
+export function handleOrdersMatched(event: OrdersMatchedEvent): void {
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let deal     = contract.viewDeal(event.params.dealid)
+
+	fetchAccount(deal.requester.toHex()).save()
+	fetchAccount(deal.beneficiary.toHex()).save()
+	fetchAccount(deal.callback.toHex()).save()
+
+	let d = new Deal(event.params.dealid.toHex())
+	d.app                  = deal.app.pointer.toHex()
+	d.appOwner             = deal.app.owner.toHex()
+	d.appPrice             = toRLC(deal.app.price)
+	d.dataset              = deal.dataset.pointer.toHex()
+	d.datasetOwner         = deal.dataset.owner.toHex()
+	d.datasetPrice         = toRLC(deal.dataset.price)
+	d.workerpool           = deal.workerpool.pointer.toHex()
+	d.workerpoolOwner      = deal.workerpool.owner.toHex()
+	d.workerpoolPrice      = toRLC(deal.workerpool.price)
+	d.trust                = deal.trust
+	d.category             = deal.category.toString()
+	d.tag                  = deal.tag
+	d.requester            = deal.requester.toHex()
+	d.beneficiary          = deal.beneficiary.toHex()
+	d.callback             = deal.callback.toHex()
+	d.params               = deal.params
+	d.startTime            = deal.startTime
+	d.botFirst             = deal.botFirst
+	d.botSize              = deal.botSize
+	d.workerStake          = deal.workerStake
+	d.schedulerRewardRatio = deal.schedulerRewardRatio
+	d.apporder             = event.params.appHash.toHex()
+	d.datasetorder         = event.params.datasetHash.toHex()
+	d.workerpoolorder      = event.params.workerpoolHash.toHex()
+	d.requestorder         = event.params.requestHash.toHex()
+	d.save()
+
+	let apporder = new AppOrder(event.params.appHash.toHex())
+	apporder.app      = d.app
+	apporder.appprice = d.appPrice
+	apporder.save()
+
+	let datasetorder = new DatasetOrder(event.params.datasetHash.toHex())
+	datasetorder.dataset      = d.dataset
+	datasetorder.datasetprice = d.datasetPrice
+	datasetorder.save()
+
+	let workerpoolorder = new WorkerpoolOrder(event.params.workerpoolHash.toHex())
+	workerpoolorder.workerpool      = d.workerpool
+	workerpoolorder.workerpoolprice = d.workerpoolPrice
+	workerpoolorder.save()
+
+	let requestorder = new RequestOrder(event.params.requestHash.toHex())
+	requestorder.requester = deal.requester.toHex()
+	requestorder.save()
+}
+
+export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
+	let e = new SchedulerNotice(createEventID(event))
+	e.transaction = logTransaction(event).id
+	e.timestamp   = event.block.timestamp
+	e.workerpool  = event.params.workerpool.toHex()
+	e.deal        = event.params.dealid.toHex()
+	e.save()
+}
+
 export function handleTaskInitialize(event: TaskInitializeEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 	let task     = contract.viewTask(event.params.taskid)
 
 	let t = new Task(event.params.taskid.toHex())
@@ -56,7 +132,7 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
 }
 
 export function handleTaskContribute(event: TaskContributeEvent): void {
-	let contract     = IexecHubContract.bind(event.address)
+	let contract     = IexecInterfaceTokenABILegacyContract.bind(event.address)
 	let contribution = contract.viewContribution(event.params.taskid, event.params.worker)
 
 	let c = new Contribution(createContributionID(event.params.taskid.toHex(), event.params.worker.toHex()))
@@ -85,7 +161,7 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
 }
 
 export function handleTaskConsensus(event: TaskConsensusEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 	let task     = contract.viewTask(event.params.taskid)
 
 	let t = new Task(event.params.taskid.toHex())
@@ -103,7 +179,7 @@ export function handleTaskConsensus(event: TaskConsensusEvent): void {
 }
 
 export function handleTaskReveal(event: TaskRevealEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.resultDigest = event.params.digest
@@ -123,7 +199,7 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
 }
 
 export function handleTaskReopen(event: TaskReopenEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let t = Task.load(event.params.taskid.toHex())
 	let cs = t.contributions;
@@ -158,7 +234,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 }
 
 export function handleTaskFinalize(event: TaskFinalizeEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.status  = 'COMPLETED'
@@ -174,7 +250,7 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 }
 
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.status = 'FAILLED'
@@ -188,7 +264,7 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
 }
 
 export function handleAccurateContribution(event: AccurateContributionEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let e = new AccurateContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id
@@ -203,7 +279,7 @@ export function handleAccurateContribution(event: AccurateContributionEvent): vo
 }
 
 export function handleFaultyContribution(event: FaultyContributionEvent): void {
-	let contract = IexecHubContract.bind(event.address)
+	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
 
 	let e = new FaultyContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id

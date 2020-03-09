@@ -1,4 +1,10 @@
 export {
+	handleCreateCategory,
+} from './IexecCategoryManager'
+
+export {
+	handleOrdersMatched,
+	handleSchedulerNotice,
 	handleTaskInitialize,
 	handleTaskContribute,
 	handleTaskConsensus,
@@ -8,8 +14,4 @@ export {
 	handleTaskClaimed,
 	handleAccurateContribution,
 	handleFaultyContribution,
-} from './hub'
-
-export {
-	handleCreateCategory,
-} from './categorymanager'
+} from './IexecPoco'

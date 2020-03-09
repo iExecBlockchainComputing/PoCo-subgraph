@@ -4,7 +4,7 @@ import {
 
 import {
 	CreateCategory as CreateCategoryEvent,
-} from '../../generated/IexecHub/IexecHub'
+} from '../../generated/Core/IexecInterfaceTokenABILegacy'
 
 import {
 	Category

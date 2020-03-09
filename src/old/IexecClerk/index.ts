@@ -1,9 +1,4 @@
 export {
-	handleOrdersMatched,
-	handleSchedulerNotice,
-} from './clerk'
-
-export {
 	handleDeposit,
 	handleDepositFor,
 	handleWithdraw,
