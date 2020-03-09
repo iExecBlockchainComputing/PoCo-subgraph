@@ -3,6 +3,14 @@ export {
 } from './IexecCategoryManager'
 
 export {
+	handleTransfer,
+	handleReward,
+	handleSeize,
+	handleLock,
+	handleUnlock,
+} from './IexecERC20'
+
+export {
 	handleOrdersMatched,
 	handleSchedulerNotice,
 	handleTaskInitialize,

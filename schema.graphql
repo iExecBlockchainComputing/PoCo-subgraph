@@ -1,6 +1,6 @@
 type Transaction @entity {
 	id:                           ID!
-	from:                         Account!
+	from:                         Account
 	to:                           Account
 	value:                        BigInt!
 	gasUsed:                      BigInt!
@@ -10,6 +10,7 @@ type Transaction @entity {
 	accountEvents:                [AccountEvent!]! @derivedFrom(field: "transaction")
 	taskEvents:                   [TaskEvent!]! @derivedFrom(field: "transaction")
 	workerpoolEvents:             [WorkerpoolEvent!]! @derivedFrom(field: "transaction")
+	erc1538Events:                [ERC1538Event!]! @derivedFrom(field: "transaction")
 }
 
 # ================================== ERC1538 ==================================
@@ -348,22 +349,13 @@ interface AccountEvent {
 	value:                        BigDecimal!
 }
 
-type Deposit implements AccountEvent @entity {
+type Transfer implements AccountEvent @entity {
 	id:                           ID!
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
 	from:                         Account!
-}
-
-type Withdraw implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
 	to:                           Account!
+	value:                        BigDecimal!
 }
 
 type Reward implements AccountEvent @entity {

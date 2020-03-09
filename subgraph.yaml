@@ -61,6 +61,11 @@ dataSources:
         - TaskClaimed
         - AccurateContribution
         - FaultyContribution
+        - Transfer
+        - Reward
+        - Seize
+        - Lock
+        - Unlock
       abis:
         - name: IexecInterfaceTokenABILegacy
           file: ./abi/IexecInterfaceTokenABILegacy.json
@@ -89,31 +94,17 @@ dataSources:
           handler: handleAccurateContribution
         - event: FaultyContribution(indexed address,indexed bytes32)
           handler: handleFaultyContribution
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Reward(address,uint256,bytes32)
+          handler: handleReward
+        - event: Seize(address,uint256,bytes32)
+          handler: handleSeize
+        - event: Lock(address,uint256)
+          handler: handleLock
+        - event: Unlock(address,uint256)
+          handler: handleUnlock
       file: ./src/Modules/index.ts
-
-#       entities:
-#         - Deposit
-#         - Withdraw
-#         - Reward
-#         - Seize
-#         - Lock
-#         - Unlock
-#       eventHandlers:
-#         - event: Deposit(address,uint256)
-#           handler: handleDeposit
-#         - event: DepositFor(address,uint256,address)
-#           handler: handleDepositFor
-#         - event: Withdraw(address,uint256)
-#           handler: handleWithdraw
-#         - event: Reward(address,uint256,bytes32)
-#           handler: handleReward
-#         - event: Seize(address,uint256,bytes32)
-#           handler: handleSeize
-#         - event: Lock(address,uint256)
-#           handler: handleLock
-#         - event: Unlock(address,uint256)
-#           handler: handleUnlock
-
 
 # # =============================== App registry ================================
 #   - name: AppRegistry
