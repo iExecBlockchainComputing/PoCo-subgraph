@@ -1,210 +1,236 @@
 specVersion: 0.0.2
-description: iExecPoCoV3
+description: iExecPoCoV5
 repository: https://github.com/iExecBlockchainComputing/PoCo-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
-# ================================= IexecHub ==================================
-  - name: IexecHub
+  - name: ERC1538Proxy
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0x99d8717a84d1e97422d04d9a2a82694038470753' # hub.iexec.eth
-      abi: IexecHub
-      startBlock: 1128400
+      address: '0xa95b9C0Faea4D0b0fd250fb14Ba8a4CA4bB6571f'
+      abi: ERC1538Proxy
+      startBlock: 2314400
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       entities:
-        - Category
-        - Task
-        - Contribution
-        - TaskInitialize
-        - TaskContribute
-        - TaskConsensus
-        - TaskReveal
-        - TaskReopen
-        - TaskFinalize
-        - TaskClaimed
-        - AccurateContribution
-        - FaultyContribution
+        - ERC1538Module
+        - ERC1538Function
+        - ERC1538FunctionUpdateEvent
+        - ERC1538CommitMessageEvent
       abis:
-        - name: IexecHub
-          file: node_modules/iexec-poco-interface/build/contracts/IexecHub.json
+        - name: ERC1538Proxy
+          file: node_modules/@iexec/solidity/build/contracts/ERC1538Proxy.json
       eventHandlers:
-        - event: CreateCategory(uint256,string,string,uint256)
-          handler: handleCreateCategory
-        - event: TaskInitialize(indexed bytes32,indexed address)
-          handler: handleTaskInitialize
-        - event: TaskContribute(indexed bytes32,indexed address,bytes32)
-          handler: handleTaskContribute
-        - event: TaskConsensus(indexed bytes32,bytes32)
-          handler: handleTaskConsensus
-        - event: TaskReveal(indexed bytes32,indexed address,bytes32)
-          handler: handleTaskReveal
-        - event: TaskReopen(indexed bytes32)
-          handler: handleTaskReopen
-        - event: TaskFinalize(indexed bytes32,bytes)
-          handler: handleTaskFinalize
-        - event: TaskClaimed(indexed bytes32)
-          handler: handleTaskClaimed
-        - event: AccurateContribution(indexed address,indexed bytes32)
-          handler: handleAccurateContribution
-        - event: FaultyContribution(indexed address,indexed bytes32)
-          handler: handleFaultyContribution
-      file: ./src/IexecHub/index.ts
-# ================================ IexecClerk =================================
-  - name: IexecClerk
-    kind: ethereum/contract
-    network: goerli
-    source:
-      address: '0x56d07b25a3a21a6abefdf777aaa8f886ecfdb43a' # clerk.iexec.eth
-      abi: IexecClerk
-      startBlock: 1128400
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Account
-        - AppOrder
-        - DatasetOrder
-        - WorkerpoolOrder
-        - RequesterOrder
-        - Deal
-        - SchedulerNotice
-        - Deposit
-        - Withdraw
-        - Reward
-        - Seize
-        - Lock
-        - Unlock
-      abis:
-        - name: IexecClerk
-          file: node_modules/iexec-poco-interface/build/contracts/IexecClerk.json
-      eventHandlers:
-        - event: OrdersMatched(bytes32,bytes32,bytes32,bytes32,bytes32,uint256)
-          handler: handleOrdersMatched
-        - event: SchedulerNotice(indexed address,bytes32)
-          handler: handleSchedulerNotice
-        # - event: ClosedAppOrder(bytes32)
-        #   handler: handleClosedAppOrder
-        # - event: ClosedDatasetOrder(bytes32)
-        #   handler: handleClosedDatasetOrder
-        # - event: ClosedWorkerpoolOrder(bytes32)
-        #   handler: handleClosedWorkerpoolOrder
-        # - event: ClosedRequestOrder(bytes32)
-        #   handler: handleClosedRequestOrder
-        # - event : BroadcastAppOrder((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes))
-        #   handler: handleBroadcastAppOrder
-        # - event : BroadcastDatasetOrder((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes))
-        #   handler: handleBroadcastDatasetOrder
-        # - event : BroadcastWorkerpoolOrder((address,uint256,uint256,bytes32,uint256,uint256,address,address,address,bytes32,bytes))
-        #   handler: handleBroadcastWorkerpoolOrder
-        # - event : BroadcastRequestOrder((address,uint256,address,uint256,address,uint256,address,uint256,bytes32,uint256,uint256,address,address,string,bytes32,bytes))
-        #   handler: handleBroadcastRequestOrder
-        - event: Deposit(address,uint256)
-          handler: handleDeposit
-        - event: DepositFor(address,uint256,address)
-          handler: handleDepositFor
-        - event: Withdraw(address,uint256)
-          handler: handleWithdraw
-        - event: Reward(address,uint256,bytes32)
-          handler: handleReward
-        - event: Seize(address,uint256,bytes32)
-          handler: handleSeize
-        - event: Lock(address,uint256)
-          handler: handleLock
-        - event: Unlock(address,uint256)
-          handler: handleUnlock
-      file: ./src/IexecClerk/index.ts
-# =============================== App registry ================================
-  - name: AppRegistry
-    kind: ethereum/contract
-    network: goerli
-    source:
-      address: '0x221b9a91320a601b30992610425a960b1949b22d' # apps.iexec.eth
-      abi: AppRegistry
-      startBlock: 1128400
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - App
-      abis:
-        - name: App
-          file: node_modules/iexec-poco-interface/build/contracts/App.json
-        - name: AppRegistry
-          file: node_modules/iexec-poco-interface/build/contracts/AppRegistry.json
-      eventHandlers:
-        - event: CreateApp(indexed address,address)
-          handler: handleCreateApp
-      file: ./src/registries/index.ts
-# ============================= Dataset registry ==============================
-  - name: DatasetRegistry
-    kind: ethereum/contract
-    network: goerli
-    source:
-      address: '0x8dc0a7d917aef68e340dbf68ef4ecb36d1ca941b' # datasets.iexec.eth
-      abi: DatasetRegistry
-      startBlock: 1128400
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Dataset
-      abis:
-        - name: Dataset
-          file: node_modules/iexec-poco-interface/build/contracts/Dataset.json
-        - name: DatasetRegistry
-          file: node_modules/iexec-poco-interface/build/contracts/DatasetRegistry.json
-      eventHandlers:
-        - event: CreateDataset(indexed address,address)
-          handler: handleCreateDataset
-      file: ./src/registries/index.ts
-# ============================ Workerpool registry ============================
-  - name: WorkerpoolRegistry
-    kind: ethereum/contract
-    network: goerli
-    source:
-      address: '0xdad30aab14f569830bfd26edf72df876dc30d20c' # workerpool.iexec.eth
-      abi: WorkerpoolRegistry
-      startBlock: 1128400
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Workerpool
-      abis:
-        - name: Workerpool
-          file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
-        - name: WorkerpoolRegistry
-          file: node_modules/iexec-poco-interface/build/contracts/WorkerpoolRegistry.json
-      eventHandlers:
-        - event: CreateWorkerpool(indexed address,indexed address,string)
-          handler: handleCreateWorkerpool
-      file: ./src/registries/index.ts
-templates:
-  - name: Workerpool
-    kind: ethereum/contract
-    network: goerli
-    source:
-      abi: Workerpool
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Workerpool
-        - PolicyChange
-      abis:
-        - name: Workerpool
-          file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
-      eventHandlers:
-        - event: PolicyUpdate(uint256,uint256,uint256,uint256)
-          handler: handlePolicyUpdate
-      file: ./src/registries/index.ts
+        - event: CommitMessage(string)
+          handler: handleCommitMessage
+        - event: FunctionUpdate(indexed bytes4,indexed address,indexed address,string)
+          handler: handleFunctionUpdate
+      file: ./src/ERC1538/ERC1538.ts
+
+# # ================================= IexecHub ==================================
+#   - name: IexecHub
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       address: '0x99d8717a84d1e97422d04d9a2a82694038470753' # hub.iexec.eth
+#       abi: IexecHub
+#       startBlock: 1128400
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - Category
+#         - Task
+#         - Contribution
+#         - TaskInitialize
+#         - TaskContribute
+#         - TaskConsensus
+#         - TaskReveal
+#         - TaskReopen
+#         - TaskFinalize
+#         - TaskClaimed
+#         - AccurateContribution
+#         - FaultyContribution
+#       abis:
+#         - name: IexecHub
+#           file: node_modules/iexec-poco-interface/build/contracts/IexecHub.json
+#       eventHandlers:
+#         - event: CreateCategory(uint256,string,string,uint256)
+#           handler: handleCreateCategory
+#         - event: TaskInitialize(indexed bytes32,indexed address)
+#           handler: handleTaskInitialize
+#         - event: TaskContribute(indexed bytes32,indexed address,bytes32)
+#           handler: handleTaskContribute
+#         - event: TaskConsensus(indexed bytes32,bytes32)
+#           handler: handleTaskConsensus
+#         - event: TaskReveal(indexed bytes32,indexed address,bytes32)
+#           handler: handleTaskReveal
+#         - event: TaskReopen(indexed bytes32)
+#           handler: handleTaskReopen
+#         - event: TaskFinalize(indexed bytes32,bytes)
+#           handler: handleTaskFinalize
+#         - event: TaskClaimed(indexed bytes32)
+#           handler: handleTaskClaimed
+#         - event: AccurateContribution(indexed address,indexed bytes32)
+#           handler: handleAccurateContribution
+#         - event: FaultyContribution(indexed address,indexed bytes32)
+#           handler: handleFaultyContribution
+#       file: ./src/IexecHub/index.ts
+# # ================================ IexecClerk =================================
+#   - name: IexecClerk
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       address: '0x56d07b25a3a21a6abefdf777aaa8f886ecfdb43a' # clerk.iexec.eth
+#       abi: IexecClerk
+#       startBlock: 1128400
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - Account
+#         - AppOrder
+#         - DatasetOrder
+#         - WorkerpoolOrder
+#         - RequesterOrder
+#         - Deal
+#         - SchedulerNotice
+#         - Deposit
+#         - Withdraw
+#         - Reward
+#         - Seize
+#         - Lock
+#         - Unlock
+#       abis:
+#         - name: IexecClerk
+#           file: node_modules/iexec-poco-interface/build/contracts/IexecClerk.json
+#       eventHandlers:
+#         - event: OrdersMatched(bytes32,bytes32,bytes32,bytes32,bytes32,uint256)
+#           handler: handleOrdersMatched
+#         - event: SchedulerNotice(indexed address,bytes32)
+#           handler: handleSchedulerNotice
+#         # - event: ClosedAppOrder(bytes32)
+#         #   handler: handleClosedAppOrder
+#         # - event: ClosedDatasetOrder(bytes32)
+#         #   handler: handleClosedDatasetOrder
+#         # - event: ClosedWorkerpoolOrder(bytes32)
+#         #   handler: handleClosedWorkerpoolOrder
+#         # - event: ClosedRequestOrder(bytes32)
+#         #   handler: handleClosedRequestOrder
+#         # - event : BroadcastAppOrder((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes))
+#         #   handler: handleBroadcastAppOrder
+#         # - event : BroadcastDatasetOrder((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes))
+#         #   handler: handleBroadcastDatasetOrder
+#         # - event : BroadcastWorkerpoolOrder((address,uint256,uint256,bytes32,uint256,uint256,address,address,address,bytes32,bytes))
+#         #   handler: handleBroadcastWorkerpoolOrder
+#         # - event : BroadcastRequestOrder((address,uint256,address,uint256,address,uint256,address,uint256,bytes32,uint256,uint256,address,address,string,bytes32,bytes))
+#         #   handler: handleBroadcastRequestOrder
+#         - event: Deposit(address,uint256)
+#           handler: handleDeposit
+#         - event: DepositFor(address,uint256,address)
+#           handler: handleDepositFor
+#         - event: Withdraw(address,uint256)
+#           handler: handleWithdraw
+#         - event: Reward(address,uint256,bytes32)
+#           handler: handleReward
+#         - event: Seize(address,uint256,bytes32)
+#           handler: handleSeize
+#         - event: Lock(address,uint256)
+#           handler: handleLock
+#         - event: Unlock(address,uint256)
+#           handler: handleUnlock
+#       file: ./src/IexecClerk/index.ts
+# # =============================== App registry ================================
+#   - name: AppRegistry
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       address: '0x221b9a91320a601b30992610425a960b1949b22d' # apps.iexec.eth
+#       abi: AppRegistry
+#       startBlock: 1128400
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - App
+#       abis:
+#         - name: App
+#           file: node_modules/iexec-poco-interface/build/contracts/App.json
+#         - name: AppRegistry
+#           file: node_modules/iexec-poco-interface/build/contracts/AppRegistry.json
+#       eventHandlers:
+#         - event: CreateApp(indexed address,address)
+#           handler: handleCreateApp
+#       file: ./src/registries/index.ts
+# # ============================= Dataset registry ==============================
+#   - name: DatasetRegistry
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       address: '0x8dc0a7d917aef68e340dbf68ef4ecb36d1ca941b' # datasets.iexec.eth
+#       abi: DatasetRegistry
+#       startBlock: 1128400
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - Dataset
+#       abis:
+#         - name: Dataset
+#           file: node_modules/iexec-poco-interface/build/contracts/Dataset.json
+#         - name: DatasetRegistry
+#           file: node_modules/iexec-poco-interface/build/contracts/DatasetRegistry.json
+#       eventHandlers:
+#         - event: CreateDataset(indexed address,address)
+#           handler: handleCreateDataset
+#       file: ./src/registries/index.ts
+# # ============================ Workerpool registry ============================
+#   - name: WorkerpoolRegistry
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       address: '0xdad30aab14f569830bfd26edf72df876dc30d20c' # workerpool.iexec.eth
+#       abi: WorkerpoolRegistry
+#       startBlock: 1128400
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - Workerpool
+#       abis:
+#         - name: Workerpool
+#           file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
+#         - name: WorkerpoolRegistry
+#           file: node_modules/iexec-poco-interface/build/contracts/WorkerpoolRegistry.json
+#       eventHandlers:
+#         - event: CreateWorkerpool(indexed address,indexed address,string)
+#           handler: handleCreateWorkerpool
+#       file: ./src/registries/index.ts
+# templates:
+#   - name: Workerpool
+#     kind: ethereum/contract
+#     network: goerli
+#     source:
+#       abi: Workerpool
+#     mapping:
+#       kind: ethereum/events
+#       apiVersion: 0.0.3
+#       language: wasm/assemblyscript
+#       entities:
+#         - Workerpool
+#         - PolicyChange
+#       abis:
+#         - name: Workerpool
+#           file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
+#       eventHandlers:
+#         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
+#           handler: handlePolicyUpdate
+#       file: ./src/registries/index.ts

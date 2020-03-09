@@ -2,23 +2,24 @@
   "name": "iExecGraph",
   "version": "0.1.0",
   "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
-    "make": "npm run codegen && npm run build",
-    "create-local":    "graph create iexecblockchaincomputing/iexec-poco-v3-goerli --node http://localhost:8020",
-    "create-thegraph": "graph create iexecblockchaincomputing/iexec-poco-v3-goerli --node https://api.thegraph.com/deploy/",
-    "create-iexec":    "graph create iexecblockchaincomputing/iexec-poco-v3-goerli --node http://192.168.100.119:8020",
-    "deploy-local":    "graph deploy iexecblockchaincomputing/iexec-poco-v3-goerli --node http://localhost:8020            --ipfs http://localhost:5001",
-    "deploy-thegraph": "graph deploy iexecblockchaincomputing/iexec-poco-v3-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
-    "deploy-iexec":    "graph deploy iexecblockchaincomputing/iexec-poco-v3-goerli --node http://192.168.100.119:8020      --ipfs http://192.168.100.119:5001"
+    "make":            "npm run codegen && npm run build",
+    "codegen":         "graph codegen",
+    "build":           "graph build",
+    "auth":            "graph auth https://api.thegraph.com/deploy/ --",
+    "create-local":    "graph create amxx/iexec-erc1538-goerli --node http://localhost:8020",
+    "create-thegraph": "graph create amxx/iexec-erc1538-goerli --node https://api.thegraph.com/deploy/",
+    "create-iexec":    "graph create amxx/iexec-erc1538-goerli --node http://192.168.100.119:8020",
+    "deploy-local":    "graph deploy amxx/iexec-erc1538-goerli --node http://localhost:8020            --ipfs http://localhost:5001",
+    "deploy-thegraph": "graph deploy amxx/iexec-erc1538-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy-iexec":    "graph deploy amxx/iexec-erc1538-goerli --node http://192.168.100.119:8020      --ipfs http://192.168.100.119:5001"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.17.1",
     "@graphprotocol/graph-ts": "^0.17.0"
   },
   "dependencies": {
+    "@iexec/solidity": "^0.1.0-beta.4",
     "babel-polyfill": "^6.26.0",
-    "babel-register": "^6.26.0",
-    "iexec-poco-interface": "^3.0.35-6"
+    "babel-register": "^6.26.0"
   }
 }

@@ -12,6 +12,39 @@ type Transaction @entity {
 	workerpoolEvents:             [WorkerpoolEvent!]! @derivedFrom(field: "transaction")
 }
 
+# ================================== ERC1538 ==================================
+type ERC1538Module @entity {
+	id:                           ID!
+	functions:                    [ERC1538Function!]! @derivedFrom(field: "module")
+}
+
+type ERC1538Function @entity {
+	id:                           ID!
+	name:                         String!
+	module:                       ERC1538Module!
+}
+
+interface ERC1538Event {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+}
+
+type ERC1538FunctionUpdate implements ERC1538Event @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	func:                         ERC1538Function!
+	module:                       ERC1538Module!
+}
+
+type ERC1538CommitMessage implements ERC1538Event @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	message:                      String!
+}
+
 # ============================== Address objects ==============================
 type Account @entity {
 	id:                           ID!
