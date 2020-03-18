@@ -67,8 +67,82 @@ type Account @entity {
 	transactions:                 [Transaction!]! @derivedFrom(field: "from")
 }
 
+# ============================== Token movements ==============================
+interface AccountEvent {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
+	value:                        BigDecimal!
+}
+
+type Transfer implements AccountEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	from:                         Account!
+	to:                           Account!
+	value:                        BigDecimal!
+}
+
+type Reward implements AccountEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
+	value:                        BigDecimal!
+	task:                         Task!
+}
+
+type Seize implements AccountEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
+	value:                        BigDecimal!
+	task:                         Task!
+}
+
+type Lock implements AccountEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
+	value:                        BigDecimal!
+}
+
+type Unlock implements AccountEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
+	value:                        BigDecimal!
+}
+
+type AccurateContribution @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	contribution:                 Contribution!
+	score:                        BigInt!
+}
+
+type FaultyContribution @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	contribution:                 Contribution!
+	score:                        BigInt!
+}
+
 # ================================ Ressources =================================
-type App @entity {
+interface Ressource {
+	id:                           ID!
+	owner:                        Account!
+	name:                         String!
+}
+
+type App implements Ressource @entity {
 	id:                           ID!
 	owner:                        Account!
 	name:                         String!
@@ -78,9 +152,10 @@ type App @entity {
 	mrenclave:                    Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "app")
 	orders:                       [AppOrder!]! @derivedFrom(field: "app")
+	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
 }
 
-type Dataset @entity {
+type Dataset implements Ressource @entity {
 	id:                           ID!
 	owner:                        Account!
 	name:                         String!
@@ -88,9 +163,10 @@ type Dataset @entity {
 	checksum:                     Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "dataset")
 	orders:                       [DatasetOrder!]! @derivedFrom(field: "dataset")
+	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
 }
 
-type Workerpool @entity {
+type Workerpool implements Ressource @entity {
 	id:                           ID!
 	owner:                        Account!
 	description:                  String!
@@ -99,6 +175,70 @@ type Workerpool @entity {
 	usages:                       [Deal!]! @derivedFrom(field: "workerpool")
 	orders:                       [WorkerpoolOrder!]! @derivedFrom(field: "workerpool")
 	events:                       [WorkerpoolEvent!]! @derivedFrom(field: "workerpool")
+	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
+}
+
+# ============================= Ressources Events =============================
+interface RessourceTransferEvent {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	oldOwner:                     Account!
+	newOwner:                     Account!
+}
+
+type AppTransfer implements RessourceTransferEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	app:                          App!
+	from:                         Account!
+	to:                           Account!
+}
+
+type DatasetTransfer implements RessourceTransferEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	dataset:                      Dataset!
+	from:                         Account!
+	to:                           Account!
+}
+
+type WorkerpoolTransfer implements RessourceTransferEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	workerpool:                   Workerpool!
+	from:                         Account!
+	to:                           Account!
+}
+
+# ============================= Workerpool events =============================
+interface WorkerpoolEvent {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	workerpool:                   Workerpool!
+}
+
+type SchedulerNotice implements WorkerpoolEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	workerpool:                   Workerpool!
+	deal:                         Deal!
+}
+
+type PolicyUpdate implements WorkerpoolEvent @entity {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	workerpool:                   Workerpool!
+	oldWorkerStakeRatio:          BigInt!
+	newWorkerStakeRatio:          BigInt!
+	oldSchedulerRewardRatio:      BigInt!
+	newSchedulerRewardRatio:      BigInt!
 }
 
 # ================================== Orders ===================================
@@ -311,99 +451,4 @@ type TaskClaimed implements TaskEvent @entity {
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
 	task:                         Task!
-}
-
-# ============================= Workerpool events =============================
-interface WorkerpoolEvent {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	workerpool:                   Workerpool!
-}
-
-type SchedulerNotice implements WorkerpoolEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	workerpool:                   Workerpool!
-	deal:                         Deal!
-}
-
-type PolicyUpdate implements WorkerpoolEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	workerpool:                   Workerpool!
-	oldWorkerStakeRatio:          BigInt!
-	newWorkerStakeRatio:          BigInt!
-	oldSchedulerRewardRatio:      BigInt!
-	newSchedulerRewardRatio:      BigInt!
-}
-
-# ============================== Token movements ==============================
-interface AccountEvent {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-}
-
-type Transfer implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	from:                         Account!
-	to:                           Account!
-	value:                        BigDecimal!
-}
-
-type Reward implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-	task:                         Task!
-}
-
-type Seize implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-	task:                         Task!
-}
-
-type Lock implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-}
-
-type Unlock implements AccountEvent @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-}
-
-type AccurateContribution @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	contribution:                 Contribution!
-	score:                        BigInt!
-}
-
-type FaultyContribution @entity {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	contribution:                 Contribution!
-	score:                        BigInt!
 }

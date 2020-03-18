@@ -1,4 +1,5 @@
 import {
+	Address,
 	BigInt,
 	BigDecimal,
 	EthereumEvent,
@@ -54,4 +55,9 @@ export function toDate(timestamp: BigInt): Date
 export function toRLC(value: BigInt): BigDecimal
 {
 	return value.divDecimal(BigDecimal.fromString('1000000000'))
+}
+
+export function intToAddress(value: BigInt): Address
+{
+	return Address.fromString(value.toString());
 }

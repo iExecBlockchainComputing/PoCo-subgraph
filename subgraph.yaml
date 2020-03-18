@@ -35,7 +35,7 @@ dataSources:
     network: goerli
     source:
       address: '0x639bb3229618FE7C110541e558AaB9DE5cc71A81' # hub.iexec.eth
-      abi: IexecInterfaceTokenABILegacy
+      abi: IexecInterfaceToken
       startBlock: 2316615
     mapping:
       kind: ethereum/events
@@ -67,8 +67,8 @@ dataSources:
         - Lock
         - Unlock
       abis:
-        - name: IexecInterfaceTokenABILegacy
-          file: ./abi/IexecInterfaceTokenABILegacy.json
+        - name: IexecInterfaceToken
+          file: ./abi/IexecInterfaceToken.json
       eventHandlers:
         - event: CreateCategory(uint256,string,string,uint256)
           handler: handleCreateCategory
@@ -106,75 +106,80 @@ dataSources:
           handler: handleUnlock
       file: ./src/Modules/index.ts
 
-# # =============================== App registry ================================
-#   - name: AppRegistry
-#     kind: ethereum/contract
-#     network: goerli
-#     source:
-#       address: '0x221b9a91320a601b30992610425a960b1949b22d' # apps.iexec.eth
-#       abi: AppRegistry
-#       startBlock: 1128400
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.3
-#       language: wasm/assemblyscript
-#       entities:
-#         - App
-#       abis:
-#         - name: App
-#           file: node_modules/iexec-poco-interface/build/contracts/App.json
-#         - name: AppRegistry
-#           file: node_modules/iexec-poco-interface/build/contracts/AppRegistry.json
-#       eventHandlers:
-#         - event: CreateApp(indexed address,address)
-#           handler: handleCreateApp
-#       file: ./src/registries/index.ts
-# # ============================= Dataset registry ==============================
-#   - name: DatasetRegistry
-#     kind: ethereum/contract
-#     network: goerli
-#     source:
-#       address: '0x8dc0a7d917aef68e340dbf68ef4ecb36d1ca941b' # datasets.iexec.eth
-#       abi: DatasetRegistry
-#       startBlock: 1128400
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.3
-#       language: wasm/assemblyscript
-#       entities:
-#         - Dataset
-#       abis:
-#         - name: Dataset
-#           file: node_modules/iexec-poco-interface/build/contracts/Dataset.json
-#         - name: DatasetRegistry
-#           file: node_modules/iexec-poco-interface/build/contracts/DatasetRegistry.json
-#       eventHandlers:
-#         - event: CreateDataset(indexed address,address)
-#           handler: handleCreateDataset
-#       file: ./src/registries/index.ts
-# # ============================ Workerpool registry ============================
-#   - name: WorkerpoolRegistry
-#     kind: ethereum/contract
-#     network: goerli
-#     source:
-#       address: '0xdad30aab14f569830bfd26edf72df876dc30d20c' # workerpool.iexec.eth
-#       abi: WorkerpoolRegistry
-#       startBlock: 1128400
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.3
-#       language: wasm/assemblyscript
-#       entities:
-#         - Workerpool
-#       abis:
-#         - name: Workerpool
-#           file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
-#         - name: WorkerpoolRegistry
-#           file: node_modules/iexec-poco-interface/build/contracts/WorkerpoolRegistry.json
-#       eventHandlers:
-#         - event: CreateWorkerpool(indexed address,indexed address,string)
-#           handler: handleCreateWorkerpool
-#       file: ./src/registries/index.ts
+# =============================== App registry ================================
+  - name: AppRegistry
+    kind: ethereum/contract
+    network: goerli
+    source:
+      address: '0x52684B017A48DED2d7c68b55FB1c321C894d3154'
+      abi: AppRegistry
+      startBlock: 2316615
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - App
+        - AppTransfer
+      abis:
+        - name: App
+          file: ./abi/App.json
+        - name: AppRegistry
+          file: ./abi/AppRegistry.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransferApp
+      file: ./src/Registries/index.ts
+
+# ============================= Dataset registry ==============================
+  - name: DatasetRegistry
+    kind: ethereum/contract
+    network: goerli
+    source:
+      address: '0x33229bd4dbF5406b90e5F6A368D04eA1fEaDD498'
+      abi: DatasetRegistry
+      startBlock: 2316615
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Dataset
+        - DatasetTransfer
+      abis:
+        - name: Dataset
+          file: ./abi/Dataset.json
+        - name: DatasetRegistry
+          file: ./abi/DatasetRegistry.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransferDataset
+      file: ./src/Registries/index.ts
+
+# ============================ Workerpool registry ============================
+  - name: WorkerpoolRegistry
+    kind: ethereum/contract
+    network: goerli
+    source:
+      address: '0x33229bd4dbF5406b90e5F6A368D04eA1fEaDD498'
+      abi: WorkerpoolRegistry
+      startBlock: 2316615
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Workerpool
+        - WorkerpoolTransfer
+      abis:
+        - name: Workerpool
+          file: ./abi/Workerpool.json
+        - name: WorkerpoolRegistry
+          file: ./abi/WorkerpoolRegistry.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransferWorkerpool
+      file: ./src/Registries/index.ts
 # templates:
 #   - name: Workerpool
 #     kind: ethereum/contract
@@ -194,4 +199,4 @@ dataSources:
 #       eventHandlers:
 #         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
 #           handler: handlePolicyUpdate
-#       file: ./src/registries/index.ts
+#       file: ./src/Registries/index.ts

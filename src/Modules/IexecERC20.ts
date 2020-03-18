@@ -4,7 +4,7 @@ import {
 	Seize    as SeizeEvent,
 	Lock     as LockEvent,
 	Unlock   as UnlockEvent,
-} from '../../generated/Core/IexecInterfaceTokenABILegacy'
+} from '../../generated/Core/IexecInterfaceToken'
 
 import {
 	Transfer,
@@ -25,8 +25,8 @@ export function handleTransfer(event: TransferEvent): void {
 	let value = toRLC(event.params.value)
 	let from  = fetchAccount(event.params.from.toHex())
 	let to    = fetchAccount(event.params.to.toHex())
-	if (from.id != "0x0000000000000000000000000000000000000000") from.balance += value;
-	if (to.id   != "0x0000000000000000000000000000000000000000") to.balance   -= value;
+	if (from.id != "0x0000000000000000000000000000000000000000") from.balance -= value;
+	if (to.id   != "0x0000000000000000000000000000000000000000") to.balance   += value;
 	from.save()
 	to.save()
 

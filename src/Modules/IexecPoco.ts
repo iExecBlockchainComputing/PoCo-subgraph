@@ -1,19 +1,19 @@
 import { log } from '@graphprotocol/graph-ts'
 
 import {
-	IexecInterfaceTokenABILegacy as IexecInterfaceTokenABILegacyContract,
-	OrdersMatched                as OrdersMatchedEvent,
-	SchedulerNotice              as SchedulerNoticeEvent,
-	TaskInitialize               as TaskInitializeEvent,
-	TaskContribute               as TaskContributeEvent,
-	TaskConsensus                as TaskConsensusEvent,
-	TaskReveal                   as TaskRevealEvent,
-	TaskReopen                   as TaskReopenEvent,
-	TaskFinalize                 as TaskFinalizeEvent,
-	TaskClaimed                  as TaskClaimedEvent,
-	AccurateContribution         as AccurateContributionEvent,
-	FaultyContribution           as FaultyContributionEvent,
-} from '../../generated/Core/IexecInterfaceTokenABILegacy'
+	IexecInterfaceToken  as IexecInterfaceTokenContract,
+	OrdersMatched        as OrdersMatchedEvent,
+	SchedulerNotice      as SchedulerNoticeEvent,
+	TaskInitialize       as TaskInitializeEvent,
+	TaskContribute       as TaskContributeEvent,
+	TaskConsensus        as TaskConsensusEvent,
+	TaskReveal           as TaskRevealEvent,
+	TaskReopen           as TaskReopenEvent,
+	TaskFinalize         as TaskFinalizeEvent,
+	TaskClaimed          as TaskClaimedEvent,
+	AccurateContribution as AccurateContributionEvent,
+	FaultyContribution   as FaultyContributionEvent,
+} from '../../generated/Core/IexecInterfaceToken'
 
 import {
 	Account,
@@ -46,7 +46,7 @@ import {
 
 
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 	let deal     = contract.viewDeal(event.params.dealid)
 
 	fetchAccount(deal.requester.toHex()).save()
@@ -111,7 +111,7 @@ export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
 }
 
 export function handleTaskInitialize(event: TaskInitializeEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 	let task     = contract.viewTask(event.params.taskid)
 
 	let t = new Task(event.params.taskid.toHex())
@@ -132,7 +132,7 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
 }
 
 export function handleTaskContribute(event: TaskContributeEvent): void {
-	let contract     = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract     = IexecInterfaceTokenContract.bind(event.address)
 	let contribution = contract.viewContribution(event.params.taskid, event.params.worker)
 
 	let c = new Contribution(createContributionID(event.params.taskid.toHex(), event.params.worker.toHex()))
@@ -161,7 +161,7 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
 }
 
 export function handleTaskConsensus(event: TaskConsensusEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 	let task     = contract.viewTask(event.params.taskid)
 
 	let t = new Task(event.params.taskid.toHex())
@@ -179,7 +179,7 @@ export function handleTaskConsensus(event: TaskConsensusEvent): void {
 }
 
 export function handleTaskReveal(event: TaskRevealEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.resultDigest = event.params.digest
@@ -199,7 +199,7 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
 }
 
 export function handleTaskReopen(event: TaskReopenEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = Task.load(event.params.taskid.toHex())
 	let cs = t.contributions;
@@ -234,7 +234,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 }
 
 export function handleTaskFinalize(event: TaskFinalizeEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.status  = 'COMPLETED'
@@ -250,7 +250,7 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 }
 
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
 	t.status = 'FAILLED'
@@ -264,7 +264,7 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
 }
 
 export function handleAccurateContribution(event: AccurateContributionEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let e = new AccurateContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id
@@ -279,7 +279,7 @@ export function handleAccurateContribution(event: AccurateContributionEvent): vo
 }
 
 export function handleFaultyContribution(event: FaultyContributionEvent): void {
-	let contract = IexecInterfaceTokenABILegacyContract.bind(event.address)
+	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let e = new FaultyContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id
