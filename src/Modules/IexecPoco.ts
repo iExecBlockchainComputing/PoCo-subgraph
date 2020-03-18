@@ -269,6 +269,7 @@ export function handleAccurateContribution(event: AccurateContributionEvent): vo
 	let e = new AccurateContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id
 	e.timestamp    = event.block.timestamp
+	e.account      = event.params.worker.toHex()
 	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
 	e.score        = contract.viewScore(event.params.worker)
 	e.save()
@@ -284,6 +285,7 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
 	let e = new FaultyContribution(createEventID(event));
 	e.transaction  = logTransaction(event).id
 	e.timestamp    = event.block.timestamp
+	e.account      = event.params.worker.toHex()
 	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
 	e.score        = contract.viewScore(event.params.worker)
 	e.save()

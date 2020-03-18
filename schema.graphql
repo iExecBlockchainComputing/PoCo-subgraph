@@ -53,6 +53,8 @@ type Account @entity {
 	balance:                      BigDecimal!
 	frozen:                       BigDecimal!
 	score:                        BigInt!
+	transfersFrom:                [Transfer!]! @derivedFrom(field: "from")
+	transfersTo:                  [Transfer!]! @derivedFrom(field: "to")
 	events:                       [AccountEvent!]! @derivedFrom(field: "account")
 	contributions:                [Contribution!]! @derivedFrom(field: "worker")
 	apps:                         [App!]! @derivedFrom(field: "owner")
@@ -68,21 +70,20 @@ type Account @entity {
 }
 
 # ============================== Token movements ==============================
-interface AccountEvent {
-	id:                           ID!
-	transaction:                  Transaction!
-	timestamp:                    BigInt!
-	account:                      Account!
-	value:                        BigDecimal!
-}
-
-type Transfer implements AccountEvent @entity {
+type Transfer @entity {
 	id:                           ID!
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
 	from:                         Account!
 	to:                           Account!
 	value:                        BigDecimal!
+}
+
+interface AccountEvent {
+	id:                           ID!
+	transaction:                  Transaction!
+	timestamp:                    BigInt!
+	account:                      Account!
 }
 
 type Reward implements AccountEvent @entity {
@@ -119,18 +120,20 @@ type Unlock implements AccountEvent @entity {
 	value:                        BigDecimal!
 }
 
-type AccurateContribution @entity {
+type AccurateContribution implements AccountEvent @entity {
 	id:                           ID!
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
+	account:                      Account!
 	contribution:                 Contribution!
 	score:                        BigInt!
 }
 
-type FaultyContribution @entity {
+type FaultyContribution implements AccountEvent @entity {
 	id:                           ID!
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
+	account:                      Account!
 	contribution:                 Contribution!
 	score:                        BigInt!
 }
@@ -139,7 +142,6 @@ type FaultyContribution @entity {
 interface Ressource {
 	id:                           ID!
 	owner:                        Account!
-	name:                         String!
 }
 
 type App implements Ressource @entity {
@@ -152,7 +154,7 @@ type App implements Ressource @entity {
 	mrenclave:                    Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "app")
 	orders:                       [AppOrder!]! @derivedFrom(field: "app")
-	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
+	transfers:                    [AppTransfer!]! @derivedFrom(field: "app")
 }
 
 type Dataset implements Ressource @entity {
@@ -163,7 +165,7 @@ type Dataset implements Ressource @entity {
 	checksum:                     Bytes!
 	usages:                       [Deal!]! @derivedFrom(field: "dataset")
 	orders:                       [DatasetOrder!]! @derivedFrom(field: "dataset")
-	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
+	transfers:                    [DatasetTransfer!]! @derivedFrom(field: "dataset")
 }
 
 type Workerpool implements Ressource @entity {
@@ -175,7 +177,7 @@ type Workerpool implements Ressource @entity {
 	usages:                       [Deal!]! @derivedFrom(field: "workerpool")
 	orders:                       [WorkerpoolOrder!]! @derivedFrom(field: "workerpool")
 	events:                       [WorkerpoolEvent!]! @derivedFrom(field: "workerpool")
-	transfers:                    [RessourceTransferEvent!]! @derivedFrom(field: "ressource")
+	transfers:                    [WorkerpoolTransfer!]! @derivedFrom(field: "workerpool")
 }
 
 # ============================= Ressources Events =============================
@@ -183,8 +185,8 @@ interface RessourceTransferEvent {
 	id:                           ID!
 	transaction:                  Transaction!
 	timestamp:                    BigInt!
-	oldOwner:                     Account!
-	newOwner:                     Account!
+	from:                         Account!
+	to:                           Account!
 }
 
 type AppTransfer implements RessourceTransferEvent @entity {

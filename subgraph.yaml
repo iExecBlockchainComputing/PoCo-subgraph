@@ -161,7 +161,7 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0x33229bd4dbF5406b90e5F6A368D04eA1fEaDD498'
+      address: '0x9711B2E71882e3a4879DB34cd6964f3Fb839e3A7'
       abi: WorkerpoolRegistry
       startBlock: 2316615
     mapping:
@@ -195,7 +195,7 @@ dataSources:
 #         - PolicyChange
 #       abis:
 #         - name: Workerpool
-#           file: node_modules/iexec-poco-interface/build/contracts/Workerpool.json
+#           file: ./abi/Workerpool.json
 #       eventHandlers:
 #         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
 #           handler: handlePolicyUpdate

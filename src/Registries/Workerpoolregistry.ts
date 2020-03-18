@@ -36,7 +36,7 @@ export function handleTransferWorkerpool(ev: TransferEvent): void {
 	let transfer = new WorkerpoolTransfer(createEventID(ev))
 	transfer.transaction = logTransaction(ev).id
 	transfer.timestamp   = ev.block.timestamp
-	transfer.workerpool         = workerpool.id;
+	transfer.workerpool  = workerpool.id;
 	transfer.from        = from.id;
 	transfer.to          = to.id;
 	transfer.save();
