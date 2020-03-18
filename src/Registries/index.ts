@@ -9,3 +9,7 @@ export {
 export {
 	handleTransferWorkerpool,
 } from './Workerpoolregistry'
+
+export {
+	handlePolicyUpdate,
+} from './Workerpool'

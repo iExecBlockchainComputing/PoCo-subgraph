@@ -180,23 +180,23 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransferWorkerpool
       file: ./src/Registries/index.ts
-# templates:
-#   - name: Workerpool
-#     kind: ethereum/contract
-#     network: goerli
-#     source:
-#       abi: Workerpool
-#     mapping:
-#       kind: ethereum/events
-#       apiVersion: 0.0.3
-#       language: wasm/assemblyscript
-#       entities:
-#         - Workerpool
-#         - PolicyChange
-#       abis:
-#         - name: Workerpool
-#           file: ./abi/Workerpool.json
-#       eventHandlers:
-#         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
-#           handler: handlePolicyUpdate
-#       file: ./src/Registries/index.ts
+templates:
+  - name: Workerpool
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: Workerpool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      entities:
+        - Workerpool
+        - PolicyChange
+      abis:
+        - name: Workerpool
+          file: ./abi/Workerpool.json
+      eventHandlers:
+        - event: PolicyUpdate(uint256,uint256,uint256,uint256)
+          handler: handlePolicyUpdate
+      file: ./src/Registries/index.ts
