@@ -59,5 +59,5 @@ export function toRLC(value: BigInt): BigDecimal
 
 export function intToAddress(value: BigInt): Address
 {
-	return Address.fromString(value.toString());
+	return Address.fromString(value.toHex());
 }
