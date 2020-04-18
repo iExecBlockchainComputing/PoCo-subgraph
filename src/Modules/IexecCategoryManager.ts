@@ -1,8 +1,4 @@
 import {
-	EthereumEvent,
-} from '@graphprotocol/graph-ts'
-
-import {
 	CreateCategory as CreateCategoryEvent,
 } from '../../generated/Core/IexecInterfaceToken'
 

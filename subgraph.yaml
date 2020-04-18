@@ -13,7 +13,7 @@ dataSources:
       startBlock: 2316615
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - ERC1538Module
@@ -39,7 +39,7 @@ dataSources:
       startBlock: 2316615
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Category
@@ -116,7 +116,7 @@ dataSources:
       startBlock: 2316615
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - App
@@ -141,7 +141,7 @@ dataSources:
       startBlock: 2316615
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Dataset
@@ -166,7 +166,7 @@ dataSources:
       startBlock: 2316615
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Workerpool
@@ -188,7 +188,7 @@ templates:
       abi: Workerpool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
         - Workerpool

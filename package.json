@@ -14,8 +14,8 @@
     "deploy-iexec": "graph deploy amxx/iexec-erc1538-goerli --node http://192.168.100.119:8020      --ipfs http://192.168.100.119:5001"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.17.1",
-    "@graphprotocol/graph-ts": "^0.17.0"
+    "@graphprotocol/graph-cli": "^0.18.0",
+    "@graphprotocol/graph-ts": "^0.18.1"
   },
   "dependencies": {
     "@iexec/solidity": "^0.1.0-beta.6",

@@ -2,7 +2,7 @@ import {
 	Address,
 	BigInt,
 	BigDecimal,
-	EthereumEvent,
+	ethereum,
 } from '@graphprotocol/graph-ts'
 
 import {
@@ -10,7 +10,7 @@ import {
 	Transaction,
 } from '../generated/schema'
 
-export function createEventID(event: EthereumEvent): string
+export function createEventID(event: ethereum.Event): string
 {
 	return event.block.number.toString().concat('-').concat(event.logIndex.toString())
 }
@@ -33,7 +33,7 @@ export function fetchAccount(id: string): Account
 	return account as Account
 }
 
-export function logTransaction(event: EthereumEvent): Transaction
+export function logTransaction(event: ethereum.Event): Transaction
 {
 	let tx = new Transaction(event.transaction.hash.toHex());
 	tx.from        = fetchAccount(event.transaction.from.toHex()).id;
@@ -59,5 +59,5 @@ export function toRLC(value: BigInt): BigDecimal
 
 export function intToAddress(value: BigInt): Address
 {
-	return Address.fromString(value.toHex());
+	return Address.fromHexString(value.toHex().substr(2).padStart(40, '0')) as Address;
 }
