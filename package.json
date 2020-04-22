@@ -1,6 +1,6 @@
 {
-  "name": "iExecGraph",
-  "version": "0.1.0",
+  "name": "@iexec/subgraph-goerli",
+  "version": "5.0.0",
   "scripts": {
     "make": "npm run codegen && npm run build",
     "codegen": "graph codegen",
