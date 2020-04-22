@@ -34,7 +34,7 @@ dataSources:
     kind: ethereum/contract
     network: goerli
     source:
-      address: '0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f' # core.v5.iexec.eth
+      address: '0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f'
       abi: IexecInterfaceToken
       startBlock: 2564000
     mapping:
@@ -68,7 +68,8 @@ dataSources:
         - Unlock
       abis:
         - name: IexecInterfaceToken
-          file: node_modules/@iexec/poco/build/contracts/IexecInterfaceToken.json
+          # file: node_modules/@iexec/poco/build/contracts/IexecInterfaceToken.json # solidity 0.6.0 not supported
+          file: abis/IexecInterfaceToken.json
       eventHandlers:
         - event: CreateCategory(uint256,string,string,uint256)
           handler: handleCreateCategory
@@ -180,6 +181,8 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransferWorkerpool
       file: ./src/Registries/index.ts
+
+# ============================ Workerpool template ============================
 templates:
   - name: Workerpool
     kind: ethereum/contract
