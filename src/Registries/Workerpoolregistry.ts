@@ -3,6 +3,10 @@ import {
 } from '../../generated/WorkerpoolRegistry/Workerpool'
 
 import {
+	Workerpool as WorkerpoolTemplate,
+} from '../../generated/templates'
+
+import {
 	Transfer as TransferEvent,
 } from '../../generated/WorkerpoolRegistry/WorkerpoolRegistry'
 
@@ -41,5 +45,5 @@ export function handleTransferWorkerpool(ev: TransferEvent): void {
 	transfer.to          = to.id;
 	transfer.save();
 
-	// WorkerpoolTemplate.create(contract._address)
+	WorkerpoolTemplate.create(contract._address)
 }
