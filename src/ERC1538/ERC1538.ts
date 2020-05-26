@@ -33,17 +33,10 @@ export function handleFunctionUpdate(event: FunctionUpdateEvent): void {
 	oldmodule.save()
 	newmodule.save()
 
-	if (event.params.newDelegate.toHex() == "0x0000000000000000000000000000000000000000")
-	{
-		store.remove("ERC1538Function", event.params.functionId.toHex())
-	}
-	else
-	{
-		let func    = new ERC1538Function(event.params.functionId.toHex())
-		func.module = newmodule.id;
-		func.name   = event.params.functionSignature
-		func.save()
-	}
+	let func    = new ERC1538Function(event.params.functionId.toHex())
+	func.module = newmodule.id;
+	func.name   = event.params.functionSignature
+	func.save()
 
 	let ev         = new ERC1538FunctionUpdate(createEventID(event))
 	ev.transaction = logTransaction(event).id
