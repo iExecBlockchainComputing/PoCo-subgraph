@@ -1,8 +1,8 @@
 {
   "name": "@iexec/subgraph-goerli",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "scripts": {
-    "build": "graph codegen && graph build",
+    "build": "bash build.sh",
     "deploy": "bash deploy.sh"
   },
   "devDependencies": {

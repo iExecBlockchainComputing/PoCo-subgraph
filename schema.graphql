@@ -365,6 +365,7 @@ type Task @entity {
 	consensus:                    Bytes # set on consensus reached
 	resultDigest:                 Bytes # set on reveal
 	results:                      Bytes # set on finalized
+	resultsCallback:              Bytes # set on finalized
 	contributionDeadline:         BigInt!
 	revealDeadline:               BigInt # set on consensus reached
 	finalDeadline:                BigInt!

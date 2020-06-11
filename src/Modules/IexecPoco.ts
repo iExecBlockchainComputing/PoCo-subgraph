@@ -237,8 +237,9 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
-	t.status  = 'COMPLETED'
-	t.results = event.params.results
+	t.status          = 'COMPLETED'
+	t.results         = event.params.results
+	t.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback
 	t.save()
 
 	let e = new TaskFinalize(createEventID(event));
