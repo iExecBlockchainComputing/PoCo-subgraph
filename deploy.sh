@@ -30,8 +30,13 @@ function deploy_iexec_private { deploy $1 http://192.168.100.119:8020      http:
 graph auth https://api.thegraph.com/deploy/ $THEGRAPH_IEXEC
 for network in `ls subgraph.*.yaml | cut -d '.' -f 2`;
 do
-	echo "### Deploying ${SUBGRAPH[$network]}"
-	${PUBLIC[$network]} && deploy_thegraph      $network
-	# ${PUBLIC[$network]} && deploy_iexec_public  $network
-	# ${PUBLIC[$network]} || deploy_iexec_private $network
+	echo "### ${SUBGRAPH[$network]}"
+
+	# ${PUBLIC[$network]} && graph create ${SUBGRAPH[$network]} --node http://thegraph.iex.ec:8020
+	${PUBLIC[$network]} || graph create ${SUBGRAPH[$network]} --node http://192.168.100.119:8020
+
+	# ${PUBLIC[$network]} && deploy $network https://api.thegraph.com/deploy/ https://api.thegraph.com/ipfs/ # thegraph
+	# ${PUBLIC[$network]} && deploy $network http://thegraph.iex.ec:8020      http://thegraph.iex.ec:5001    # iexec public
+	${PUBLIC[$network]} || deploy $network http://192.168.100.119:8020      http://192.168.100.119:5001    # iexec private
+
 done;
