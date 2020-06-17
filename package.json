@@ -10,8 +10,8 @@
     "@graphprotocol/graph-ts": "^0.18.1"
   },
   "dependencies": {
-    "@iexec/poco": "5.0.0",
-    "@iexec/solidity": "0.1.0-beta.13",
+    "@iexec/poco": "5.1.1",
+    "@iexec/solidity": "0.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0"
   }
