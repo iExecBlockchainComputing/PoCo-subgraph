@@ -23,6 +23,7 @@ type ERC1538Function @entity {
 	id:                           ID!
 	module:                       ERC1538Module!
 	name:                         String!
+	updates:                      [ERC1538FunctionUpdate!]! @derivedFrom(field: "functionId")
 }
 
 interface ERC1538Event {

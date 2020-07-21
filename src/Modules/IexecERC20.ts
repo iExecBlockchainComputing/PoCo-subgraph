@@ -42,10 +42,6 @@ export function handleTransfer(event: TransferEvent): void {
 export function handleReward(event: RewardEvent): void {
 	let value = toRLC(event.params.amount)
 
-	let account = fetchAccount(event.params.owner.toHex())
-	account.balance += value
-	account.save()
-
 	let op         = new Reward(createEventID(event))
 	op.transaction = logTransaction(event).id
 	op.timestamp   = event.block.timestamp
@@ -75,8 +71,7 @@ export function handleLock(event: LockEvent): void {
 	let value = toRLC(event.params.amount)
 
 	let account = fetchAccount(event.params.owner.toHex())
-	account.balance -= value
-	account.frozen  += value
+	account.frozen += value
 	account.save()
 
 	let op         = new Lock(createEventID(event))
@@ -91,8 +86,7 @@ export function handleUnlock(event: UnlockEvent): void {
 	let value = toRLC(event.params.amount)
 
 	let account = fetchAccount(event.params.owner.toHex())
-	account.balance += value
-	account.frozen  -= value
+	account.frozen -= value
 	account.save()
 
 	let op         = new Unlock(createEventID(event))
