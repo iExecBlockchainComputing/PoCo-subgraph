@@ -1,16 +1,26 @@
 {
-  "name": "@iexec/subgraph-goerli",
+  "name": "@iexec/subgraph",
   "version": "5.1.0",
+  "author": "iExec",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "bash build.sh",
     "deploy": "bash deploy.sh"
+  },
+  "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iExecBlockchainComputing/PoCo-subgraph.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
     "@graphprotocol/graph-ts": "^0.18.1"
   },
   "dependencies": {
-    "@iexec/poco": "5.1.1",
+    "@iexec/poco": "5.1.2",
     "@iexec/solidity": "0.1.0",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0"
