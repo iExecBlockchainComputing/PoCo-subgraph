@@ -1,4 +1,4 @@
-#!/bin/#!/usr/bin/env bash
+#!/bin/bash
 
 # Copyright 2020 IEXEC BLOCKCHAIN TECH
 #
