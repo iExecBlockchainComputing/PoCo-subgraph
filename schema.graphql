@@ -24,6 +24,7 @@ type Transaction @entity {
 	accountEvents:                [AccountEvent!]! @derivedFrom(field: "transaction")
 	taskEvents:                   [TaskEvent!]! @derivedFrom(field: "transaction")
 	workerpoolEvents:             [WorkerpoolEvent!]! @derivedFrom(field: "transaction")
+	ressourceTransferEvent:       [RessourceTransferEvent!]! @derivedFrom(field: "transaction")
 	erc1538Events:                [ERC1538Event!]! @derivedFrom(field: "transaction")
 }
 
