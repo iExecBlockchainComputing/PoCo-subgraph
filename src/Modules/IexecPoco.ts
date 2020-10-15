@@ -130,10 +130,13 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
 	let contract = IexecInterfaceTokenContract.bind(event.address)
 	let task     = contract.viewTask(event.params.taskid)
 
+  let deal  = Deal.load(task.dealid.toHex());
+
 	let t = new Task(event.params.taskid.toHex())
 	t.status               = 'ACTIVE'
-	t.deal                 = task.dealid.toHex()
+	t.deal                 = deal.id
 	t.index                = task.idx
+  t.requester            = deal.requester
 	t.contributions        = new Array<string>();
 	t.contributionDeadline = task.contributionDeadline
 	t.finalDeadline        = task.finalDeadline

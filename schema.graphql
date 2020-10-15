@@ -79,6 +79,7 @@ type Account @entity {
 	dealRequester:                [Deal!]! @derivedFrom(field: "requester")
 	dealBeneficiary:              [Deal!]! @derivedFrom(field: "beneficiary")
 	dealCallback:                 [Deal!]! @derivedFrom(field: "callback")
+	taskRequester:                [Task!]! @derivedFrom(field: "requester")
 	orderRequester:               [RequestOrder!]! @derivedFrom(field: "requester")
 	orderBeneficiary:             [RequestOrder!]! @derivedFrom(field: "beneficiary")
 	orderCallback:                [RequestOrder!]! @derivedFrom(field: "callback")
@@ -377,6 +378,7 @@ type Task @entity {
 	status:                       TaskStatus!
 	deal:                         Deal!
 	index:                        BigInt!
+	requester:                    Account!
 	contributions:                [Contribution!]!
 	consensus:                    Bytes # set on consensus reached
 	resultDigest:                 Bytes # set on reveal
