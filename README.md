@@ -1,4 +1,4 @@
-# iExec PoCo v3 - subgraph
+# iExec PoCo v5 - subgraph
 
 
 ## Usefull commands
@@ -14,4 +14,9 @@
 
 	`npm run deploy`
 
+* wip goerli
 
+```
+graph build subgraph.goerli.yaml
+graph deploy pierrejeanjacquot/wip-goerli --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ subgraph.goerli.yaml
+```
