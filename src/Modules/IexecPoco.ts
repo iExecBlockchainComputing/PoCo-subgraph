@@ -14,7 +14,10 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-import { log } from '@graphprotocol/graph-ts'
+import {
+	log,
+	BigInt,
+} from '@graphprotocol/graph-ts'
 
 import {
 	IexecInterfaceToken  as IexecInterfaceTokenContract,
@@ -56,6 +59,7 @@ import {
 	createEventID,
 	createContributionID,
 	fetchAccount,
+	fetchProtocol,
 	logTransaction,
 	toRLC,
 } from '../utils'
@@ -115,6 +119,11 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
 	let requestorder = new RequestOrder(event.params.requestHash.toHex())
 	requestorder.requester = deal.requester.toHex()
 	requestorder.save()
+
+	let protocol = fetchProtocol();
+	protocol.deals = protocol.deals.plus(BigInt.fromI32(1));
+	protocol.tasks = protocol.tasks.plus(d.botSize);
+	protocol.save();
 }
 
 export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
@@ -267,6 +276,10 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 	e.task        = event.params.taskid.toHex()
 	e.results     = event.params.results
 	e.save()
+
+	let protocol = fetchProtocol();
+	protocol.completedTasks = protocol.completedTasks.plus(BigInt.fromI32(1));
+	protocol.save();
 }
 
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
@@ -281,6 +294,10 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
 	e.timestamp   = event.block.timestamp
 	e.task        = event.params.taskid.toHex()
 	e.save()
+
+	let protocol = fetchProtocol();
+	protocol.claimedTasks = protocol.claimedTasks.plus(BigInt.fromI32(1));
+	protocol.save();
 }
 
 export function handleAccurateContribution(event: AccurateContributionEvent): void {

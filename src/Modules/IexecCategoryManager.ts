@@ -15,6 +15,10 @@
  ******************************************************************************/
 
 import {
+  BigInt,
+} from '@graphprotocol/graph-ts'
+
+import {
 	CreateCategory as CreateCategoryEvent,
 } from '../../generated/Core/IexecInterfaceToken'
 
@@ -22,9 +26,23 @@ import {
 	Category
 } from '../../generated/schema'
 
+import {
+  fetchProtocol,
+} from '../utils'
+
 export function handleCreateCategory(event: CreateCategoryEvent): void
 {
-	let category = new Category(event.params.catid.toString())
+  // categories may be redefined by the administrator
+  let category = Category.load(event.params.catid.toString())
+
+  if (category == null) {
+    category = new Category(event.params.catid.toString())
+
+    let protocol = fetchProtocol();
+    protocol.categories = protocol.categories.plus(BigInt.fromI32(1));
+    protocol.save();
+  }
+
 	category.name             = event.params.name
 	category.description      = event.params.description
 	category.workClockTimeRef = event.params.workClockTimeRef

@@ -23,6 +23,7 @@ import {
 
 import {
 	Account,
+  Protocol,
 	Transaction,
 } from '../generated/schema'
 
@@ -47,6 +48,24 @@ export function fetchAccount(id: string): Account
 		account.score   = BigInt.fromI32(0)
 	}
 	return account as Account
+}
+
+
+export function fetchProtocol(): Protocol
+{
+	let protocol = Protocol.load('iExec');
+	if (protocol == null)	{
+		protocol = new Protocol('iExec');
+    protocol.categories = BigInt.fromI32(0);
+		protocol.apps = BigInt.fromI32(0);
+    protocol.datasets = BigInt.fromI32(0);
+    protocol.workerpools = BigInt.fromI32(0);
+    protocol.deals = BigInt.fromI32(0);
+    protocol.tasks = BigInt.fromI32(0);
+    protocol.completedTasks = BigInt.fromI32(0);
+    protocol.claimedTasks = BigInt.fromI32(0);
+	}
+	return protocol as Protocol;
 }
 
 export function logTransaction(event: ethereum.Event): Transaction
@@ -77,3 +96,5 @@ export function intToAddress(value: BigInt): Address
 {
 	return Address.fromHexString(value.toHex().substr(2).padStart(40, '0')) as Address;
 }
+
+export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';

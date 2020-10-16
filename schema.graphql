@@ -473,3 +473,16 @@ type TaskClaimed implements TaskEvent @entity {
 	timestamp:                    BigInt!
 	task:                         Task!
 }
+
+# ============================ Protocol =======================================
+type Protocol @entity {
+	id:                  					ID!
+	categories:										BigInt!
+	apps: 												BigInt!
+	datasets: 										BigInt!
+	workerpools: 									BigInt!
+	deals: 												BigInt!
+	tasks:												BigInt!
+	completedTasks: 							BigInt!
+	claimedTasks: 								BigInt!
+}

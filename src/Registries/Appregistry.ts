@@ -15,6 +15,10 @@
  ******************************************************************************/
 
 import {
+ 	BigInt,
+} from '@graphprotocol/graph-ts'
+
+import {
 	App as AppContract,
 } from '../../generated/AppRegistry/App'
 
@@ -30,8 +34,10 @@ import {
 import {
 	createEventID,
 	fetchAccount,
+  fetchProtocol,
 	logTransaction,
 	intToAddress,
+  ADDRESS_ZERO,
 } from '../utils'
 
 export function handleTransferApp(ev: TransferEvent): void {
@@ -59,4 +65,9 @@ export function handleTransferApp(ev: TransferEvent): void {
 	transfer.to          = to.id;
 	transfer.save();
 
+  if (from.id == ADDRESS_ZERO) {
+    let protocol = fetchProtocol();
+    protocol.apps = protocol.apps.plus(BigInt.fromI32(1));
+    protocol.save();
+  }
 }

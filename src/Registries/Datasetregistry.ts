@@ -15,6 +15,10 @@
  ******************************************************************************/
 
 import {
+ 	BigInt,
+} from '@graphprotocol/graph-ts'
+
+import {
 	Dataset as DatasetContract,
 } from '../../generated/DatasetRegistry/Dataset'
 
@@ -30,8 +34,10 @@ import {
 import {
 	createEventID,
 	fetchAccount,
+  fetchProtocol,
 	logTransaction,
 	intToAddress,
+  ADDRESS_ZERO,
 } from '../utils'
 
 export function handleTransferDataset(ev: TransferEvent): void {
@@ -57,4 +63,9 @@ export function handleTransferDataset(ev: TransferEvent): void {
 	transfer.to          = to.id;
 	transfer.save();
 
+  if (from.id == ADDRESS_ZERO) {
+    let protocol = fetchProtocol();
+    protocol.datasets = protocol.datasets.plus(BigInt.fromI32(1));
+    protocol.save();
+  }
 }

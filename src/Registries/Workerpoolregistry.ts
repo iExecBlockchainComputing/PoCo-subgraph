@@ -15,6 +15,10 @@
  ******************************************************************************/
 
 import {
+  BigInt,
+} from '@graphprotocol/graph-ts'
+
+import {
 	Workerpool as WorkerpoolContract,
 } from '../../generated/WorkerpoolRegistry/Workerpool'
 
@@ -34,8 +38,10 @@ import {
 import {
 	createEventID,
 	fetchAccount,
+  fetchProtocol,
 	logTransaction,
 	intToAddress,
+  ADDRESS_ZERO,
 } from '../utils'
 
 export function handleTransferWorkerpool(ev: TransferEvent): void {
@@ -60,6 +66,12 @@ export function handleTransferWorkerpool(ev: TransferEvent): void {
 	transfer.from        = from.id;
 	transfer.to          = to.id;
 	transfer.save();
+
+  if (from.id == ADDRESS_ZERO) {
+    let protocol = fetchProtocol();
+    protocol.workerpools = protocol.workerpools.plus(BigInt.fromI32(1));
+    protocol.save();
+  }
 
 	WorkerpoolTemplate.create(contract._address)
 }
