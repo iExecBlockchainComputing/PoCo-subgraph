@@ -99,6 +99,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
 	d.datasetorder         = event.params.datasetHash.toHex()
 	d.workerpoolorder      = event.params.workerpoolHash.toHex()
 	d.requestorder         = event.params.requestHash.toHex()
+  d.timestamp            = event.block.timestamp;
 	d.save()
 
 	let apporder = new AppOrder(event.params.appHash.toHex())
@@ -149,6 +150,7 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
 	t.contributions        = new Array<string>();
 	t.contributionDeadline = task.contributionDeadline
 	t.finalDeadline        = task.finalDeadline
+  t.timestamp            = event.block.timestamp;
 	t.save()
 
 	let e = new TaskInitialize(createEventID(event));
@@ -177,6 +179,7 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
 	let cs = t.contributions
 	cs.push(c.id)
 	t.contributions = cs
+  t.timestamp     = event.block.timestamp;
 	t.save()
 
 	let e = new TaskContribute(createEventID(event));
@@ -196,6 +199,7 @@ export function handleTaskConsensus(event: TaskConsensusEvent): void {
 	t.status         = 'REVEALING'
 	t.consensus      = task.consensusValue
 	t.revealDeadline = task.revealDeadline
+  t.timestamp      = event.block.timestamp;
 	t.save()
 
 	let e = new TaskConsensus(createEventID(event));
@@ -211,6 +215,7 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
 
 	let t = new Task(event.params.taskid.toHex())
 	t.resultDigest = event.params.digest
+  t.timestamp    = event.block.timestamp;
 	t.save()
 
 	let c = new Contribution(createContributionID(event.params.taskid.toHex(), event.params.worker.toHex()))
@@ -252,6 +257,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 	t.status         = 'ACTIVE'
 	t.consensus      = null
 	t.revealDeadline = null
+  t.timestamp      = event.block.timestamp;
 	t.save()
 
 	let e = new TaskReopen(createEventID(event));
@@ -268,6 +274,7 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 	t.status          = 'COMPLETED'
 	t.results         = event.params.results
 	t.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback
+  t.timestamp       = event.block.timestamp;
 	t.save()
 
 	let e = new TaskFinalize(createEventID(event));
@@ -286,7 +293,8 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
 	let contract = IexecInterfaceTokenContract.bind(event.address)
 
 	let t = new Task(event.params.taskid.toHex())
-	t.status = 'FAILLED'
+	t.status    = 'FAILLED'
+  t.timestamp = event.block.timestamp;
 	t.save()
 
 	let e = new TaskClaimed(createEventID(event));

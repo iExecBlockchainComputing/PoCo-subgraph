@@ -169,6 +169,7 @@ type App implements Ressource @entity {
 	multiaddr:                    Bytes!
 	checksum:                     Bytes!
 	mrenclave:                    Bytes!
+	timestamp:                    BigInt! # last transfer
 	usages:                       [Deal!]! @derivedFrom(field: "app")
 	orders:                       [AppOrder!]! @derivedFrom(field: "app")
 	transfers:                    [AppTransfer!]! @derivedFrom(field: "app")
@@ -180,6 +181,7 @@ type Dataset implements Ressource @entity {
 	name:                         String!
 	multiaddr:                    Bytes!
 	checksum:                     Bytes!
+	timestamp:                    BigInt! # last transfer
 	usages:                       [Deal!]! @derivedFrom(field: "dataset")
 	orders:                       [DatasetOrder!]! @derivedFrom(field: "dataset")
 	transfers:                    [DatasetTransfer!]! @derivedFrom(field: "dataset")
@@ -191,6 +193,7 @@ type Workerpool implements Ressource @entity {
 	description:                  String!
 	workerStakeRatio:             BigInt!
 	schedulerRewardRatio:         BigInt!
+	timestamp:                    BigInt! # last transfer
 	usages:                       [Deal!]! @derivedFrom(field: "workerpool")
 	orders:                       [WorkerpoolOrder!]! @derivedFrom(field: "workerpool")
 	events:                       [WorkerpoolEvent!]! @derivedFrom(field: "workerpool")
@@ -332,6 +335,7 @@ type Category @entity {
 	name:                         String!
 	description:                  String!
 	workClockTimeRef:             BigInt!
+	timestamp:                    BigInt! # last update
 	deals:                        [Deal!]! @derivedFrom(field: "category")
 }
 
@@ -359,6 +363,7 @@ type Deal @entity {
 	botSize:                      BigInt!
 	workerStake:                  BigInt!
 	schedulerRewardRatio:         BigInt!
+	timestamp:                    BigInt! # creation
 	apporder:                     AppOrder # todo: not available if not broadcasted
 	datasetorder:                 DatasetOrder # todo: not available if not broadcasted
 	workerpoolorder:              WorkerpoolOrder # todo: not available if not broadcasted
@@ -387,6 +392,7 @@ type Task @entity {
 	contributionDeadline:         BigInt!
 	revealDeadline:               BigInt # set on consensus reached
 	finalDeadline:                BigInt!
+	timestamp:                    BigInt! # last update
 	rewards:                      [Reward!]! @derivedFrom(field: "task")
 	seizes:                       [Seize!]! @derivedFrom(field: "task")
 	events:                       [TaskEvent!]! @derivedFrom(field: "task")

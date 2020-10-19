@@ -55,11 +55,12 @@ export function handleTransferApp(ev: TransferEvent): void {
 	app.multiaddr = contract.m_appMultiaddr()
 	app.checksum  = contract.m_appChecksum()
 	app.mrenclave = contract.m_appMREnclave()
+  app.timestamp = ev.block.timestamp;
 	app.save();
 
 	let transfer = new AppTransfer(createEventID(ev))
 	transfer.transaction = logTransaction(ev).id
-	transfer.timestamp   = ev.block.timestamp
+	transfer.timestamp   = app.timestamp;
 	transfer.app         = app.id;
 	transfer.from        = from.id;
 	transfer.to          = to.id;

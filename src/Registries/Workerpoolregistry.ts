@@ -57,11 +57,12 @@ export function handleTransferWorkerpool(ev: TransferEvent): void {
 	workerpool.description          = contract.m_workerpoolDescription()
 	workerpool.workerStakeRatio     = contract.m_workerStakeRatioPolicy()
 	workerpool.schedulerRewardRatio = contract.m_schedulerRewardRatioPolicy()
+  workerpool.timestamp            = ev.block.timestamp;
 	workerpool.save();
 
 	let transfer = new WorkerpoolTransfer(createEventID(ev))
 	transfer.transaction = logTransaction(ev).id
-	transfer.timestamp   = ev.block.timestamp
+	transfer.timestamp   = workerpool.timestamp;
 	transfer.workerpool  = workerpool.id;
 	transfer.from        = from.id;
 	transfer.to          = to.id;

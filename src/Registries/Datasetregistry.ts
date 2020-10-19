@@ -53,11 +53,12 @@ export function handleTransferDataset(ev: TransferEvent): void {
 	dataset.name      = contract.m_datasetName()
 	dataset.multiaddr = contract.m_datasetMultiaddr()
 	dataset.checksum  = contract.m_datasetChecksum()
+  dataset.timestamp   = ev.block.timestamp;
 	dataset.save();
 
 	let transfer = new DatasetTransfer(createEventID(ev))
 	transfer.transaction = logTransaction(ev).id
-	transfer.timestamp   = ev.block.timestamp
+	transfer.timestamp   = dataset.timestamp;
 	transfer.dataset     = dataset.id;
 	transfer.from        = from.id;
 	transfer.to          = to.id;

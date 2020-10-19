@@ -46,5 +46,6 @@ export function handleCreateCategory(event: CreateCategoryEvent): void
 	category.name             = event.params.name
 	category.description      = event.params.description
 	category.workClockTimeRef = event.params.workClockTimeRef
+  category.timestamp        = event.block.timestamp;
 	category.save()
 }
