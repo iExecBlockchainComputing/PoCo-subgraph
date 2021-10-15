@@ -59,6 +59,7 @@ import {
   fetchProtocol,
   logTransaction,
   toRLC,
+  fetchTask,
 } from "../utils";
 
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
@@ -140,12 +141,11 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
   let contract = IexecInterfaceTokenContract.bind(event.address);
   let viewedTask = contract.viewTask(event.params.taskid);
 
-  let deal = Deal.load(viewedTask.dealid.toHex());
-
-  let task = new Task(event.params.taskid.toHex());
-  if (deal) {
-    task.deal = deal.id;
-    task.requester = deal.requester;
+  let task = fetchTask(event.params.taskid.toHex());
+  let loadedDeal = Deal.load(viewedTask.dealid.toHex());
+  if (loadedDeal) {
+    task.deal = loadedDeal.id;
+    task.requester = loadedDeal.requester;
   }
   task.status = "ACTIVE";
   task.index = viewedTask.idx;
@@ -185,14 +185,12 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
   contribution.challenge = viewedContribution.enclaveChallenge;
   contribution.save();
 
-  let loadedTask = Task.load(event.params.taskid.toHex());
-  if (loadedTask) {
-    const contributions = loadedTask.contributions;
-    contributions.push(contribution.id);
-    loadedTask.contributions = contributions;
-    loadedTask.timestamp = event.block.timestamp;
-    loadedTask.save();
-  }
+  let task = fetchTask(event.params.taskid.toHex());
+  const contributions = task.contributions;
+  contributions.push(contribution.id);
+  task.contributions = contributions;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
   let contributeEvent = new TaskContribute(createEventID(event));
   contributeEvent.transaction = logTransaction(event).id;
@@ -207,7 +205,7 @@ export function handleTaskConsensus(event: TaskConsensusEvent): void {
   let contract = IexecInterfaceTokenContract.bind(event.address);
   let viewedTask = contract.viewTask(event.params.taskid);
 
-  let task = new Task(event.params.taskid.toHex());
+  let task = fetchTask(event.params.taskid.toHex());
   task.status = "REVEALING";
   task.consensus = viewedTask.consensusValue;
   task.revealDeadline = viewedTask.revealDeadline;
@@ -225,7 +223,7 @@ export function handleTaskConsensus(event: TaskConsensusEvent): void {
 export function handleTaskReveal(event: TaskRevealEvent): void {
   //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-  let task = new Task(event.params.taskid.toHex());
+  let task = fetchTask(event.params.taskid.toHex());
   task.status = "REVEALING";
   task.resultDigest = event.params.digest;
   task.timestamp = event.block.timestamp;
@@ -252,26 +250,23 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
 export function handleTaskReopen(event: TaskReopenEvent): void {
   //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-  let loadedTask = Task.load(event.params.taskid.toHex());
-  let contributions: string[] = [];
-  if (loadedTask) {
-    contributions = loadedTask.contributions;
-    loadedTask.status = "ACTIVE";
-    loadedTask.consensus = null;
-    loadedTask.revealDeadline = null;
-    loadedTask.timestamp = event.block.timestamp;
-    loadedTask.save();
-    for (let i = 0; i < contributions.length; ++i) {
-      let loadedContribution = Contribution.load(contributions[i]);
-      const consensus = loadedTask.consensus;
-      if (
-        loadedContribution &&
-        consensus &&
-        loadedContribution.hash.toHex() == consensus.toHex()
-      ) {
-        loadedContribution.status = "REJECTED";
-        loadedContribution.save();
-      }
+  let task = fetchTask(event.params.taskid.toHex());
+  let contributions = task.contributions;
+  task.status = "ACTIVE";
+  task.consensus = null;
+  task.revealDeadline = null;
+  task.timestamp = event.block.timestamp;
+  task.save();
+  for (let i = 0; i < contributions.length; ++i) {
+    let loadedContribution = Contribution.load(contributions[i]);
+    const consensus = task.consensus;
+    if (
+      loadedContribution &&
+      consensus &&
+      loadedContribution.hash.toHex() == consensus.toHex()
+    ) {
+      loadedContribution.status = "REJECTED";
+      loadedContribution.save();
     }
   }
 
@@ -285,7 +280,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
 export function handleTaskFinalize(event: TaskFinalizeEvent): void {
   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-  let task = new Task(event.params.taskid.toHex());
+  let task = fetchTask(event.params.taskid.toHex());
   task.status = "COMPLETED";
   task.results = event.params.results;
   task.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback;
@@ -307,7 +302,8 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
   //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-  let task = new Task(event.params.taskid.toHex());
+  let task = fetchTask(event.params.taskid.toHex());
+
   task.status = "FAILLED";
   task.timestamp = event.block.timestamp;
   task.save();

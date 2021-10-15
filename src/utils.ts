@@ -16,7 +16,7 @@
 
 import { Address, BigInt, BigDecimal, ethereum } from "@graphprotocol/graph-ts";
 
-import { Account, Protocol, Transaction } from "../generated/schema";
+import { Account, Protocol, Task, Transaction } from "../generated/schema";
 
 export function createEventID(event: ethereum.Event): string {
   return event.block.number
@@ -38,6 +38,15 @@ export function fetchAccount(id: string): Account {
     account.score = BigInt.fromI32(0);
   }
   return account as Account;
+}
+
+export function fetchTask(id: string): Task {
+  let task = Task.load(id);
+  if (task == null) {
+    task = new Task(id);
+    task.status = "UNSET";
+  }
+  return task as Task;
 }
 
 export function fetchProtocol(): Protocol {
