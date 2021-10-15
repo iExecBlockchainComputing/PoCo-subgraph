@@ -226,6 +226,7 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
   //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
   let task = new Task(event.params.taskid.toHex());
+  task.status = "REVEALING";
   task.resultDigest = event.params.digest;
   task.timestamp = event.block.timestamp;
   task.save();
