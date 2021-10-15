@@ -81,7 +81,7 @@ export function toRLC(value: BigInt): BigDecimal {
 }
 
 export function intToAddress(value: BigInt): Address {
-  return Address.fromHexString(
+  return Address.fromString(
     value
       .toHex()
       .substr(2)
