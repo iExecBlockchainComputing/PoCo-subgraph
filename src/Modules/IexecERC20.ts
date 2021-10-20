@@ -24,16 +24,31 @@ import {
 
 import { Transfer, Reward, Seize, Lock, Unlock } from "../../generated/schema";
 
-import { createEventID, fetchAccount, logTransaction, toRLC } from "../utils";
+import {
+  ADDRESS_ZERO,
+  createEventID,
+  fetchAccount,
+  fetchProtocol,
+  logTransaction,
+  toRLC,
+} from "../utils";
 
 export function handleTransfer(event: TransferEvent): void {
+  let protocol = fetchProtocol();
   let value = toRLC(event.params.value);
   let from = fetchAccount(event.params.from.toHex());
   let to = fetchAccount(event.params.to.toHex());
-  if (from.id != "0x0000000000000000000000000000000000000000")
+  if (from.id == ADDRESS_ZERO) {
+    protocol.tvl = protocol.tvl.plus(value);
+  } else {
     from.balance = from.balance.minus(value);
-  if (to.id != "0x0000000000000000000000000000000000000000")
+  }
+  if (to.id == ADDRESS_ZERO) {
+    protocol.tvl = protocol.tvl.minus(value);
+  } else {
     to.balance = to.balance.plus(value);
+  }
+  protocol.save();
   from.save();
   to.save();
 

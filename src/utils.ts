@@ -61,6 +61,7 @@ export function fetchProtocol(): Protocol {
     protocol.tasks = BigInt.fromI32(0);
     protocol.completedTasks = BigInt.fromI32(0);
     protocol.claimedTasks = BigInt.fromI32(0);
+    protocol.tvl = BigDecimal.fromString("0");
   }
   return protocol as Protocol;
 }
