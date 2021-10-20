@@ -33,9 +33,9 @@ export function fetchAccount(id: string): Account {
   let account = Account.load(id);
   if (account == null) {
     account = new Account(id);
-    account.balance = BigDecimal.fromString("0");
-    account.frozen = BigDecimal.fromString("0");
-    account.score = BigInt.fromI32(0);
+    account.balance = BigDecimal.zero();
+    account.frozen = BigDecimal.zero();
+    account.score = BigInt.zero();
   }
   return account as Account;
 }
@@ -53,15 +53,15 @@ export function fetchProtocol(): Protocol {
   let protocol = Protocol.load("iExec");
   if (protocol == null) {
     protocol = new Protocol("iExec");
-    protocol.categories = BigInt.fromI32(0);
-    protocol.apps = BigInt.fromI32(0);
-    protocol.datasets = BigInt.fromI32(0);
-    protocol.workerpools = BigInt.fromI32(0);
-    protocol.deals = BigInt.fromI32(0);
-    protocol.tasks = BigInt.fromI32(0);
-    protocol.completedTasks = BigInt.fromI32(0);
-    protocol.claimedTasks = BigInt.fromI32(0);
-    protocol.tvl = BigDecimal.fromString("0");
+    protocol.categories = BigInt.zero();
+    protocol.apps = BigInt.zero();
+    protocol.datasets = BigInt.zero();
+    protocol.workerpools = BigInt.zero();
+    protocol.deals = BigInt.zero();
+    protocol.tasks = BigInt.zero();
+    protocol.completedTasks = BigInt.zero();
+    protocol.claimedTasks = BigInt.zero();
+    protocol.tvl = BigDecimal.zero();
   }
   return protocol as Protocol;
 }
