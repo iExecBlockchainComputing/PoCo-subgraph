@@ -73,7 +73,8 @@ export function logTransaction(event: ethereum.Event): Transaction {
     tx.to = fetchAccount(to.toHex()).id;
   }
   tx.value = event.transaction.value;
-  //   tx.gasUsed = event.transaction.gasUsed; // TODO gasUsed is not accessible from Transaction
+  tx.gasUsed = event.transaction.gasLimit; // bugged, keeping for backward compatibility: see https://github.com/graphprotocol/graph-ts/commit/535465263e85f4a14e8217afbe161b22b5ca4a6a
+  tx.gasLimit = event.transaction.gasLimit;
   tx.gasPrice = event.transaction.gasPrice;
   tx.timestamp = event.block.timestamp;
   tx.blockNumber = event.block.number;
