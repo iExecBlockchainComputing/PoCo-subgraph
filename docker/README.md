@@ -2,8 +2,10 @@
 
 ## Prerequisites:
 
-- for **viviani graphnodes**, a `viviani-archive-node` service must expose `8545` on network `viviani_blockchain`
-- for **bellecour graphnodes**, a `bellecour-archive-node` service must expose `8545` on network `bellecour_blockchain`
+- install **graph** cli: `npm i -g @graphprotocol/graph-cli`
+- blockchain specific:
+  - for **viviani graphnodes**, a `viviani-archive-node` docker service must expose `8545` on network `viviani_blockchain`
+  - for **bellecour graphnodes**, a `bellecour-archive-node` docker service must expose `8545` on network `bellecour_blockchain`
 
 ## Usage
 
