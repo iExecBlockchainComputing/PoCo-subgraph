@@ -36,4 +36,5 @@ export {
   handleTaskClaimed,
   handleAccurateContribution,
   handleFaultyContribution,
+  handleMatchOrders,
 } from "./IexecPoco";

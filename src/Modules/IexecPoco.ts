@@ -14,7 +14,7 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-import { log, BigInt } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 import {
   IexecInterfaceToken as IexecInterfaceTokenContract,
@@ -29,17 +29,12 @@ import {
   TaskClaimed as TaskClaimedEvent,
   AccurateContribution as AccurateContributionEvent,
   FaultyContribution as FaultyContributionEvent,
+  MatchOrdersCall,
 } from "../../generated/Core/IexecInterfaceToken";
 
 import {
-  //   Account,
-  AppOrder,
-  DatasetOrder,
-  WorkerpoolOrder,
-  RequestOrder,
   Deal,
   SchedulerNotice,
-  Task,
   Contribution,
   TaskInitialize,
   TaskContribute,
@@ -60,7 +55,90 @@ import {
   logTransaction,
   toRLC,
   fetchTask,
+  fetchApporder,
+  fetchDatasetorder,
+  fetchWorkerpoolorder,
+  fetchRequestorder,
+  hashApporder,
+  hashDatasetorder,
+  hashWorkerpoolorder,
+  hashRequestorder,
+  ADDRESS_ZERO,
 } from "../utils";
+
+export function handleMatchOrders(call: MatchOrdersCall): void {
+  const contract = IexecInterfaceTokenContract.bind(call.to);
+  const domain = contract.domain();
+
+  const apporderInput = call.inputs.value0;
+  const apporder = fetchApporder(hashApporder(domain, apporderInput).toHex());
+  apporder.app = apporderInput.app.toHex();
+  apporder.appprice = toRLC(apporderInput.appprice);
+  apporder.volume = apporderInput.volume;
+  apporder.tag = apporderInput.tag;
+  apporder.datasetrestrict = apporderInput.datasetrestrict;
+  apporder.workerpoolrestrict = apporderInput.workerpoolrestrict;
+  apporder.requesterrestrict = apporderInput.requesterrestrict;
+  apporder.salt = apporderInput.salt;
+  apporder.sign = apporderInput.sign;
+  apporder.save();
+
+  const datasetorderInput = call.inputs.value1;
+  if (datasetorderInput.dataset.toString() != ADDRESS_ZERO) {
+    const datasetorder = fetchDatasetorder(
+      hashDatasetorder(domain, datasetorderInput).toHex()
+    );
+    datasetorder.dataset = datasetorderInput.dataset.toHex();
+    datasetorder.datasetprice = toRLC(datasetorderInput.datasetprice);
+    datasetorder.volume = datasetorderInput.volume;
+    datasetorder.tag = datasetorderInput.tag;
+    datasetorder.apprestrict = datasetorderInput.apprestrict;
+    datasetorder.workerpoolrestrict = datasetorderInput.workerpoolrestrict;
+    datasetorder.requesterrestrict = datasetorderInput.requesterrestrict;
+    datasetorder.salt = datasetorderInput.salt;
+    datasetorder.sign = datasetorderInput.sign;
+    datasetorder.save();
+  }
+
+  const workerpoolorderInput = call.inputs.value2;
+  const workerpoolorder = fetchWorkerpoolorder(
+    hashWorkerpoolorder(domain, workerpoolorderInput).toHex()
+  );
+  workerpoolorder.workerpool = workerpoolorderInput.workerpool.toHex();
+  workerpoolorder.workerpoolprice = toRLC(workerpoolorderInput.workerpoolprice);
+  workerpoolorder.volume = workerpoolorderInput.volume;
+  workerpoolorder.tag = workerpoolorderInput.tag;
+  workerpoolorder.category = workerpoolorderInput.category.toString();
+  workerpoolorder.trust = workerpoolorderInput.trust;
+  workerpoolorder.apprestrict = workerpoolorderInput.apprestrict;
+  workerpoolorder.datasetrestrict = workerpoolorderInput.datasetrestrict;
+  workerpoolorder.requesterrestrict = workerpoolorderInput.requesterrestrict;
+  workerpoolorder.salt = workerpoolorderInput.salt;
+  workerpoolorder.sign = workerpoolorderInput.sign;
+  workerpoolorder.save();
+
+  const requestorderInput = call.inputs.value3;
+  const requestorder = fetchRequestorder(
+    hashRequestorder(domain, requestorderInput).toHex()
+  );
+  requestorder.app = requestorderInput.app.toHex();
+  requestorder.appmaxprice = toRLC(requestorderInput.appmaxprice);
+  requestorder.dataset = requestorderInput.dataset.toHex();
+  requestorder.datasetmaxprice = toRLC(requestorderInput.datasetmaxprice);
+  requestorder.workerpool = requestorderInput.workerpool.toHex();
+  requestorder.workerpoolmaxprice = toRLC(requestorderInput.workerpoolmaxprice);
+  requestorder.requester = requestorderInput.requester.toHex();
+  requestorder.volume = requestorderInput.volume;
+  requestorder.tag = requestorderInput.tag;
+  requestorder.category = requestorderInput.category.toString();
+  requestorder.trust = requestorderInput.trust;
+  requestorder.beneficiary = requestorderInput.beneficiary.toHex();
+  requestorder.callback = requestorderInput.callback.toHex();
+  requestorder.params = requestorderInput.params;
+  requestorder.salt = requestorderInput.salt;
+  requestorder.sign = requestorderInput.sign;
+  requestorder.save();
+}
 
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
   let contract = IexecInterfaceTokenContract.bind(event.address);
@@ -101,24 +179,24 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
 
   const dataset = deal.dataset;
 
-  let apporder = new AppOrder(event.params.appHash.toHex());
+  let apporder = fetchApporder(event.params.appHash.toHex());
   apporder.app = deal.app;
   apporder.appprice = deal.appPrice;
   apporder.save();
 
-  let datasetorder = new DatasetOrder(event.params.datasetHash.toHex());
+  let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
   if (dataset) datasetorder.dataset = dataset;
   datasetorder.datasetprice = deal.datasetPrice;
   datasetorder.save();
 
-  let workerpoolorder = new WorkerpoolOrder(
+  let workerpoolorder = fetchWorkerpoolorder(
     event.params.workerpoolHash.toHex()
   );
   workerpoolorder.workerpool = deal.workerpool;
   workerpoolorder.workerpoolprice = deal.workerpoolPrice;
   workerpoolorder.save();
 
-  let requestorder = new RequestOrder(event.params.requestHash.toHex());
+  let requestorder = fetchRequestorder(event.params.requestHash.toHex());
   requestorder.requester = viewedDeal.requester.toHex();
   requestorder.save();
 
