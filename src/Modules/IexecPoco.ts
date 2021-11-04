@@ -45,6 +45,7 @@ import {
   TaskClaimed,
   AccurateContribution,
   FaultyContribution,
+  OrdersMatched,
 } from "../../generated/schema";
 
 import {
@@ -200,6 +201,12 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
   requestorder.requester = viewedDeal.requester.toHex();
   requestorder.save();
 
+  let orderMatchedEvent = new OrdersMatched(createEventID(event));
+  orderMatchedEvent.transaction = logTransaction(event).id;
+  orderMatchedEvent.timestamp = event.block.timestamp;
+  orderMatchedEvent.deal = event.params.dealid.toHex();
+  orderMatchedEvent.save();
+
   let protocol = fetchProtocol();
   protocol.deals = protocol.deals.plus(BigInt.fromI32(1));
   protocol.tasks = protocol.tasks.plus(deal.botSize);
@@ -207,12 +214,12 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
 }
 
 export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
-  let schedulerNoticeEent = new SchedulerNotice(createEventID(event));
-  schedulerNoticeEent.transaction = logTransaction(event).id;
-  schedulerNoticeEent.timestamp = event.block.timestamp;
-  schedulerNoticeEent.workerpool = event.params.workerpool.toHex();
-  schedulerNoticeEent.deal = event.params.dealid.toHex();
-  schedulerNoticeEent.save();
+  let schedulerNoticeEvent = new SchedulerNotice(createEventID(event));
+  schedulerNoticeEvent.transaction = logTransaction(event).id;
+  schedulerNoticeEvent.timestamp = event.block.timestamp;
+  schedulerNoticeEvent.workerpool = event.params.workerpool.toHex();
+  schedulerNoticeEvent.deal = event.params.dealid.toHex();
+  schedulerNoticeEvent.save();
 }
 
 export function handleTaskInitialize(event: TaskInitializeEvent): void {

@@ -370,6 +370,7 @@ type Deal @entity {
   datasetorder: DatasetOrder # todo: not available if not broadcasted
   workerpoolorder: WorkerpoolOrder # todo: not available if not broadcasted
   requestorder: RequestOrder # todo: not available if not broadcasted
+  events: [DealEvent!]! @derivedFrom(field: "deal")
 }
 
 enum TaskStatus {
@@ -419,6 +420,20 @@ type Contribution @entity {
 }
 
 # ============================ PoCo contributions =============================
+interface DealEvent {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  deal: Deal!
+}
+
+type OrdersMatched implements DealEvent @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  deal: Deal!
+}
+
 interface TaskEvent {
   id: ID!
   transaction: Transaction!
