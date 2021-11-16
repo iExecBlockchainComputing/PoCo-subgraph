@@ -30,7 +30,7 @@ export function handleCreateCategory(event: CreateCategoryEvent): void {
     category = new Category(event.params.catid.toString());
 
     let protocol = fetchProtocol();
-    protocol.categories = protocol.categories.plus(BigInt.fromI32(1));
+    protocol.categoriesCount = protocol.categoriesCount.plus(BigInt.fromI32(1));
     protocol.save();
   }
 

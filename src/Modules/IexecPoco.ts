@@ -208,8 +208,8 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
   orderMatchedEvent.save();
 
   let protocol = fetchProtocol();
-  protocol.deals = protocol.deals.plus(BigInt.fromI32(1));
-  protocol.tasks = protocol.tasks.plus(deal.botSize);
+  protocol.dealsCount = protocol.dealsCount.plus(BigInt.fromI32(1));
+  protocol.tasksCount = protocol.tasksCount.plus(deal.botSize);
   protocol.save();
 }
 
@@ -380,7 +380,9 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
   finalizeEvent.save();
 
   let protocol = fetchProtocol();
-  protocol.completedTasks = protocol.completedTasks.plus(BigInt.fromI32(1));
+  protocol.completedTasksCount = protocol.completedTasksCount.plus(
+    BigInt.fromI32(1)
+  );
   protocol.save();
 }
 
@@ -400,7 +402,9 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
   claimedEvent.save();
 
   let protocol = fetchProtocol();
-  protocol.claimedTasks = protocol.claimedTasks.plus(BigInt.fromI32(1));
+  protocol.claimedTasksCount = protocol.claimedTasksCount.plus(
+    BigInt.fromI32(1)
+  );
   protocol.save();
 }
 

@@ -59,7 +59,7 @@ export function handleTransferApp(ev: TransferEvent): void {
 
   if (from.id == ADDRESS_ZERO) {
     let protocol = fetchProtocol();
-    protocol.apps = protocol.apps.plus(BigInt.fromI32(1));
+    protocol.appsCount = protocol.appsCount.plus(BigInt.fromI32(1));
     protocol.save();
   }
 }

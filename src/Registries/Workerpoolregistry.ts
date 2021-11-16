@@ -59,7 +59,9 @@ export function handleTransferWorkerpool(ev: TransferEvent): void {
 
   if (from.id == ADDRESS_ZERO) {
     let protocol = fetchProtocol();
-    protocol.workerpools = protocol.workerpools.plus(BigInt.fromI32(1));
+    protocol.workerpoolsCount = protocol.workerpoolsCount.plus(
+      BigInt.fromI32(1)
+    );
     protocol.save();
   }
 

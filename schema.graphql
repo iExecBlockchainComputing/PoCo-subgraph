@@ -500,13 +500,13 @@ type TaskClaimed implements TaskEvent @entity {
 # ============================ Protocol =======================================
 type Protocol @entity {
   id: ID!
-  categories: BigInt!
-  apps: BigInt!
-  datasets: BigInt!
-  workerpools: BigInt!
-  deals: BigInt!
-  tasks: BigInt!
-  completedTasks: BigInt!
-  claimedTasks: BigInt!
+  categoriesCount: BigInt!
+  appsCount: BigInt!
+  datasetsCount: BigInt!
+  workerpoolsCount: BigInt!
+  dealsCount: BigInt!
+  tasksCount: BigInt!
+  completedTasksCount: BigInt!
+  claimedTasksCount: BigInt!
   tvl: BigDecimal!
 }

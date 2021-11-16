@@ -111,14 +111,14 @@ export function fetchProtocol(): Protocol {
   let protocol = Protocol.load("iExec");
   if (protocol == null) {
     protocol = new Protocol("iExec");
-    protocol.categories = BigInt.zero();
-    protocol.apps = BigInt.zero();
-    protocol.datasets = BigInt.zero();
-    protocol.workerpools = BigInt.zero();
-    protocol.deals = BigInt.zero();
-    protocol.tasks = BigInt.zero();
-    protocol.completedTasks = BigInt.zero();
-    protocol.claimedTasks = BigInt.zero();
+    protocol.categoriesCount = BigInt.zero();
+    protocol.appsCount = BigInt.zero();
+    protocol.datasetsCount = BigInt.zero();
+    protocol.workerpoolsCount = BigInt.zero();
+    protocol.dealsCount = BigInt.zero();
+    protocol.tasksCount = BigInt.zero();
+    protocol.completedTasksCount = BigInt.zero();
+    protocol.claimedTasksCount = BigInt.zero();
     protocol.tvl = BigDecimal.zero();
   }
   return protocol as Protocol;

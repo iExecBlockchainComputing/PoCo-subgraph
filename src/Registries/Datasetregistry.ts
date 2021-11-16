@@ -57,7 +57,7 @@ export function handleTransferDataset(ev: TransferEvent): void {
 
   if (from.id == ADDRESS_ZERO) {
     let protocol = fetchProtocol();
-    protocol.datasets = protocol.datasets.plus(BigInt.fromI32(1));
+    protocol.datasetsCount = protocol.datasetsCount.plus(BigInt.fromI32(1));
     protocol.save();
   }
 }
