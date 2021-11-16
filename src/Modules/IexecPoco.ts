@@ -35,7 +35,6 @@ import {
 import {
   Deal,
   SchedulerNotice,
-  Contribution,
   TaskInitialize,
   TaskContribute,
   TaskConsensus,
@@ -65,6 +64,7 @@ import {
   hashWorkerpoolorder,
   hashRequestorder,
   ADDRESS_ZERO,
+  fetchContribution,
 } from "../utils";
 
 export function handleMatchOrders(call: MatchOrdersCall): void {
@@ -255,7 +255,7 @@ export function handleTaskContribute(event: TaskContributeEvent): void {
     event.params.worker
   );
 
-  let contribution = new Contribution(
+  let contribution = fetchContribution(
     createContributionID(
       event.params.taskid.toHex(),
       event.params.worker.toHex()
@@ -314,7 +314,7 @@ export function handleTaskReveal(event: TaskRevealEvent): void {
   task.timestamp = event.block.timestamp;
   task.save();
 
-  let contribution = new Contribution(
+  let contribution = fetchContribution(
     createContributionID(
       event.params.taskid.toHex(),
       event.params.worker.toHex()
@@ -343,7 +343,7 @@ export function handleTaskReopen(event: TaskReopenEvent): void {
   task.timestamp = event.block.timestamp;
   task.save();
   for (let i = 0; i < contributions.length; ++i) {
-    let loadedContribution = Contribution.load(contributions[i]);
+    let loadedContribution = fetchContribution(contributions[i]);
     const consensus = task.consensus;
     if (
       loadedContribution &&

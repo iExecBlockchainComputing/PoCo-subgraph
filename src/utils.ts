@@ -27,6 +27,7 @@ import {
 import {
   Account,
   AppOrder,
+  Contribution,
   DatasetOrder,
   Protocol,
   RequestOrder,
@@ -129,6 +130,14 @@ export function fetchTransaction(id: string): Transaction {
     tx = new Transaction(id);
   }
   return tx as Transaction;
+}
+
+export function fetchContribution(id: string): Contribution {
+  let contribution = Contribution.load(id);
+  if (contribution == null) {
+    contribution = new Contribution(id);
+  }
+  return contribution as Contribution;
 }
 
 export function logTransaction(event: ethereum.Event): Transaction {
