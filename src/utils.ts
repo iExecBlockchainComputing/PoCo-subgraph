@@ -123,8 +123,16 @@ export function fetchProtocol(): Protocol {
   return protocol as Protocol;
 }
 
+export function fetchTransaction(id: string): Transaction {
+  let tx = Transaction.load(id);
+  if (tx == null) {
+    tx = new Transaction(id);
+  }
+  return tx as Transaction;
+}
+
 export function logTransaction(event: ethereum.Event): Transaction {
-  let tx = new Transaction(event.transaction.hash.toHex());
+  let tx = fetchTransaction(event.transaction.hash.toHex());
   tx.from = fetchAccount(event.transaction.from.toHex()).id;
   const to = event.transaction.to; // may be null
   if (to) {
