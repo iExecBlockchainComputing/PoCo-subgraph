@@ -29,6 +29,7 @@ import {
   AppOrder,
   Contribution,
   DatasetOrder,
+  Deal,
   Protocol,
   RequestOrder,
   Task,
@@ -64,6 +65,16 @@ export function fetchAccount(id: string): Account {
     account.score = BigInt.zero();
   }
   return account as Account;
+}
+
+export function fetchDeal(id: string): Deal {
+  let deal = Deal.load(id);
+  if (deal == null) {
+    deal = new Deal(id);
+    deal.completedTasksCount = BigInt.zero();
+    deal.claimedTasksCount = BigInt.zero();
+  }
+  return deal as Deal;
 }
 
 export function fetchTask(id: string): Task {

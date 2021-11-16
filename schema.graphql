@@ -363,6 +363,8 @@ type Deal @entity {
   startTime: BigInt!
   botFirst: BigInt!
   botSize: BigInt!
+  completedTasksCount: BigInt!
+  claimedTasksCount: BigInt!
   workerStake: BigInt!
   schedulerRewardRatio: BigInt!
   timestamp: BigInt! # creation

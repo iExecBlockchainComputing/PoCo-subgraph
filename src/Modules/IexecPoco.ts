@@ -33,7 +33,6 @@ import {
 } from "../../generated/Core/IexecInterfaceToken";
 
 import {
-  Deal,
   SchedulerNotice,
   TaskInitialize,
   TaskContribute,
@@ -59,6 +58,7 @@ import {
   fetchDatasetorder,
   fetchWorkerpoolorder,
   fetchRequestorder,
+  fetchDeal,
   hashApporder,
   hashDatasetorder,
   hashWorkerpoolorder,
@@ -149,7 +149,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
   fetchAccount(viewedDeal.beneficiary.toHex()).save();
   fetchAccount(viewedDeal.callback.toHex()).save();
 
-  let deal = new Deal(event.params.dealid.toHex());
+  let deal = fetchDeal(event.params.dealid.toHex());
   deal.app = viewedDeal.app.pointer.toHex();
   deal.appOwner = viewedDeal.app.owner.toHex();
   deal.appPrice = toRLC(viewedDeal.app.price);
@@ -227,7 +227,7 @@ export function handleTaskInitialize(event: TaskInitializeEvent): void {
   let viewedTask = contract.viewTask(event.params.taskid);
 
   let task = fetchTask(event.params.taskid.toHex());
-  let loadedDeal = Deal.load(viewedTask.dealid.toHex());
+  let loadedDeal = fetchDeal(viewedTask.dealid.toHex());
   if (loadedDeal) {
     task.deal = loadedDeal.id;
     task.requester = loadedDeal.requester;
@@ -379,6 +379,10 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
   finalizeEvent.results = event.params.results;
   finalizeEvent.save();
 
+  let deal = fetchDeal(task.deal);
+  deal.completedTasksCount = deal.completedTasksCount.plus(BigInt.fromI32(1));
+  deal.save();
+
   let protocol = fetchProtocol();
   protocol.completedTasksCount = protocol.completedTasksCount.plus(
     BigInt.fromI32(1)
@@ -400,6 +404,10 @@ export function handleTaskClaimed(event: TaskClaimedEvent): void {
   claimedEvent.timestamp = event.block.timestamp;
   claimedEvent.task = event.params.taskid.toHex();
   claimedEvent.save();
+
+  let deal = fetchDeal(task.deal);
+  deal.claimedTasksCount = deal.claimedTasksCount.plus(BigInt.fromI32(1));
+  deal.save();
 
   let protocol = fetchProtocol();
   protocol.claimedTasksCount = protocol.claimedTasksCount.plus(
