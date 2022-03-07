@@ -5,7 +5,7 @@ networks:
   blockchain:
     external:
       name: bellecour_blockchain
-  
+
 services:
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
@@ -34,7 +34,7 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
     volumes:
-     - ${DATA}/postgres:/var/lib/postgresql/data
+      - ${DATA}/postgres:/var/lib/postgresql/data
 
   graphnode:
     image: graphprotocol/graph-node
@@ -53,7 +53,6 @@ services:
       - 8040:8040 # prometeus
     environment:
       RUST_BACKTRACE: 1
-      RUST_BACKTRACE: full
       postgres_host: postgres
       postgres_user: "${DB_USER}"
       postgres_pass: "${DB_PASSWORD}"

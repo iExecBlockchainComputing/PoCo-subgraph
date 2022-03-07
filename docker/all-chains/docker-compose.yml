@@ -9,7 +9,8 @@ networks:
   viviani:
     external:
       name: viviani_blockchain
-  
+  thegraph-goerli:
+
 services:
   ipfs:
     image: ipfs/go-ipfs:v0.4.23
@@ -17,6 +18,7 @@ services:
     networks:
       - thegraph-bellecour
       - thegraph-viviani
+      - thegraph-goerli
     expose:
       - 5001
     ports:
@@ -39,7 +41,7 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
     volumes:
-     - ${DATA}/viviani/postgres:/var/lib/postgresql/data
+      - ${DATA}/viviani/postgres:/var/lib/postgresql/data
 
   graphnode-viviani:
     image: graphprotocol/graph-node
@@ -58,7 +60,6 @@ services:
       - 13340:8040 # prometeus
     environment:
       RUST_BACKTRACE: 1
-      RUST_BACKTRACE: full
       postgres_host: postgres-viviani
       postgres_user: "${DB_USER}"
       postgres_pass: "${DB_PASSWORD}"
@@ -82,7 +83,7 @@ services:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
     volumes:
-     - ${DATA}/bellecour/postgres:/var/lib/postgresql/data
+      - ${DATA}/bellecour/postgres:/var/lib/postgresql/data
 
   graphnode-bellecour:
     image: graphprotocol/graph-node
@@ -93,6 +94,9 @@ services:
     depends_on:
       - ipfs
       - postgres-bellecour
+    expose:
+      - 8000
+      - 8001
     ports:
       - 13400:8000 # http
       - 13401:8001 # ws
@@ -101,7 +105,6 @@ services:
       - 13440:8040 # prometeus
     environment:
       RUST_BACKTRACE: 1
-      RUST_BACKTRACE: full
       postgres_host: postgres-bellecour
       postgres_user: "${DB_USER}"
       postgres_pass: "${DB_PASSWORD}"
@@ -109,3 +112,83 @@ services:
       ipfs: "ipfs:5001"
       ethereum: "bellecour:http://bellecour-archive-node:8545"
       GRAPH_NODE_ID: "graphnode_id"
+  # postgres-goerli:
+  #   image: postgres
+  #   restart: unless-stopped
+  #   networks:
+  #     - thegraph-goerli
+  #   command:
+  #     - "postgres"
+  #     - "-cshared_preload_libraries=pg_stat_statements"
+  #   expose:
+  #     - 5432
+  #   environment:
+  #     POSTGRES_USER: "${DB_USER}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #     POSTGRES_DB: "${DB_NAME}"
+  #   volumes:
+  #    - ${DATA}/goerli/postgres:/var/lib/postgresql/data
+  # graphnode-goerli:
+  #   image: graphprotocol/graph-node
+  #   restart: unless-stopped
+  #   networks:
+  #     - thegraph-goerli
+  #   depends_on:
+  #     - ipfs
+  #     - postgres-goerli
+  #   ports:
+  #     - 50000:8000 # http
+  #     - 50001:8001 # ws
+  #     - 50020:8020 # deploy
+  #     - 50030:8030 # monitoring
+  #     - 50040:8040 # prometeus
+  #   environment:
+  #     RUST_BACKTRACE: 1
+  #     RUST_BACKTRACE: full
+  #     postgres_host: postgres-goerli
+  #     postgres_user: "${DB_USER}"
+  #     postgres_pass: "${DB_PASSWORD}"
+  #     postgres_db: "${DB_NAME}"
+  #     ipfs: "ipfs:5001"
+  #     ethereum: "goerli:https://eth-goerli.alchemyapi.io/v2/Up5Axu02IzUdyhpxbavUdSnU8cDcG8rT"
+  #     GRAPH_NODE_ID: "graphnode_id"
+  # postgres-goerli-infura:
+  #   image: postgres
+  #   restart: unless-stopped
+  #   networks:
+  #     - thegraph-goerli
+  #   command:
+  #     - "postgres"
+  #     - "-cshared_preload_libraries=pg_stat_statements"
+  #   expose:
+  #     - 5432
+  #   environment:
+  #     POSTGRES_USER: "${DB_USER}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #     POSTGRES_DB: "${DB_NAME}"
+  #   volumes:
+  #    - ${DATA}/goerli-infura/postgres:/var/lib/postgresql/data
+  # graphnode-goerli-infura:
+  #   image: graphprotocol/graph-node
+  #   restart: unless-stopped
+  #   networks:
+  #     - thegraph-goerli
+  #   depends_on:
+  #     - ipfs
+  #     - postgres-goerli-infura
+  #   ports:
+  #     - 51000:8000 # http
+  #     - 51001:8001 # ws
+  #     - 51020:8020 # deploy
+  #     - 51030:8030 # monitoring
+  #     - 51040:8040 # prometeus
+  #   environment:
+  #     RUST_BACKTRACE: 1
+  #     RUST_BACKTRACE: full
+  #     postgres_host: postgres-goerli-infura
+  #     postgres_user: "${DB_USER}"
+  #     postgres_pass: "${DB_PASSWORD}"
+  #     postgres_db: "${DB_NAME}"
+  #     ipfs: "ipfs:5001"
+  #     ethereum: "goerli:https://goerli.infura.io/v3/514947489c494970878e796545044fb2"
+  #     GRAPH_NODE_ID: "graphnode_id"
