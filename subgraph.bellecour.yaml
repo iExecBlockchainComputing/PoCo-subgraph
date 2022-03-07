@@ -82,8 +82,7 @@ dataSources:
         - Unlock
       abis:
         - name: IexecInterfaceToken
-          # file: node_modules/@iexec/poco/build/contracts/IexecInterfaceToken.json # solidity 0.6.0 not supported
-          file: abis/IexecInterfaceToken.json
+          file: node_modules/@iexec/poco/build/contracts/IexecInterfaceNative.json
       eventHandlers:
         - event: CreateCategory(uint256,string,string,uint256)
           handler: handleCreateCategory
