@@ -22,12 +22,12 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f'
+      address: "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f"
       abi: ERC1538
       startBlock: 9917600
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - ERC1538Module
@@ -48,12 +48,12 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f'
+      address: "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f"
       abi: IexecInterfaceToken
       startBlock: 9917600
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Category
@@ -119,19 +119,22 @@ dataSources:
           handler: handleLock
         - event: Unlock(address,uint256)
           handler: handleUnlock
+      # callHandlers: # require trace_filter access
+      #   - function: matchOrders((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes),(address,uint256,uint256,bytes32,address,address,address,bytes32,bytes),(address,uint256,uint256,bytes32,uint256,uint256,address,address,address,bytes32,bytes),(address,uint256,address,uint256,address,uint256,address,uint256,bytes32,uint256,uint256,address,address,string,bytes32,bytes))
+      #     handler: handleMatchOrders
       file: ./src/Modules/index.ts
 
-# =============================== App registry ================================
+  # =============================== App registry ================================
   - name: AppRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xB1C52075b276f87b1834919167312221d50c9D16'
+      address: "0xB1C52075b276f87b1834919167312221d50c9D16"
       abi: AppRegistry
       startBlock: 9917600
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - App
@@ -146,17 +149,17 @@ dataSources:
           handler: handleTransferApp
       file: ./src/Registries/index.ts
 
-# ============================= Dataset registry ==============================
+  # ============================= Dataset registry ==============================
   - name: DatasetRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0x799DAa22654128d0C64d5b79eac9283008158730'
+      address: "0x799DAa22654128d0C64d5b79eac9283008158730"
       abi: DatasetRegistry
       startBlock: 9917600
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Dataset
@@ -171,17 +174,17 @@ dataSources:
           handler: handleTransferDataset
       file: ./src/Registries/index.ts
 
-# ============================ Workerpool registry ============================
+  # ============================ Workerpool registry ============================
   - name: WorkerpoolRegistry
     kind: ethereum/contract
     network: mainnet
     source:
-      address: '0xC76A18c78B7e530A165c5683CB1aB134E21938B4'
+      address: "0xC76A18c78B7e530A165c5683CB1aB134E21938B4"
       abi: WorkerpoolRegistry
       startBlock: 9917600
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Workerpool
@@ -205,7 +208,7 @@ templates:
       abi: Workerpool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Workerpool

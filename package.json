@@ -16,8 +16,8 @@
     "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.18.0",
-    "@graphprotocol/graph-ts": "^0.18.1"
+    "@graphprotocol/graph-cli": "^0.22.3",
+    "@graphprotocol/graph-ts": "^0.22.1"
   },
   "dependencies": {
     "@iexec/poco": "5.1.2",

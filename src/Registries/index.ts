@@ -14,18 +14,10 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-export {
-	handleTransferApp,
-} from './Appregistry'
+export { handleTransferApp } from "./Appregistry";
 
-export {
-	handleTransferDataset,
-} from './Datasetregistry'
+export { handleTransferDataset } from "./Datasetregistry";
 
-export {
-	handleTransferWorkerpool,
-} from './Workerpoolregistry'
+export { handleTransferWorkerpool } from "./Workerpoolregistry";
 
-export {
-	handlePolicyUpdate,
-} from './Workerpool'
+export { handlePolicyUpdate } from "./Workerpool";

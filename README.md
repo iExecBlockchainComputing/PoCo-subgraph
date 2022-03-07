@@ -1,4 +1,4 @@
-# iExec PoCo v3 - subgraph
+# iExec PoCo v5 - subgraph
 
 
 ## Usefull commands
@@ -13,5 +13,3 @@
 * deployment
 
 	`npm run deploy`
-
-

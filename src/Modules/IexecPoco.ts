@@ -14,300 +14,446 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-import { log } from '@graphprotocol/graph-ts'
+import { BigInt } from "@graphprotocol/graph-ts";
 
 import {
-	IexecInterfaceToken  as IexecInterfaceTokenContract,
-	OrdersMatched        as OrdersMatchedEvent,
-	SchedulerNotice      as SchedulerNoticeEvent,
-	TaskInitialize       as TaskInitializeEvent,
-	TaskContribute       as TaskContributeEvent,
-	TaskConsensus        as TaskConsensusEvent,
-	TaskReveal           as TaskRevealEvent,
-	TaskReopen           as TaskReopenEvent,
-	TaskFinalize         as TaskFinalizeEvent,
-	TaskClaimed          as TaskClaimedEvent,
-	AccurateContribution as AccurateContributionEvent,
-	FaultyContribution   as FaultyContributionEvent,
-} from '../../generated/Core/IexecInterfaceToken'
+  IexecInterfaceToken as IexecInterfaceTokenContract,
+  OrdersMatched as OrdersMatchedEvent,
+  SchedulerNotice as SchedulerNoticeEvent,
+  TaskInitialize as TaskInitializeEvent,
+  TaskContribute as TaskContributeEvent,
+  TaskConsensus as TaskConsensusEvent,
+  TaskReveal as TaskRevealEvent,
+  TaskReopen as TaskReopenEvent,
+  TaskFinalize as TaskFinalizeEvent,
+  TaskClaimed as TaskClaimedEvent,
+  AccurateContribution as AccurateContributionEvent,
+  FaultyContribution as FaultyContributionEvent,
+  MatchOrdersCall,
+} from "../../generated/Core/IexecInterfaceToken";
 
 import {
-	Account,
-	AppOrder,
-	DatasetOrder,
-	WorkerpoolOrder,
-	RequestOrder,
-	Deal,
-	SchedulerNotice,
-	Task,
-	Contribution,
-	TaskInitialize,
-	TaskContribute,
-	TaskConsensus,
-	TaskReveal,
-	TaskReopen,
-	TaskFinalize,
-	TaskClaimed,
-	AccurateContribution,
-	FaultyContribution,
-} from '../../generated/schema'
+  SchedulerNotice,
+  TaskInitialize,
+  TaskContribute,
+  TaskConsensus,
+  TaskReveal,
+  TaskReopen,
+  TaskFinalize,
+  TaskClaimed,
+  AccurateContribution,
+  FaultyContribution,
+  OrdersMatched,
+} from "../../generated/schema";
 
 import {
-	createEventID,
-	createContributionID,
-	fetchAccount,
-	logTransaction,
-	toRLC,
-} from '../utils'
+  createEventID,
+  createContributionID,
+  fetchAccount,
+  fetchProtocol,
+  logTransaction,
+  toRLC,
+  fetchTask,
+  fetchApporder,
+  fetchDatasetorder,
+  fetchWorkerpoolorder,
+  fetchRequestorder,
+  fetchDeal,
+  hashApporder,
+  hashDatasetorder,
+  hashWorkerpoolorder,
+  hashRequestorder,
+  ADDRESS_ZERO,
+  fetchContribution,
+} from "../utils";
 
+export function handleMatchOrders(call: MatchOrdersCall): void {
+  const contract = IexecInterfaceTokenContract.bind(call.to);
+  const domain = contract.domain();
+
+  const apporderInput = call.inputs.value0;
+  const apporder = fetchApporder(hashApporder(domain, apporderInput).toHex());
+  apporder.app = apporderInput.app.toHex();
+  apporder.appprice = toRLC(apporderInput.appprice);
+  apporder.volume = apporderInput.volume;
+  apporder.tag = apporderInput.tag;
+  apporder.datasetrestrict = apporderInput.datasetrestrict;
+  apporder.workerpoolrestrict = apporderInput.workerpoolrestrict;
+  apporder.requesterrestrict = apporderInput.requesterrestrict;
+  apporder.salt = apporderInput.salt;
+  apporder.sign = apporderInput.sign;
+  apporder.save();
+
+  const datasetorderInput = call.inputs.value1;
+  if (datasetorderInput.dataset.toString() != ADDRESS_ZERO) {
+    const datasetorder = fetchDatasetorder(
+      hashDatasetorder(domain, datasetorderInput).toHex()
+    );
+    datasetorder.dataset = datasetorderInput.dataset.toHex();
+    datasetorder.datasetprice = toRLC(datasetorderInput.datasetprice);
+    datasetorder.volume = datasetorderInput.volume;
+    datasetorder.tag = datasetorderInput.tag;
+    datasetorder.apprestrict = datasetorderInput.apprestrict;
+    datasetorder.workerpoolrestrict = datasetorderInput.workerpoolrestrict;
+    datasetorder.requesterrestrict = datasetorderInput.requesterrestrict;
+    datasetorder.salt = datasetorderInput.salt;
+    datasetorder.sign = datasetorderInput.sign;
+    datasetorder.save();
+  }
+
+  const workerpoolorderInput = call.inputs.value2;
+  const workerpoolorder = fetchWorkerpoolorder(
+    hashWorkerpoolorder(domain, workerpoolorderInput).toHex()
+  );
+  workerpoolorder.workerpool = workerpoolorderInput.workerpool.toHex();
+  workerpoolorder.workerpoolprice = toRLC(workerpoolorderInput.workerpoolprice);
+  workerpoolorder.volume = workerpoolorderInput.volume;
+  workerpoolorder.tag = workerpoolorderInput.tag;
+  workerpoolorder.category = workerpoolorderInput.category.toString();
+  workerpoolorder.trust = workerpoolorderInput.trust;
+  workerpoolorder.apprestrict = workerpoolorderInput.apprestrict;
+  workerpoolorder.datasetrestrict = workerpoolorderInput.datasetrestrict;
+  workerpoolorder.requesterrestrict = workerpoolorderInput.requesterrestrict;
+  workerpoolorder.salt = workerpoolorderInput.salt;
+  workerpoolorder.sign = workerpoolorderInput.sign;
+  workerpoolorder.save();
+
+  const requestorderInput = call.inputs.value3;
+  const requestorder = fetchRequestorder(
+    hashRequestorder(domain, requestorderInput).toHex()
+  );
+  requestorder.app = requestorderInput.app.toHex();
+  requestorder.appmaxprice = toRLC(requestorderInput.appmaxprice);
+  requestorder.dataset = requestorderInput.dataset.toHex();
+  requestorder.datasetmaxprice = toRLC(requestorderInput.datasetmaxprice);
+  requestorder.workerpool = requestorderInput.workerpool.toHex();
+  requestorder.workerpoolmaxprice = toRLC(requestorderInput.workerpoolmaxprice);
+  requestorder.requester = requestorderInput.requester.toHex();
+  requestorder.volume = requestorderInput.volume;
+  requestorder.tag = requestorderInput.tag;
+  requestorder.category = requestorderInput.category.toString();
+  requestorder.trust = requestorderInput.trust;
+  requestorder.beneficiary = requestorderInput.beneficiary.toHex();
+  requestorder.callback = requestorderInput.callback.toHex();
+  requestorder.params = requestorderInput.params;
+  requestorder.salt = requestorderInput.salt;
+  requestorder.sign = requestorderInput.sign;
+  requestorder.save();
+}
 
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
-	let deal     = contract.viewDeal(event.params.dealid)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
+  let viewedDeal = contract.viewDeal(event.params.dealid);
 
-	fetchAccount(deal.requester.toHex()).save()
-	fetchAccount(deal.beneficiary.toHex()).save()
-	fetchAccount(deal.callback.toHex()).save()
+  fetchAccount(viewedDeal.requester.toHex()).save();
+  fetchAccount(viewedDeal.beneficiary.toHex()).save();
+  fetchAccount(viewedDeal.callback.toHex()).save();
 
-	let d = new Deal(event.params.dealid.toHex())
-	d.app                  = deal.app.pointer.toHex()
-	d.appOwner             = deal.app.owner.toHex()
-	d.appPrice             = toRLC(deal.app.price)
-	d.dataset              = deal.dataset.pointer.toHex()
-	d.datasetOwner         = deal.dataset.owner.toHex()
-	d.datasetPrice         = toRLC(deal.dataset.price)
-	d.workerpool           = deal.workerpool.pointer.toHex()
-	d.workerpoolOwner      = deal.workerpool.owner.toHex()
-	d.workerpoolPrice      = toRLC(deal.workerpool.price)
-	d.trust                = deal.trust
-	d.category             = deal.category.toString()
-	d.tag                  = deal.tag
-	d.requester            = deal.requester.toHex()
-	d.beneficiary          = deal.beneficiary.toHex()
-	d.callback             = deal.callback.toHex()
-	d.params               = deal.params
-	d.startTime            = deal.startTime
-	d.botFirst             = deal.botFirst
-	d.botSize              = deal.botSize
-	d.workerStake          = deal.workerStake
-	d.schedulerRewardRatio = deal.schedulerRewardRatio
-	d.apporder             = event.params.appHash.toHex()
-	d.datasetorder         = event.params.datasetHash.toHex()
-	d.workerpoolorder      = event.params.workerpoolHash.toHex()
-	d.requestorder         = event.params.requestHash.toHex()
-	d.save()
+  let deal = fetchDeal(event.params.dealid.toHex());
+  deal.app = viewedDeal.app.pointer.toHex();
+  deal.appOwner = viewedDeal.app.owner.toHex();
+  deal.appPrice = toRLC(viewedDeal.app.price);
+  deal.dataset = viewedDeal.dataset.pointer.toHex();
+  deal.datasetOwner = viewedDeal.dataset.owner.toHex();
+  deal.datasetPrice = toRLC(viewedDeal.dataset.price);
+  deal.workerpool = viewedDeal.workerpool.pointer.toHex();
+  deal.workerpoolOwner = viewedDeal.workerpool.owner.toHex();
+  deal.workerpoolPrice = toRLC(viewedDeal.workerpool.price);
+  deal.trust = viewedDeal.trust;
+  deal.category = viewedDeal.category.toString();
+  deal.tag = viewedDeal.tag;
+  deal.requester = viewedDeal.requester.toHex();
+  deal.beneficiary = viewedDeal.beneficiary.toHex();
+  deal.callback = viewedDeal.callback.toHex();
+  deal.params = viewedDeal.params;
+  deal.startTime = viewedDeal.startTime;
+  deal.botFirst = viewedDeal.botFirst;
+  deal.botSize = viewedDeal.botSize;
+  deal.workerStake = viewedDeal.workerStake;
+  deal.schedulerRewardRatio = viewedDeal.schedulerRewardRatio;
+  deal.apporder = event.params.appHash.toHex();
+  deal.datasetorder = event.params.datasetHash.toHex();
+  deal.workerpoolorder = event.params.workerpoolHash.toHex();
+  deal.requestorder = event.params.requestHash.toHex();
+  deal.timestamp = event.block.timestamp;
+  deal.save();
 
-	let apporder = new AppOrder(event.params.appHash.toHex())
-	apporder.app      = d.app
-	apporder.appprice = d.appPrice
-	apporder.save()
+  const dataset = deal.dataset;
 
-	let datasetorder = new DatasetOrder(event.params.datasetHash.toHex())
-	datasetorder.dataset      = d.dataset
-	datasetorder.datasetprice = d.datasetPrice
-	datasetorder.save()
+  let apporder = fetchApporder(event.params.appHash.toHex());
+  apporder.app = deal.app;
+  apporder.appprice = deal.appPrice;
+  apporder.save();
 
-	let workerpoolorder = new WorkerpoolOrder(event.params.workerpoolHash.toHex())
-	workerpoolorder.workerpool      = d.workerpool
-	workerpoolorder.workerpoolprice = d.workerpoolPrice
-	workerpoolorder.save()
+  let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
+  if (dataset) datasetorder.dataset = dataset;
+  datasetorder.datasetprice = deal.datasetPrice;
+  datasetorder.save();
 
-	let requestorder = new RequestOrder(event.params.requestHash.toHex())
-	requestorder.requester = deal.requester.toHex()
-	requestorder.save()
+  let workerpoolorder = fetchWorkerpoolorder(
+    event.params.workerpoolHash.toHex()
+  );
+  workerpoolorder.workerpool = deal.workerpool;
+  workerpoolorder.workerpoolprice = deal.workerpoolPrice;
+  workerpoolorder.save();
+
+  let requestorder = fetchRequestorder(event.params.requestHash.toHex());
+  requestorder.requester = viewedDeal.requester.toHex();
+  requestorder.save();
+
+  let orderMatchedEvent = new OrdersMatched(createEventID(event));
+  orderMatchedEvent.transaction = logTransaction(event).id;
+  orderMatchedEvent.timestamp = event.block.timestamp;
+  orderMatchedEvent.deal = event.params.dealid.toHex();
+  orderMatchedEvent.save();
+
+  let protocol = fetchProtocol();
+  protocol.dealsCount = protocol.dealsCount.plus(BigInt.fromI32(1));
+  protocol.tasksCount = protocol.tasksCount.plus(deal.botSize);
+  protocol.save();
 }
 
 export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
-	let e = new SchedulerNotice(createEventID(event))
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.workerpool  = event.params.workerpool.toHex()
-	e.deal        = event.params.dealid.toHex()
-	e.save()
+  let schedulerNoticeEvent = new SchedulerNotice(createEventID(event));
+  schedulerNoticeEvent.transaction = logTransaction(event).id;
+  schedulerNoticeEvent.timestamp = event.block.timestamp;
+  schedulerNoticeEvent.workerpool = event.params.workerpool.toHex();
+  schedulerNoticeEvent.deal = event.params.dealid.toHex();
+  schedulerNoticeEvent.save();
 }
 
 export function handleTaskInitialize(event: TaskInitializeEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
-	let task     = contract.viewTask(event.params.taskid)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
+  let viewedTask = contract.viewTask(event.params.taskid);
 
-	let t = new Task(event.params.taskid.toHex())
-	t.status               = 'ACTIVE'
-	t.deal                 = task.dealid.toHex()
-	t.index                = task.idx
-	t.contributions        = new Array<string>();
-	t.contributionDeadline = task.contributionDeadline
-	t.finalDeadline        = task.finalDeadline
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
+  let loadedDeal = fetchDeal(viewedTask.dealid.toHex());
+  if (loadedDeal) {
+    task.deal = loadedDeal.id;
+    task.requester = loadedDeal.requester;
+  }
+  task.status = "ACTIVE";
+  task.index = viewedTask.idx;
+  task.contributions = new Array<string>();
+  task.contributionDeadline = viewedTask.contributionDeadline;
+  task.finalDeadline = viewedTask.finalDeadline;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
-	let e = new TaskInitialize(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.workerpool  = event.params.workerpool.toHex()
-	e.save()
+  let initializeEvent = new TaskInitialize(createEventID(event));
+  initializeEvent.transaction = logTransaction(event).id;
+  initializeEvent.timestamp = event.block.timestamp;
+  initializeEvent.task = event.params.taskid.toHex();
+  initializeEvent.workerpool = event.params.workerpool.toHex();
+  initializeEvent.save();
 }
 
 export function handleTaskContribute(event: TaskContributeEvent): void {
-	let contract     = IexecInterfaceTokenContract.bind(event.address)
-	let contribution = contract.viewContribution(event.params.taskid, event.params.worker)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
+  let viewedContribution = contract.viewContribution(
+    event.params.taskid,
+    event.params.worker
+  );
 
-	let c = new Contribution(createContributionID(event.params.taskid.toHex(), event.params.worker.toHex()))
-	c.status    = 'CONTRIBUTED'
-	c.timestamp = event.block.timestamp.toI32()
-	c.task      = event.params.taskid.toHex()
-	c.worker    = event.params.worker.toHex()
-	c.hash      = contribution.resultHash
-	c.seal      = contribution.resultSeal
-	c.challenge = contribution.enclaveChallenge
-	c.save()
+  let contribution = fetchContribution(
+    createContributionID(
+      event.params.taskid.toHex(),
+      event.params.worker.toHex()
+    )
+  );
+  contribution.status = "CONTRIBUTED";
+  contribution.timestamp = event.block.timestamp.toI32();
+  contribution.task = event.params.taskid.toHex();
+  contribution.worker = event.params.worker.toHex();
+  contribution.hash = viewedContribution.resultHash;
+  contribution.seal = viewedContribution.resultSeal;
+  contribution.challenge = viewedContribution.enclaveChallenge;
+  contribution.save();
 
-	let t = Task.load(event.params.taskid.toHex())
-	let cs = t.contributions
-	cs.push(c.id)
-	t.contributions = cs
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
+  const contributions = task.contributions;
+  contributions.push(contribution.id);
+  task.contributions = contributions;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
-	let e = new TaskContribute(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.worker      = event.params.worker.toHex()
-	e.hash        = event.params.hash
-	e.save()
+  let contributeEvent = new TaskContribute(createEventID(event));
+  contributeEvent.transaction = logTransaction(event).id;
+  contributeEvent.timestamp = event.block.timestamp;
+  contributeEvent.task = event.params.taskid.toHex();
+  contributeEvent.worker = event.params.worker.toHex();
+  contributeEvent.hash = event.params.hash;
+  contributeEvent.save();
 }
 
 export function handleTaskConsensus(event: TaskConsensusEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
-	let task     = contract.viewTask(event.params.taskid)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
+  let viewedTask = contract.viewTask(event.params.taskid);
 
-	let t = new Task(event.params.taskid.toHex())
-	t.status         = 'REVEALING'
-	t.consensus      = task.consensusValue
-	t.revealDeadline = task.revealDeadline
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
+  task.status = "REVEALING";
+  task.consensus = viewedTask.consensusValue;
+  task.revealDeadline = viewedTask.revealDeadline;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
-	let e = new TaskConsensus(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.consensus   = event.params.consensus
-	e.save()
+  let consensusEvent = new TaskConsensus(createEventID(event));
+  consensusEvent.transaction = logTransaction(event).id;
+  consensusEvent.timestamp = event.block.timestamp;
+  consensusEvent.task = event.params.taskid.toHex();
+  consensusEvent.consensus = event.params.consensus;
+  consensusEvent.save();
 }
 
 export function handleTaskReveal(event: TaskRevealEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+  //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let t = new Task(event.params.taskid.toHex())
-	t.resultDigest = event.params.digest
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
+  task.status = "REVEALING";
+  task.resultDigest = event.params.digest;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
-	let c = new Contribution(createContributionID(event.params.taskid.toHex(), event.params.worker.toHex()))
-	c.status = 'PROVED'
-	c.save()
+  let contribution = fetchContribution(
+    createContributionID(
+      event.params.taskid.toHex(),
+      event.params.worker.toHex()
+    )
+  );
+  contribution.status = "PROVED";
+  contribution.save();
 
-	let e = new TaskReveal(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.worker      = event.params.worker.toHex()
-	e.digest      = event.params.digest
-	e.save()
+  let revealEvent = new TaskReveal(createEventID(event));
+  revealEvent.transaction = logTransaction(event).id;
+  revealEvent.timestamp = event.block.timestamp;
+  revealEvent.task = event.params.taskid.toHex();
+  revealEvent.worker = event.params.worker.toHex();
+  revealEvent.digest = event.params.digest;
+  revealEvent.save();
 }
 
 export function handleTaskReopen(event: TaskReopenEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+  //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let t = Task.load(event.params.taskid.toHex())
-	let cs = t.contributions;
-	for (let i = 0;  i < cs.length; ++i)
-	{
-		let c = Contribution.load(cs[i]);
-		if (c.hash.toHex() == t.consensus.toHex())
-		{
-			c.status = 'REJECTED'
-			c.save()
-		}
-	}
+  let task = fetchTask(event.params.taskid.toHex());
+  let contributions = task.contributions;
+  task.status = "ACTIVE";
+  task.consensus = null;
+  task.revealDeadline = null;
+  task.timestamp = event.block.timestamp;
+  task.save();
+  for (let i = 0; i < contributions.length; ++i) {
+    let loadedContribution = fetchContribution(contributions[i]);
+    const consensus = task.consensus;
+    if (
+      loadedContribution &&
+      consensus &&
+      loadedContribution.hash.toHex() == consensus.toHex()
+    ) {
+      loadedContribution.status = "REJECTED";
+      loadedContribution.save();
+    }
+  }
 
-	// t.contributions
-	// .map<Contribution>(value => Contribution.load(value) as Contribution)
-	// .filter(contribution => contribution.hash.toHex() == t.consensus.toHex())
-	// .forEach(contribution => {
-	// 	contribution.status = 'REJECTED'
-	// 	contribution.save()
-	// })
-
-	t.status         = 'ACTIVE'
-	t.consensus      = null
-	t.revealDeadline = null
-	t.save()
-
-	let e = new TaskReopen(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.save()
+  let reopenEvent = new TaskReopen(createEventID(event));
+  reopenEvent.transaction = logTransaction(event).id;
+  reopenEvent.timestamp = event.block.timestamp;
+  reopenEvent.task = event.params.taskid.toHex();
+  reopenEvent.save();
 }
 
 export function handleTaskFinalize(event: TaskFinalizeEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let t = new Task(event.params.taskid.toHex())
-	t.status          = 'COMPLETED'
-	t.results         = event.params.results
-	t.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
+  task.status = "COMPLETED";
+  task.results = event.params.results;
+  task.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback;
+  task.timestamp = event.block.timestamp;
+  task.save();
 
-	let e = new TaskFinalize(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.results     = event.params.results
-	e.save()
+  let finalizeEvent = new TaskFinalize(createEventID(event));
+  finalizeEvent.transaction = logTransaction(event).id;
+  finalizeEvent.timestamp = event.block.timestamp;
+  finalizeEvent.task = event.params.taskid.toHex();
+  finalizeEvent.results = event.params.results;
+  finalizeEvent.save();
+
+  let deal = fetchDeal(task.deal);
+  deal.completedTasksCount = deal.completedTasksCount.plus(BigInt.fromI32(1));
+  deal.save();
+
+  let protocol = fetchProtocol();
+  protocol.completedTasksCount = protocol.completedTasksCount.plus(
+    BigInt.fromI32(1)
+  );
+  protocol.save();
 }
 
 export function handleTaskClaimed(event: TaskClaimedEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+  //   let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let t = new Task(event.params.taskid.toHex())
-	t.status = 'FAILLED'
-	t.save()
+  let task = fetchTask(event.params.taskid.toHex());
 
-	let e = new TaskClaimed(createEventID(event));
-	e.transaction = logTransaction(event).id
-	e.timestamp   = event.block.timestamp
-	e.task        = event.params.taskid.toHex()
-	e.save()
+  task.status = "FAILLED";
+  task.timestamp = event.block.timestamp;
+  task.save();
+
+  let claimedEvent = new TaskClaimed(createEventID(event));
+  claimedEvent.transaction = logTransaction(event).id;
+  claimedEvent.timestamp = event.block.timestamp;
+  claimedEvent.task = event.params.taskid.toHex();
+  claimedEvent.save();
+
+  let deal = fetchDeal(task.deal);
+  deal.claimedTasksCount = deal.claimedTasksCount.plus(BigInt.fromI32(1));
+  deal.save();
+
+  let protocol = fetchProtocol();
+  protocol.claimedTasksCount = protocol.claimedTasksCount.plus(
+    BigInt.fromI32(1)
+  );
+  protocol.save();
 }
 
-export function handleAccurateContribution(event: AccurateContributionEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+export function handleAccurateContribution(
+  event: AccurateContributionEvent
+): void {
+  let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let e = new AccurateContribution(createEventID(event));
-	e.transaction  = logTransaction(event).id
-	e.timestamp    = event.block.timestamp
-	e.account      = event.params.worker.toHex()
-	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
-	e.score        = contract.viewScore(event.params.worker)
-	e.save()
+  let accurateContributionEvent = new AccurateContribution(
+    createEventID(event)
+  );
+  accurateContributionEvent.transaction = logTransaction(event).id;
+  accurateContributionEvent.timestamp = event.block.timestamp;
+  accurateContributionEvent.account = event.params.worker.toHex();
+  accurateContributionEvent.contribution = createContributionID(
+    event.params.taskid.toHex(),
+    event.params.worker.toHex()
+  );
+  accurateContributionEvent.score = contract.viewScore(event.params.worker);
+  accurateContributionEvent.save();
 
-	let w = fetchAccount(event.params.worker.toHex())
-	w.score = e.score
-	w.save()
+  let workerAccount = fetchAccount(event.params.worker.toHex());
+  workerAccount.score = accurateContributionEvent.score;
+  workerAccount.save();
 }
 
 export function handleFaultyContribution(event: FaultyContributionEvent): void {
-	let contract = IexecInterfaceTokenContract.bind(event.address)
+  let contract = IexecInterfaceTokenContract.bind(event.address);
 
-	let e = new FaultyContribution(createEventID(event));
-	e.transaction  = logTransaction(event).id
-	e.timestamp    = event.block.timestamp
-	e.account      = event.params.worker.toHex()
-	e.contribution = createContributionID(event.params.taskid.toHex(), event.params.worker.toHex())
-	e.score        = contract.viewScore(event.params.worker)
-	e.save()
+  let faultyContributionEvent = new FaultyContribution(createEventID(event));
+  faultyContributionEvent.transaction = logTransaction(event).id;
+  faultyContributionEvent.timestamp = event.block.timestamp;
+  faultyContributionEvent.account = event.params.worker.toHex();
+  faultyContributionEvent.contribution = createContributionID(
+    event.params.taskid.toHex(),
+    event.params.worker.toHex()
+  );
+  faultyContributionEvent.score = contract.viewScore(event.params.worker);
+  faultyContributionEvent.save();
 
-	let w = fetchAccount(event.params.worker.toHex())
-	w.score = e.score
-	w.save()
+  let workerAccount = fetchAccount(event.params.worker.toHex());
+  workerAccount.score = faultyContributionEvent.score;
+  workerAccount.save();
 }

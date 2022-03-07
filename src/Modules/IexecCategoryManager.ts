@@ -14,19 +14,29 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-import {
-	CreateCategory as CreateCategoryEvent,
-} from '../../generated/Core/IexecInterfaceToken'
+import { BigInt } from "@graphprotocol/graph-ts";
 
-import {
-	Category
-} from '../../generated/schema'
+import { CreateCategory as CreateCategoryEvent } from "../../generated/Core/IexecInterfaceToken";
 
-export function handleCreateCategory(event: CreateCategoryEvent): void
-{
-	let category = new Category(event.params.catid.toString())
-	category.name             = event.params.name
-	category.description      = event.params.description
-	category.workClockTimeRef = event.params.workClockTimeRef
-	category.save()
+import { Category } from "../../generated/schema";
+
+import { fetchProtocol } from "../utils";
+
+export function handleCreateCategory(event: CreateCategoryEvent): void {
+  // categories may be redefined by the administrator
+  let category = Category.load(event.params.catid.toString());
+
+  if (category == null) {
+    category = new Category(event.params.catid.toString());
+
+    let protocol = fetchProtocol();
+    protocol.categoriesCount = protocol.categoriesCount.plus(BigInt.fromI32(1));
+    protocol.save();
+  }
+
+  category.name = event.params.name;
+  category.description = event.params.description;
+  category.workClockTimeRef = event.params.workClockTimeRef;
+  category.timestamp = event.block.timestamp;
+  category.save();
 }

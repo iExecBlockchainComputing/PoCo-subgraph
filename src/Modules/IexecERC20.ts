@@ -15,100 +15,106 @@
  ******************************************************************************/
 
 import {
-	Transfer as TransferEvent,
-	Reward   as RewardEvent,
-	Seize    as SeizeEvent,
-	Lock     as LockEvent,
-	Unlock   as UnlockEvent,
-} from '../../generated/Core/IexecInterfaceToken'
+  Transfer as TransferEvent,
+  Reward as RewardEvent,
+  Seize as SeizeEvent,
+  Lock as LockEvent,
+  Unlock as UnlockEvent,
+} from "../../generated/Core/IexecInterfaceToken";
+
+import { Transfer, Reward, Seize, Lock, Unlock } from "../../generated/schema";
 
 import {
-	Transfer,
-	Reward,
-	Seize,
-	Lock,
-	Unlock,
-} from '../../generated/schema'
-
-import {
-	createEventID,
-	fetchAccount,
-	logTransaction,
-	toRLC,
-} from '../utils'
+  ADDRESS_ZERO,
+  createEventID,
+  fetchAccount,
+  fetchProtocol,
+  logTransaction,
+  toRLC,
+} from "../utils";
 
 export function handleTransfer(event: TransferEvent): void {
-	let value = toRLC(event.params.value)
-	let from  = fetchAccount(event.params.from.toHex())
-	let to    = fetchAccount(event.params.to.toHex())
-	if (from.id != "0x0000000000000000000000000000000000000000") from.balance -= value;
-	if (to.id   != "0x0000000000000000000000000000000000000000") to.balance   += value;
-	from.save()
-	to.save()
+  let protocol = fetchProtocol();
+  let value = toRLC(event.params.value);
+  let from = fetchAccount(event.params.from.toHex());
+  let to = fetchAccount(event.params.to.toHex());
+  if (from.id == ADDRESS_ZERO) {
+    protocol.tvl = protocol.tvl.plus(value);
+  } else {
+    from.balance = from.balance.minus(value);
+  }
+  if (to.id == ADDRESS_ZERO) {
+    protocol.tvl = protocol.tvl.minus(value);
+  } else {
+    to.balance = to.balance.plus(value);
+  }
+  protocol.save();
+  from.save();
+  to.save();
 
-	let ev         = new Transfer(createEventID(event))
-	ev.transaction = logTransaction(event).id
-	ev.timestamp   = event.block.timestamp
-	ev.from        = from.id
-	ev.to          = to.id
-	ev.value       = value
-	ev.save()
+  let transferEvent = new Transfer(createEventID(event));
+  transferEvent.transaction = logTransaction(event).id;
+  transferEvent.timestamp = event.block.timestamp;
+  transferEvent.from = from.id;
+  transferEvent.to = to.id;
+  transferEvent.value = value;
+  transferEvent.save();
 }
 
 export function handleReward(event: RewardEvent): void {
-	let value = toRLC(event.params.amount)
+  let value = toRLC(event.params.amount);
 
-	let op         = new Reward(createEventID(event))
-	op.transaction = logTransaction(event).id
-	op.timestamp   = event.block.timestamp
-	op.account     = event.params.owner.toHex()
-	op.value       = value
-	op.task        = event.params.ref.toHex()
-	op.save()
+  let op = new Reward(createEventID(event));
+  op.transaction = logTransaction(event).id;
+  op.timestamp = event.block.timestamp;
+  op.account = event.params.owner.toHex();
+  op.value = value;
+  op.task = event.params.ref.toHex();
+  op.save();
 }
 
 export function handleSeize(event: SeizeEvent): void {
-	let value = toRLC(event.params.amount)
+  let value = toRLC(event.params.amount);
 
-	let account = fetchAccount(event.params.owner.toHex())
-	account.frozen -= value
-	account.save()
+  let account = fetchAccount(event.params.owner.toHex());
+  account.frozen = account.frozen.minus(value);
+  account.save();
 
-	let op         = new Seize(createEventID(event))
-	op.transaction = logTransaction(event).id
-	op.timestamp   = event.block.timestamp
-	op.account     = event.params.owner.toHex()
-	op.value       = value
-	op.task        = event.params.ref.toHex()
-	op.save()
+  let op = new Seize(createEventID(event));
+  op.transaction = logTransaction(event).id;
+  op.timestamp = event.block.timestamp;
+  op.account = event.params.owner.toHex();
+  op.value = value;
+  op.task = event.params.ref.toHex();
+  op.save();
 }
 
 export function handleLock(event: LockEvent): void {
-	let value = toRLC(event.params.amount)
+  let value = toRLC(event.params.amount);
 
-	let account = fetchAccount(event.params.owner.toHex())
-	account.frozen += value
-	account.save()
+  let account = fetchAccount(event.params.owner.toHex());
+  account.frozen = account.frozen.plus(value);
+  account.save();
 
-	let op         = new Lock(createEventID(event))
-	op.transaction = logTransaction(event).id
-	op.timestamp   = event.block.timestamp
-	op.account     = event.params.owner.toHex()
-	op.value       = value
-	op.save()
+  let op = new Lock(createEventID(event));
+  op.transaction = logTransaction(event).id;
+  op.timestamp = event.block.timestamp;
+  op.account = event.params.owner.toHex();
+  op.value = value;
+  op.save();
 }
 
 export function handleUnlock(event: UnlockEvent): void {
-	let value = toRLC(event.params.amount)
+  let value = toRLC(event.params.amount);
 
-	let account = fetchAccount(event.params.owner.toHex())
-	account.frozen -= value
-	account.save()
+  let account = fetchAccount(event.params.owner.toHex());
+  account.frozen = account.frozen.minus(value);
+  account.save();
 
-	let op         = new Unlock(createEventID(event))
-	op.transaction = logTransaction(event).id
-	op.timestamp   = event.block.timestamp
-	op.account     = event.params.owner.toHex()
-	op.value       = value
-	op.save()
+  let op = new Unlock(createEventID(event));
+  op.transaction = logTransaction(event).id;
+  op.timestamp = event.block.timestamp;
+  op.account = event.params.owner.toHex();
+  op.value = value;
+  op.save();
 }
