@@ -1,15 +1,15 @@
 # iExec PoCo v5 - subgraph
 
-
 ## Usefull commands
-* authentification (only once per machine)
 
-	`graph auth https://api.thegraph.com/deploy/ <accesstoken>`
+- authentification (only once per machine)
 
-* compilation
+  `graph auth https://api.thegraph.com/deploy/ <accesstoken>`
 
-	`npm run codegen && npm run build`
+- compilation
 
-* deployment
+  `npm run codegen && npm run build`
 
-	`npm run deploy`
+- deployment
+
+  `npm run deploy`
