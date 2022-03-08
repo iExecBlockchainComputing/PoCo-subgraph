@@ -8,8 +8,4 @@
 
 - compilation
 
-  `npm run codegen && npm run build`
-
-- deployment
-
-  `npm run deploy`
+  `graph codegen && graph build`

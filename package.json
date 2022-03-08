@@ -4,7 +4,7 @@
   "author": "iExec",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "bash build.sh"
+    "test-builds": "bash test-builds.sh"
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {

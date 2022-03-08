@@ -16,6 +16,7 @@
 
 for subgraph in `ls subgraph.*.yaml`;
 do
+	echo "testing $subgraph build"
 	graph codegen $subgraph
 	graph build   $subgraph
 done;

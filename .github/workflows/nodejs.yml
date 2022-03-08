@@ -16,9 +16,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install and build
+      - name: npm install and test-builds
         run: |
           npm ci
-          npm run build
+          npm run test-builds
         env:
           CI: true
