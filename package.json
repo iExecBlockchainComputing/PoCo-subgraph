@@ -1,6 +1,6 @@
 {
   "name": "@iexec/subgraph",
-  "version": "5.3.0",
+  "version": "1.0.0-rc.0",
   "author": "iExec",
   "license": "Apache-2.0",
   "scripts": {
@@ -19,7 +19,7 @@
     "@graphprotocol/graph-ts": "^0.25.0"
   },
   "dependencies": {
-    "@iexec/poco": "^5.3.0",
-    "@iexec/solidity": "^0.1.0"
+    "@iexec/poco": "5.3.0",
+    "@iexec/solidity": "0.1.0"
   }
 }
