@@ -367,8 +367,10 @@ export function handleTaskFinalize(event: TaskFinalizeEvent): void {
 
   let task = fetchTask(event.params.taskid.toHex());
   task.status = "COMPLETED";
-  task.results = event.params.results;
-  task.resultsCallback = contract.viewTask(event.params.taskid).resultsCallback;
+  task.results = event.params.results.toHexString();
+  task.resultsCallback = contract
+    .viewTask(event.params.taskid)
+    .resultsCallback.toHexString();
   task.timestamp = event.block.timestamp;
   task.save();
 
