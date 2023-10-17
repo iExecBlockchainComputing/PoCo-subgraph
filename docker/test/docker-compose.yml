@@ -18,7 +18,7 @@ services:
       - 8546:8546
 
   ipfs:
-    image: ipfs/go-ipfs:v0.4.23
+    image: ipfs/go-ipfs:v0.10.0
     restart: unless-stopped
     networks:
       - thegraph
@@ -28,7 +28,7 @@ services:
       - ${DATA}/ipfs:/data/ipfs
 
   postgres:
-    image: postgres
+    image: postgres:12
     restart: unless-stopped
     networks:
       - thegraph
@@ -41,11 +41,9 @@ services:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
-    volumes:
-      - ${DATA}/postgres:/var/lib/postgresql/data
 
   graphnode:
-    image: graphprotocol/graph-node
+    image: graphprotocol/graph-node:v0.27.0
     restart: unless-stopped
     networks:
       - blockchain

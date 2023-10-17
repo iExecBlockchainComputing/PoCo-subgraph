@@ -13,7 +13,7 @@ networks:
 
 services:
   ipfs:
-    image: ipfs/go-ipfs:v0.4.23
+    image: ipfs/go-ipfs:v0.10.0
     restart: unless-stopped
     networks:
       - thegraph-bellecour
@@ -27,7 +27,7 @@ services:
       - ${DATA}/ipfs:/data/ipfs
 
   postgres-viviani:
-    image: postgres
+    image: postgres:12
     restart: unless-stopped
     networks:
       - thegraph-viviani
@@ -44,7 +44,7 @@ services:
       - ${DATA}/viviani/postgres:/var/lib/postgresql/data
 
   graphnode-viviani:
-    image: graphprotocol/graph-node
+    image: graphprotocol/graph-node:v0.27.0
     restart: unless-stopped
     networks:
       - viviani
@@ -69,7 +69,7 @@ services:
       GRAPH_NODE_ID: "graphnode_id"
 
   postgres-bellecour:
-    image: postgres
+    image: postgres:12
     restart: unless-stopped
     networks:
       - thegraph-bellecour
@@ -86,7 +86,7 @@ services:
       - ${DATA}/bellecour/postgres:/var/lib/postgresql/data
 
   graphnode-bellecour:
-    image: graphprotocol/graph-node
+    image: graphprotocol/graph-node:v0.27.0
     restart: unless-stopped
     networks:
       - bellecour
@@ -113,7 +113,7 @@ services:
       ethereum: "bellecour:http://bellecour-archive-node:8545"
       GRAPH_NODE_ID: "graphnode_id"
   # postgres-goerli:
-  #   image: postgres
+  #   image: postgres:12
   #   restart: unless-stopped
   #   networks:
   #     - thegraph-goerli
@@ -129,7 +129,7 @@ services:
   #   volumes:
   #    - ${DATA}/goerli/postgres:/var/lib/postgresql/data
   # graphnode-goerli:
-  #   image: graphprotocol/graph-node
+  #   image: graphprotocol/graph-node:v0.27.0
   #   restart: unless-stopped
   #   networks:
   #     - thegraph-goerli
@@ -153,7 +153,7 @@ services:
   #     ethereum: "goerli:https://eth-goerli.alchemyapi.io/v2/Up5Axu02IzUdyhpxbavUdSnU8cDcG8rT"
   #     GRAPH_NODE_ID: "graphnode_id"
   # postgres-goerli-infura:
-  #   image: postgres
+  #   image: postgres:12
   #   restart: unless-stopped
   #   networks:
   #     - thegraph-goerli
@@ -169,7 +169,7 @@ services:
   #   volumes:
   #    - ${DATA}/goerli-infura/postgres:/var/lib/postgresql/data
   # graphnode-goerli-infura:
-  #   image: graphprotocol/graph-node
+  #   image: graphprotocol/graph-node:v0.27.0
   #   restart: unless-stopped
   #   networks:
   #     - thegraph-goerli
