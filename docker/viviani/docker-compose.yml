@@ -8,7 +8,7 @@ networks:
 
 services:
   ipfs:
-    image: ipfs/go-ipfs:v0.4.23
+    image: ipfs/go-ipfs:v0.10.0
     restart: unless-stopped
     networks:
       - thegraph
@@ -20,7 +20,7 @@ services:
       - ${DATA}/ipfs:/data/ipfs
 
   postgres:
-    image: postgres
+    image: postgres:12
     restart: unless-stopped
     networks:
       - thegraph
@@ -37,7 +37,7 @@ services:
       - ${DATA}/postgres:/var/lib/postgresql/data
 
   graphnode:
-    image: graphprotocol/graph-node
+    image: graphprotocol/graph-node:v0.27.0
     restart: unless-stopped
     networks:
       - blockchain

@@ -24,16 +24,16 @@ npm ci
 generate code
 
 ```sh
-./node_modules/@graphprotocol/graph-cli/bin/graph codegen subgraph.test.yaml
-./node_modules/@graphprotocol/graph-cli/bin/graph build subgraph.test.yaml
+npx graph codegen subgraph.test.yaml
+npx graph build subgraph.test.yaml
 ```
 
 deploy the subgraph on local node
 
 ```sh
 # create once
-./node_modules/@graphprotocol/graph-cli/bin/graph create test/poco --node http://127.0.0.1:8020
-./node_modules/@graphprotocol/graph-cli/bin/graph deploy test/poco subgraph.test.yaml --node http://127.0.0.1:8020 --ipfs http://127.0.01:5001 --version-label dev
+npx graph create test/poco --node http://127.0.0.1:8020
+npx graph deploy test/poco subgraph.test.yaml --node http://127.0.0.1:8020 --ipfs http://127.0.01:5001 --version-label dev
 ```
 
 test/poco subgraph graphql API enpoints:
