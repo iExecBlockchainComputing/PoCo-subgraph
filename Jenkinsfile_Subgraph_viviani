@@ -1,6 +1,6 @@
 //Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
 
-@Library('global-jenkins-library@2.7.0') _
+@Library('global-jenkins-library@fix/subgraph_deploy_add_custom_filename') _
 deploySubGraph(
   targetRemoteHost : 'azubgrpvx-thegraph-viviani.public.az2.internal',
   subgraphFolder: './',
