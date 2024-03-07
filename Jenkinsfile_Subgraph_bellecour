@@ -1,0 +1,10 @@
+//Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
+
+@Library('global-jenkins-library@2.7.7') _
+deploySubGraph(
+  targetRemoteHost : 'azubgrpvx-thegraph-bellecour.public.az2.internal',
+  subgraphFolder: './',
+  subgraphFilename: 'subgraph.bellecour.yaml',
+  subgraphVersionLabel: 'v1.0.0-rc.1',
+  subgraphLabel: 'bellecour/poco-v5'
+)
