@@ -1,0 +1,10 @@
+//Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
+
+@Library('global-jenkins-library@2.7.0') _
+deploySubGraph(
+  targetRemoteHost : 'azubgrpvx-thegraph-viviani.public.az2.internal',
+  subgraphFolder: './',
+  subgraphFilename: 'subgraph.viviani.yaml',
+  subgraphVersionLabel: 'v1.0.0-rc.1',
+  subgraphLabel: 'viviani/poco-v5'
+)
