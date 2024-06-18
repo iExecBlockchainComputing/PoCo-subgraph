@@ -4,7 +4,7 @@
 deploySubGraph(
   targetRemoteHost : 'services.c13.az2.internal',
   subgraphFolder: './',
-  subgraphFilename: 'subgraph.bellecour.yaml',
+  subgraphFilename: 'subgraph.c13.yaml',
   subgraphVersionLabel: 'v1.0.0-rc.1',
   subgraphLabel: 'c13/poco-v5'
 )
