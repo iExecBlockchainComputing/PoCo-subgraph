@@ -49,6 +49,51 @@ debugging:
 
 _NB_: other blockchains setups are availables in [docker/README.md](./docker/README.md).
 
+Sure, here's a summarized version for your README:
+
+---
+
+## Generating Subgraph and Jenkins Configuration Files
+
+This project includes a bash script, `generate_subgraph.sh`, to automate the creation of subgraph YAML configuration files and Jenkinsfiles based on the network settings in `config.json`.
+
+
+**Run the script with the network name**:
+```bash
+./generate_subgraph.sh <network-name>
+```
+
+### Configuration
+
+Ensure `config.json` is populated with the required values. Example:
+
+```json
+{
+    "bellecour": {
+        "STARTBLOCK": 4543300,
+        "ERC1538_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
+        "IEXECE_INTERFACE_TOKEN_CORE_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
+        "APP_REGISTRY_ADDRESS": "0xB1C52075b276f87b1834919167312221d50c9D16",
+        "DATATSET_REGISTRY_ADDRESS": "0x799DAa22654128d0C64d5b79eac9283008158730",
+        "WORKERPOOL_REGISTRY_ADDRESS": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4"
+    }
+}
+```
+
+### Files Generated
+
+- **subgraph.<network>.yaml**: Subgraph configuration with placeholders replaced.
+- **Jenkinsfile.<network>**: Jenkinsfile for deploying the subgraph.
+
+#### Example Command
+
+```bash
+./generate_subgraph.sh bellecour
+```
+
+This command generates `subgraph.bellecour.yaml` and `Jenkinsfile.bellecour`.
+
+
 ## Resources
 
 - [thegraph docs](https://thegraph.com/docs/en/)
