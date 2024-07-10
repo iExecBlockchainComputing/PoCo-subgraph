@@ -26,19 +26,18 @@ node {
         }
         stage('Building subgraph') {
             // Print working directory and list files for debugging
-            sh 'pwd'
-            sh 'ls -la'
-            
-
-            // Run the script using absolute path
-            def scriptPath = "${env.WORKSPACE}/generate_subgraph.sh"
-            // Ensure the script is executable
-            sh "chmod +x ${scriptPath}"
-            sh "${scriptPath} '${userInput.network}'"
+            sh """
+            cd /home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13 && 
+            ls -la &&
+            chmod +x generate_subgraph.sh &&
+            cat generate_subgraph.sh &&
+            apk add bash &&
+            bash ./generate_subgraph.sh '${userInput.network}'
+            """
             
             // Check if the subgraph file was generated
             sh """
-            FILE=./subgraph.${userInput.network}.yaml
+            FILE=/home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13/subgraph.${userInput.network}.yaml
             if test -f "\$FILE"; then
                 echo "Subgraph file generated successfully"
             else
