@@ -13,12 +13,19 @@ generate_yaml() {
     local output_file="subgraph.${network}.yaml"
 
     # Read values from config.json
-    local start_block=$(jq -r ".${network}.STARTBLOCK" ${config_file})
-    local erc1538_address=$(jq -r ".${network}.ERC1538_ADDRESS" ${config_file})
-    local core_address=$(jq -r ".${network}.IEXECE_INTERFACE_TOKEN_CORE_ADDRESS" ${config_file})
-    local app_registry_address=$(jq -r ".${network}.APP_REGISTRY_ADDRESS" ${config_file})
-    local dataset_registry_address=$(jq -r ".${network}.DATATSET_REGISTRY_ADDRESS" ${config_file})
-    local workerpool_registry_address=$(jq -r ".${network}.WORKERPOOL_REGISTRY_ADDRESS" ${config_file})
+    # local start_block=$(jq -r ".${network}.STARTBLOCK" ${config_file})
+    local start_block=$(echo ${config_file} | json ${network}.STARTBLOCK)
+    # local erc1538_address=$(jq -r ".${network}.ERC1538_ADDRESS" ${config_file})
+    local erc1538_address=$(echo ${config_file} | json ${network}.ERC1538_ADDRESS)
+    # local core_address=$(jq -r ".${network}.IEXECE_INTERFACE_TOKEN_CORE_ADDRESS" ${config_file})
+    local core_address=$(echo ${config_file} | json ${network}.IEXECE_INTERFACE_TOKEN_CORE_ADDRESS)
+    # local app_registry_address=$(jq -r ".${network}.APP_REGISTRY_ADDRESS" ${config_file})
+    local app_registry_address=$(echo ${config_file} | json ${network}.APP_REGISTRY_ADDRESS)
+    # local dataset_registry_address=$(jq -r ".${network}.DATATSET_REGISTRY_ADDRESS" ${config_file})
+    local dataset_registry_address=$(echo ${config_file} | json ${network}.DATATSET_REGISTRY_ADDRESS)
+    # local workerpool_registry_address=$(jq -r ".${network}.WORKERPOOL_REGISTRY_ADDRESS" ${config_file})
+    local workerpool_registry_address=$(echo ${config_file} | json ${network}.WORKERPOOL_REGISTRY_ADDRESS)
+
 
     # Replace placeholders in the template and create the output file
     sed -e "s/#NETWORK_NAME#/network: ${network}/g" \
