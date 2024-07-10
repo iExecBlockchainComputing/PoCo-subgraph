@@ -1,15 +1,13 @@
-//Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
-
 @Library('global-jenkins-library@2.7.7') _
 
 def userInput
 
 node {
     docker.image('node:20-alpine').inside('--user root') {
-        // stage('Setup') {
-        //     checkout scm
-        // }
-        stage('Deployement form') {
+        stage('Setup') {
+            checkout scm
+        }
+        stage('Deployment form') {
             timeout(time: 5, unit: 'MINUTES') {
                 userInput = input(
                     id: 'select-deployment',
@@ -17,32 +15,45 @@ node {
                     parameters: [
                         string(name: 'network', description: 'The network name you want to deploy your subgraph'),
                         string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
-                        
                     ]
                 )
             }
-            println "Selected network: '$userInput.network'"
-            println "Selected service name: '$userInput.targetRemoteHost'"
+            println "Selected network: '${userInput.network}'"
+            println "Selected service name: '${userInput.targetRemoteHost}'"
         }
         stage('Setup Docker image') {
             sh 'apk add jq'
         }
-        stage('Building subgraph') {   
-            checkout scm
-            sh "./generate_subgraph.sh '$userInput.network'"
+        stage('Building subgraph') {
+            // Print working directory and list files for debugging
+            sh 'pwd'
+            sh 'ls -la'
+            
+            // Ensure the script is executable
+            sh 'chmod +x ./generate_subgraph.sh'
+
+            // Run the script
+            sh "./generate_subgraph.sh '${userInput.network}'"
+            
+            // Check if the subgraph file was generated
             sh """
-            FILE=./subgraph.'$userInput.network}'.yaml
-            if test -f "$FILE"; then
+            FILE=./subgraph.${userInput.network}.yaml
+            if test -f "\$FILE"; then
                 echo "Subgraph file generated successfully"
+            else
+                echo "Failed to generate subgraph file"
+                exit 1
             fi
-            """ 
+            """
         }
-        deploySubGraph(
-        targetRemoteHost : "'$userInput.targetRemoteHost}'",
-        subgraphFolder: './',
-        subgraphFilename: "subgraph.'$userInput.network}'.yaml",
-        subgraphVersionLabel: 'v1.0.0-rc.1',
-        subgraphLabel: "'$userInput.network}'/poco-v5"
-        )
+        stage('Deploy SubGraph') {
+            deploySubGraph(
+                targetRemoteHost: "${userInput.targetRemoteHost}",
+                subgraphFolder: './',
+                subgraphFilename: "subgraph.${userInput.network}.yaml",
+                subgraphVersionLabel: 'v1.0.0-rc.1',
+                subgraphLabel: "${userInput.network}/poco-v5"
+            )
+        }
     }
 }
