@@ -2,35 +2,38 @@
 
 @Library('global-jenkins-library@2.7.7') _
 
-
 def userInput
 
-stage('Deployement form') {
-    timeout(time: 5, unit: 'MINUTES') {
-        userInput = input(
-            id: 'select-deployment',
-            message: 'Select environment & service',
-            parameters: [
-                string(name: 'network', description: 'The network name you want to deploy your subgraph'),
-                string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
-                
-            ]
-        )
+node('docker') {
+    stage('Deployement form') {
+        timeout(time: 5, unit: 'MINUTES') {
+            userInput = input(
+                id: 'select-deployment',
+                message: 'Select environment & service',
+                parameters: [
+                    string(name: 'network', description: 'The network name you want to deploy your subgraph'),
+                    string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
+                    
+                ]
+            )
+        }
+        println "Selected network: '$userInput.network'"
+        println "Selected service name: '$userInput.targetRemoteHost'"
     }
-    println "Selected network: '$userInput.network'"
-    println "Selected service name: '$userInput.targetRemoteHost'"
-    sh "./generate_subgraph.sh '$userInput.network'"
-    sh """
-      FILE=./subgraph.'$userInput.network}'.yaml
-      if test -f "$FILE"; then
-          echo "Subgraph file generated successfully"
-      fi
-      """ 
+     stage('Building subgraph') {   
+        sh "./generate_subgraph.sh '$userInput.network'"
+        sh """
+        FILE=./subgraph.'$userInput.network}'.yaml
+        if test -f "$FILE"; then
+            echo "Subgraph file generated successfully"
+        fi
+        """ 
+    }
+    deploySubGraph(
+    targetRemoteHost : "'$userInput.targetRemoteHost}'",
+    subgraphFolder: './',
+    subgraphFilename: "subgraph.'$userInput.network}'.yaml",
+    subgraphVersionLabel: 'v1.0.0-rc.1',
+    subgraphLabel: "'$userInput.network}'/poco-v5"
+    )
 }
-deploySubGraph(
-  targetRemoteHost : "'$userInput.targetRemoteHost}'",
-  subgraphFolder: './',
-  subgraphFilename: "subgraph.'$userInput.network}'.yaml",
-  subgraphVersionLabel: 'v1.0.0-rc.1',
-  subgraphLabel: "'$userInput.network}'/poco-v5"
-)
