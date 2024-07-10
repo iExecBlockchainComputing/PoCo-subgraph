@@ -12,7 +12,6 @@ stage('Deployement form') {
             message: 'Select environment & service',
             parameters: [
                 string(name: 'network', description: 'The network name you want to deploy your subgraph'),
-                choice(name: 'network', description:'The network name you want to deploy your subgraph', choices: ['dev', 'prod']),
                 string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
                 
             ]
