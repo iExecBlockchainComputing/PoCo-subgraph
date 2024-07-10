@@ -6,9 +6,9 @@ def userInput
 
 node {
     docker.image('node:20-alpine').inside('--user root') {
-        stage('Setup') {
-            checkout scm
-        }
+        // stage('Setup') {
+        //     checkout scm
+        // }
         stage('Deployement form') {
             timeout(time: 5, unit: 'MINUTES') {
                 userInput = input(
@@ -28,6 +28,7 @@ node {
             sh 'apk add jq'
         }
         stage('Building subgraph') {   
+            checkout scm
             sh "./generate_subgraph.sh '$userInput.network'"
             sh """
             FILE=./subgraph.'$userInput.network}'.yaml
