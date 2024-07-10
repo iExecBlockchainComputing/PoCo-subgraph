@@ -19,7 +19,7 @@ stage('Deployement form') {
     }
     println "Selected network: '$userInput.network'"
     println "Selected service name: '$userInput.targetRemoteHost'"
-    sh "./generate_subgraph '$userInput.network'"
+    sh "./generate_subgraph.sh '$userInput.network'"
     sh """
       FILE=./subgraph.'$userInput.network}'.yaml
       if test -f "$FILE"; then
