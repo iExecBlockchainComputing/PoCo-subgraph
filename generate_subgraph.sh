@@ -6,7 +6,6 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
-# Function to replace placeholders in the template
 generate_yaml() {
     local network=$1
     local config_file="config.json"
@@ -35,28 +34,6 @@ generate_yaml() {
 }
 
 
-# Function to create the Jenkinsfile
-generate_jenkinsfile() {
-    local network=$1
-    local jenkinsfile="Jenkinsfile_Subgraph_${network}"
-
-    cat <<EOL > ${jenkinsfile}
-//Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
-
-@Library('global-jenkins-library@2.7.7') _
-deploySubGraph(
-  targetRemoteHost : 'azubgrpvx-thegraph-${network}.public.az2.internal',
-  subgraphFolder: './',
-  subgraphFilename: 'subgraph.${network}.yaml',
-  subgraphVersionLabel: 'v1.0.0-rc.1',
-  subgraphLabel: '${network}/poco-v5'
-)
-EOL
-
-    echo "Generated ${jenkinsfile}"
-}
-
-# Check if the user provided a network name
 if [ -z "$1" ]; then
     echo "Usage: $0 <network-name>"
     exit 1
@@ -64,6 +41,4 @@ fi
 
 network_name=$1
 
-# Generate the YAML file for the specified network
 generate_yaml ${network_name}
-generate_jenkinsfile ${network_name}
