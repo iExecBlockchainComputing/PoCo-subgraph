@@ -4,40 +4,44 @@
 
 def userInput
 
-node('docker') {
+node {
     stage('Setup') {
         checkout scm
     }
-    stage('Deployement form') {
-        timeout(time: 5, unit: 'MINUTES') {
-            userInput = input(
-                id: 'select-deployment',
-                message: 'Select environment & service',
-                parameters: [
-                    string(name: 'network', description: 'The network name you want to deploy your subgraph'),
-                    string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
-                    
-                ]
-            )
+    docker.image('node:20-alpine').inside('--user root') {
+        stage('Deployement form') {
+            timeout(time: 5, unit: 'MINUTES') {
+                userInput = input(
+                    id: 'select-deployment',
+                    message: 'Select environment & service',
+                    parameters: [
+                        string(name: 'network', description: 'The network name you want to deploy your subgraph'),
+                        string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
+                        
+                    ]
+                )
+            }
+            println "Selected network: '$userInput.network'"
+            println "Selected service name: '$userInput.targetRemoteHost'"
         }
-        println "Selected network: '$userInput.network'"
-        println "Selected service name: '$userInput.targetRemoteHost'"
+        stage('Setup Docker image') {
+            sh 'apk add jq'
+        }
+        stage('Building subgraph') {   
+            sh "./generate_subgraph.sh '$userInput.network'"
+            sh """
+            FILE=./subgraph.'$userInput.network}'.yaml
+            if test -f "$FILE"; then
+                echo "Subgraph file generated successfully"
+            fi
+            """ 
+        }
+        deploySubGraph(
+        targetRemoteHost : "'$userInput.targetRemoteHost}'",
+        subgraphFolder: './',
+        subgraphFilename: "subgraph.'$userInput.network}'.yaml",
+        subgraphVersionLabel: 'v1.0.0-rc.1',
+        subgraphLabel: "'$userInput.network}'/poco-v5"
+        )
     }
-     stage('Building subgraph') {   
-        sh 'sudo apt install jq'
-        sh "./generate_subgraph.sh '$userInput.network'"
-        sh """
-        FILE=./subgraph.'$userInput.network}'.yaml
-        if test -f "$FILE"; then
-            echo "Subgraph file generated successfully"
-        fi
-        """ 
-    }
-    deploySubGraph(
-    targetRemoteHost : "'$userInput.targetRemoteHost}'",
-    subgraphFolder: './',
-    subgraphFilename: "subgraph.'$userInput.network}'.yaml",
-    subgraphVersionLabel: 'v1.0.0-rc.1',
-    subgraphLabel: "'$userInput.network}'/poco-v5"
-    )
 }
