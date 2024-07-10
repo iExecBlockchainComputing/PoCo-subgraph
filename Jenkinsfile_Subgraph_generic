@@ -29,11 +29,11 @@ node {
             sh 'pwd'
             sh 'ls -la'
             
-            // Ensure the script is executable
-            sh 'chmod +x ./generate_subgraph.sh'
 
             // Run the script using absolute path
             def scriptPath = "${env.WORKSPACE}/generate_subgraph.sh"
+            // Ensure the script is executable
+            sh "chmod +x ${scriptPath}"
             sh "${scriptPath} '${userInput.network}'"
             
             // Check if the subgraph file was generated
