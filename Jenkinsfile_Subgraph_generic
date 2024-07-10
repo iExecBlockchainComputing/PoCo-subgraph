@@ -45,6 +45,8 @@ node {
             fi
             """
         }
+    }
+}
         stage('Deploy SubGraph') {
             deploySubGraph(
                 targetRemoteHost: "${userInput.targetRemoteHost}",
@@ -54,5 +56,3 @@ node {
                 subgraphLabel: "${userInput.network}/poco-v5"
             )
         }
-    }
-}
