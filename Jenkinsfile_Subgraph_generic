@@ -5,10 +5,10 @@
 def userInput
 
 node {
-    stage('Setup') {
-        checkout scm
-    }
     docker.image('node:20-alpine').inside('--user root') {
+        stage('Setup') {
+            checkout scm
+        }
         stage('Deployement form') {
             timeout(time: 5, unit: 'MINUTES') {
                 userInput = input(
