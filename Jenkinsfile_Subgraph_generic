@@ -3,7 +3,7 @@
 def userInput
 
 node {
-    docker.image('node:18').inside('--user root') {
+    docker.image('node:20-alpine').inside('--user root') {
         stage('Setup') {
             checkout scm
         }
@@ -22,7 +22,7 @@ node {
             println "Selected service name: '${userInput.targetRemoteHost}'"
         }
         stage('Setup Docker image') {
-            sh 'apt install bash'
+            sh 'apk add jq'
         }
         stage('Building subgraph') {
             // Print working directory and list files for debugging
@@ -31,6 +31,7 @@ node {
             ls -la &&
             chmod +x generate_subgraph.sh &&
             cat generate_subgraph.sh &&
+            apk add bash &&
             bash ./generate_subgraph.sh '${userInput.network}'
             """
             
@@ -47,12 +48,12 @@ node {
         }
     }
 }
-        stage('Deploy SubGraph') {
-            deploySubGraph(
-                targetRemoteHost: "${userInput.targetRemoteHost}",
-                subgraphFolder: './',
-                subgraphFilename: "subgraph.${userInput.network}.yaml",
-                subgraphVersionLabel: 'v1.0.0-rc.1',
-                subgraphLabel: "${userInput.network}/poco-v5"
-            )
-        }
+stage('Deploy SubGraph') {
+    deploySubGraph(
+        targetRemoteHost: "${userInput.targetRemoteHost}",
+        subgraphFolder: './',
+        subgraphFilename: "subgraph.${userInput.network}.yaml",
+        subgraphVersionLabel: 'v1.0.0-rc.1',
+        subgraphLabel: "${userInput.network}/poco-v5"
+    )
+}
