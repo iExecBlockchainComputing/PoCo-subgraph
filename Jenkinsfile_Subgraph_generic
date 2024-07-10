@@ -24,6 +24,7 @@ node('docker') {
         println "Selected service name: '$userInput.targetRemoteHost'"
     }
      stage('Building subgraph') {   
+        sh 'apk add jq'
         sh "./generate_subgraph.sh '$userInput.network'"
         sh """
         FILE=./subgraph.'$userInput.network}'.yaml
