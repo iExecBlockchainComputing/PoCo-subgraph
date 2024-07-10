@@ -22,7 +22,7 @@ node {
             println "Selected service name: '${userInput.targetRemoteHost}'"
         }
         stage('Setup Docker image') {
-            sh 'apk add jq'
+            sh 'sudo apt install jq'
         }
         stage('Building subgraph') {
             // Print working directory and list files for debugging
