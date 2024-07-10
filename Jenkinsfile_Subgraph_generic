@@ -31,7 +31,6 @@ node {
             ls -la &&
             chmod +x generate_subgraph.sh &&
             cat generate_subgraph.sh &&
-            apk add bash &&
             bash ./generate_subgraph.sh '${userInput.network}'
             """
             

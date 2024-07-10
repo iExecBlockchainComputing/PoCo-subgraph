@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo "jq is required but not installed. Please install jq to proceed."
-    exit 1
-fi
+# # Check if jq is installed
+# if ! command -v jq &> /dev/null; then
+#     echo "jq is required but not installed. Please install jq to proceed."
+#     exit 1
+# fi
 
 generate_yaml() {
     local network=$1
