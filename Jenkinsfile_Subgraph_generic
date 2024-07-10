@@ -3,7 +3,7 @@
 def userInput
 
 node {
-    docker.image('node:20-alpine').inside('--user root') {
+    docker.image('node:18-alpine').inside('--user root') {
         stage('Setup') {
             checkout scm
         }
