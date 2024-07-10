@@ -5,6 +5,9 @@
 def userInput
 
 node('docker') {
+    stage('Setup') {
+        checkout scm
+    }
     stage('Deployement form') {
         timeout(time: 5, unit: 'MINUTES') {
             userInput = input(
