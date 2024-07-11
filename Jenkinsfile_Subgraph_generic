@@ -7,32 +7,36 @@ node {
         stage('Setup') {
             checkout scm
         }
-        stage('Deployment form') {
+
+        stage('Deployment Form') {
             timeout(time: 5, unit: 'MINUTES') {
                 userInput = input(
                     id: 'select-deployment',
                     message: 'Select environment & service',
                     parameters: [
                         string(name: 'network', description: 'The network name you want to deploy your subgraph'),
-                        string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph'),
+                        string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph')
                     ]
                 )
             }
             echo "Selected network: '${userInput.network}'"
             echo "Selected service name: '${userInput.targetRemoteHost}'"
         }
-        stage('Setup Docker image') {
+
+        stage('Setup Docker Image') {
             sh 'apk add jq'
         }
-        stage('Building subgraph') {
+
+        stage('Building Subgraph') {
             sh """
+            # Navigate to workspace directory and ensure the script is executable
             cd /home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13 &&
             chmod +x generate_subgraph.sh &&
             apk add bash &&
             bash ./generate_subgraph.sh '${userInput.network}'
             """
             
-            // Check if the subgraph file was generated
+            // Validate subgraph file generation
             sh """
             FILE=/home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13/subgraph.${userInput.network}.yaml
             if test -f "\$FILE"; then
@@ -43,6 +47,7 @@ node {
             fi
             """
         }
+
         stage('Build') {
             sh """
             yarn global add @graphprotocol/graph-cli &&
@@ -54,7 +59,8 @@ node {
             graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1
             """
         }
-        stage('The end') {
+
+        stage('The End') {
             echo 'The end.'
         }
     }
