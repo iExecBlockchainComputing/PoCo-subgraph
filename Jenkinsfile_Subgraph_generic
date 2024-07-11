@@ -18,19 +18,16 @@ node {
                     ]
                 )
             }
-            println "Selected network: '${userInput.network}'"
-            println "Selected service name: '${userInput.targetRemoteHost}'"
+            echo "Selected network: '${userInput.network}'"
+            echo "Selected service name: '${userInput.targetRemoteHost}'"
         }
         stage('Setup Docker image') {
             sh 'apk add jq'
         }
         stage('Building subgraph') {
-            // Print working directory and list files for debugging
             sh """
-            cd /home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13 && 
-            ls -la &&
+            cd /home/ubuntu/jenkins/workspace/graph_Poco_Gen_feat_subgraph_c13 &&
             chmod +x generate_subgraph.sh &&
-            cat generate_subgraph.sh &&
             apk add bash &&
             bash ./generate_subgraph.sh '${userInput.network}'
             """
@@ -46,19 +43,19 @@ node {
             fi
             """
         }
-        stage("Build") {
-              sh "yarn global add @graphprotocol/graph-cli"
-              sh "cd ./;yarn install"
-              
-              sh "graph codegen subgraph.${userInput.network}.yaml"
-              sh "graph build subgraph.${userInput.network}.yaml"
-              sh "graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020"
-              sh "graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml  --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1"
+        stage('Build') {
+            sh """
+            yarn global add @graphprotocol/graph-cli &&
+            cd ./ &&
+            yarn install &&
+            graph codegen subgraph.${userInput.network}.yaml &&
+            graph build subgraph.${userInput.network}.yaml &&
+            graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020 &&
+            graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1
+            """
         }
-
         stage('The end') {
-            println 'The end.'
+            echo 'The end.'
         }
     }
 }
-
