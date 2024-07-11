@@ -50,10 +50,10 @@ node {
               sh "yarn global add @graphprotocol/graph-cli"
               sh "cd ./;yarn install"
               
-              sh "cd ./;/home/node/.yarn/bin/graph codegen"
-              sh "cd ./;/home/node/.yarn/bin/graph build"
-              sh "cd ./;/home/node/.yarn/bin/graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020"
-              sh "cd ./;/home/node/.yarn/bin/graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml  --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1"
+              sh "graph codegen"
+              sh "graph build"
+              sh "graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020"
+              sh "graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml  --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1"
         }
 
         stage('The end') {
