@@ -46,14 +46,19 @@ node {
             fi
             """
         }
+        stage("Build") {
+              sh "yarn global add @graphprotocol/graph-cli"
+              sh "cd ./;yarn install"
+              
+              sh "cd ./;/home/node/.yarn/bin/graph codegen"
+              sh "cd ./;/home/node/.yarn/bin/graph build"
+              sh "cd ./;/home/node/.yarn/bin/graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020"
+              sh "cd ./;/home/node/.yarn/bin/graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml  --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1"
+        }
+
+        stage('The end') {
+            println 'The end.'
+        }
     }
 }
-stage('Deploy SubGraph') {
-    deploySubGraph(
-        targetRemoteHost: "${userInput.targetRemoteHost}",
-        subgraphFolder: './',
-        subgraphFilename: "subgraph.${userInput.network}.yaml",
-        subgraphVersionLabel: 'v1.0.0-rc.1',
-        subgraphLabel: "${userInput.network}/poco-v5"
-    )
-}
+
