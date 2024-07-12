@@ -6,6 +6,11 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+if [ -z "$1" ]; then
+    echo "Usage: $0 <network-name>"
+    exit 1
+fi
+
 generate_yaml() {
     local network=$1
     local config_file="config.json"
@@ -13,7 +18,7 @@ generate_yaml() {
     local output_file="subgraph.${network}.yaml"
 
     # Read values from config.json
-    local start_block=$(jq -r ".${network}.STARTBLOCK" ${config_file})
+    local start_block=$(jq -r ".${network}.START_BLOCK" ${config_file})
     local erc1538_address=$(jq -r ".${network}.ERC1538_ADDRESS" ${config_file})
     local core_address=$(jq -r ".${network}.IEXECE_INTERFACE_TOKEN_CORE_ADDRESS" ${config_file})
     local app_registry_address=$(jq -r ".${network}.APP_REGISTRY_ADDRESS" ${config_file})
@@ -22,7 +27,7 @@ generate_yaml() {
 
     # Replace placeholders in the template and create the output file
     sed -e "s/#NETWORK_NAME#/network: ${network}/g" \
-        -e "s/#STARTBLOCK#/startBlock: ${start_block}/g" \
+        -e "s/#START_BLOCK#/startBlock: ${start_block}/g" \
         -e "s|#ERC1538_ADDRESS#|address: \"${erc1538_address}\"|g" \
         -e "s|#IEXECE_INTERFACE_TOKEN_CORE_ADDRESS#|address: \"${core_address}\"|g" \
         -e "s|#APP_REGISTRY_ADDRESS#|address: \"${app_registry_address}\"|g" \
@@ -32,12 +37,6 @@ generate_yaml() {
 
     echo "Generated ${output_file}"
 }
-
-
-if [ -z "$1" ]; then
-    echo "Usage: $0 <network-name>"
-    exit 1
-fi
 
 network_name=$1
 

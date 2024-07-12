@@ -69,7 +69,7 @@ Ensure `config.json` is populated with the required values. Example:
 ```json
 {
     "bellecour": {
-        "STARTBLOCK": 4543300,
+        "START_BLOCK": 4543300,
         "ERC1538_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
         "IEXECE_INTERFACE_TOKEN_CORE_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
         "APP_REGISTRY_ADDRESS": "0xB1C52075b276f87b1834919167312221d50c9D16",

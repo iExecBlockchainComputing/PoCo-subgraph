@@ -24,7 +24,7 @@ dataSources:
     source:
       #ERC1538_ADDRESS#
       abi: ERC1538
-      #STARTBLOCK#
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -50,7 +50,7 @@ dataSources:
     source:
       #IEXECE_INTERFACE_TOKEN_CORE_ADDRESS#
       abi: IexecInterfaceToken
-      #STARTBLOCK#
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -130,7 +130,7 @@ dataSources:
     source:
       #APP_REGISTRY_ADDRESS#
       abi: AppRegistry
-      #STARTBLOCK#
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -155,7 +155,7 @@ dataSources:
     source:
       #DATATSET_REGISTRY_ADDRESS#
       abi: DatasetRegistry
-      #STARTBLOCK#
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -180,7 +180,7 @@ dataSources:
     source:
       #WORKERPOOL_REGISTRY_ADDRESS#
       abi: WorkerpoolRegistry
-      #STARTBLOCK#
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
