@@ -1,8 +1,6 @@
 @Library('global-jenkins-library@2.7.7') _
 
 def userInput
-path = '/home/ubuntu/jenkins/workspace/graph_Poco_Gen_'
-currentBranch = 'feat_subgraph_c13'
 
 node {
     docker.image('node:20-alpine').inside('--user root') {
@@ -28,7 +26,6 @@ node {
         stage('Setup Docker Image') {
             sh 'apk add jq'
         }
-            // cd '${path}''${currentBranch}' &&
         stage('Building Subgraph') {
             sh """
             # Navigate to workspace directory and ensure the script is executable
@@ -38,7 +35,6 @@ node {
             """
             
             // Validate subgraph file generation
-            // FILE='${path}''${currentBranch}'/subgraph.${userInput.network}.yaml
             sh """
             FILE=./subgraph.${userInput.network}.yaml
             if test -f "\$FILE"; then
