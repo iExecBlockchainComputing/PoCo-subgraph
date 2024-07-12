@@ -82,7 +82,6 @@ Ensure `config.json` is populated with the required values. Example:
 ### Files Generated
 
 - **subgraph.<network>.yaml**: Subgraph configuration with placeholders replaced.
-- **Jenkinsfile.<network>**: Jenkinsfile for deploying the subgraph.
 
 #### Example Command
 
@@ -90,7 +89,7 @@ Ensure `config.json` is populated with the required values. Example:
 ./generate_subgraph.sh bellecour
 ```
 
-This command generates `subgraph.bellecour.yaml` and `Jenkinsfile.bellecour`.
+This command generates `subgraph.bellecour.yaml`.
 
 
 ## Resources
