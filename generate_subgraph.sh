@@ -14,7 +14,7 @@ fi
 generate_yaml() {
     local network=$1
     local config_file="config.json"
-    local template_file="subgraph.bellecour.template.yaml"
+    local template_file="subgraph.template.yaml"
     local output_file="subgraph.${network}.yaml"
 
     # Read values from config.json
