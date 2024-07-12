@@ -49,7 +49,6 @@ debugging:
 
 _NB_: other blockchains setups are availables in [docker/README.md](./docker/README.md).
 
-Sure, here's a summarized version for your README:
 
 ---
 
