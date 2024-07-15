@@ -8,25 +8,26 @@ node {
             checkout scm
         }
 
-        stage('Deployment Form') {
+        stage('Choose network and host') {
             timeout(time: 5, unit: 'MINUTES') {
                 userInput = input(
                     id: 'select-deployment',
                     message: 'Select environment & service',
                     parameters: [
-                        string(name: 'network', description: 'The network name you want to deploy your subgraph'),
-                        string(name: 'targetRemoteHost', description: 'The host you want to deploy the subgraph')
+                        string(name: 'network', description: 'Target network name of the subgraph'),
+                        string(name: 'targetRemoteHost', description: 'Hostname where to deploy the subgraph')
                     ]
                 )
             }
             echo "Selected network: '${userInput.network}'"
-            echo "Selected service name: '${userInput.targetRemoteHost}'"
+            echo "Selected hostname: '${userInput.targetRemoteHost}'"
         }
 
         stage('Setup Docker Image') {
-            sh 'apk add jq'
+            sh 'apk add jq bash'
         }
-        stage('Building Subgraph') {
+
+        stage('Generate subgraph file') {
             sh """
             # Navigate to workspace directory and ensure the script is executable
             chmod +x generate_subgraph.sh &&
