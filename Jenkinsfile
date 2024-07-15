@@ -29,10 +29,7 @@ node {
 
         stage('Generate subgraph file') {
             sh """
-            # Navigate to workspace directory and ensure the script is executable
-            chmod +x generate_subgraph.sh &&
-            apk add bash &&
-            bash ./generate_subgraph.sh '${userInput.network}'
+            bash generate_subgraph_file.sh '${userInput.network}'
             """
             
             // Validate subgraph file generation

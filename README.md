@@ -59,7 +59,7 @@ This project includes a bash script, `generate_subgraph.sh`, to automate the cre
 
 **Run the script with the network name**:
 ```bash
-bash ./generate_subgraph.sh <network-name>
+bash generate_subgraph_file.sh <network-name>
 ```
 
 ### Configuration
@@ -86,7 +86,7 @@ Ensure `config.json` is populated with the required values. Example:
 #### Example Command
 
 ```bash
-bash ./generate_subgraph.sh bellecour
+bash generate_subgraph_file.sh bellecour
 ```
 
 This command generates `subgraph.bellecour.yaml`.
