@@ -59,7 +59,7 @@ This project includes a bash script, `generate_subgraph.sh`, to automate the cre
 
 **Run the script with the network name**:
 ```bash
-./generate_subgraph.sh <network-name>
+bash ./generate_subgraph.sh <network-name>
 ```
 
 ### Configuration
