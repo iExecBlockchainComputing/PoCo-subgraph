@@ -86,7 +86,7 @@ Ensure `config.json` is populated with the required values. Example:
 #### Example Command
 
 ```bash
-./generate_subgraph.sh bellecour
+bash ./generate_subgraph.sh bellecour
 ```
 
 This command generates `subgraph.bellecour.yaml`.
