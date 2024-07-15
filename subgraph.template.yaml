@@ -9,11 +9,11 @@ schema:
 dataSources:
   - name: ERC1538
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
-      address: "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f"
+      #ERC1538_ADDRESS#
       abi: ERC1538
-      startBlock: 4543300
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -35,11 +35,11 @@ dataSources:
 
   - name: Core
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
-      address: "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f"
+      #IEXECE_INTERFACE_TOKEN_CORE_ADDRESS#
       abi: IexecInterfaceToken
-      startBlock: 4543300
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -115,11 +115,11 @@ dataSources:
   # =============================== App registry ================================
   - name: AppRegistry
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
-      address: "0xB1C52075b276f87b1834919167312221d50c9D16"
+      #APP_REGISTRY_ADDRESS#
       abi: AppRegistry
-      startBlock: 4543300
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -140,11 +140,11 @@ dataSources:
   # ============================= Dataset registry ==============================
   - name: DatasetRegistry
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
-      address: "0x799DAa22654128d0C64d5b79eac9283008158730"
+      #DATATSET_REGISTRY_ADDRESS#
       abi: DatasetRegistry
-      startBlock: 4543300
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -165,11 +165,11 @@ dataSources:
   # ============================ Workerpool registry ============================
   - name: WorkerpoolRegistry
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
-      address: "0xC76A18c78B7e530A165c5683CB1aB134E21938B4"
+      #WORKERPOOL_REGISTRY_ADDRESS#
       abi: WorkerpoolRegistry
-      startBlock: 4543300
+      #START_BLOCK#
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -191,7 +191,7 @@ dataSources:
 templates:
   - name: Workerpool
     kind: ethereum/contract
-    network: bellecour
+    #NETWORK_NAME#
     source:
       abi: Workerpool
     mapping:
