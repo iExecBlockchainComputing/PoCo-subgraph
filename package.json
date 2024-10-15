@@ -4,7 +4,9 @@
   "author": "iExec",
   "license": "Apache-2.0",
   "scripts": {
-    "test-builds": "bash test-builds.sh"
+    "test-builds": "bash test-builds.sh",
+    "test": "graph test",
+    "test-docker": "docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main"
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {
@@ -15,8 +17,9 @@
     "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.59.0",
-    "@graphprotocol/graph-ts": "^0.25.0"
+    "@graphprotocol/graph-cli": "^0.86.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
+    "matchstick-as": "^0.6.0"
   },
   "dependencies": {
     "@iexec/poco": "5.3.0",
