@@ -16,5 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Init
         run: npm ci
-      - name: Run tests
+      - name: Run unit tests
         run: npm run test
+      - name: Test build
+        run: npm run build

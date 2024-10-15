@@ -7,7 +7,8 @@
     "test-builds": "bash test-builds.sh",
     "codegen": "graph codegen subgraph.template.yaml",
     "test": "npm run codegen && graph test",
-    "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main"
+    "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
+    "build": "npm run codegen && graph build subgraph.${NETWORK_NAME:-bellecour}.yaml"
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {
