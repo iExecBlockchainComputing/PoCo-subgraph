@@ -5,8 +5,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "test-builds": "bash test-builds.sh",
-    "test": "graph test",
-    "test-docker": "docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main"
+    "codegen": "graph codegen subgraph.template.yaml",
+    "test": "npm run codegen && graph test",
+    "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main"
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {
