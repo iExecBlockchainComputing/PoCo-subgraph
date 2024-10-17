@@ -1,0 +1,14 @@
+node('docker') {
+    stage('Clean Workspace') {
+        cleanWs()
+    }
+
+    stage('Checkout scm') {
+        checkout scm
+    }
+
+    stage('Run integration tests') {
+        sh 'npm ci'
+        sh 'npm run itest:all'
+    }
+}
