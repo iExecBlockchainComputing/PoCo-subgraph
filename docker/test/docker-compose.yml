@@ -1,15 +1,7 @@
-version: "3"
-
-networks:
-  thegraph:
-  blockchain:
-
 services:
   chain:
-    image: "iexechub/poco-chaintest:5.3.0-token-parity"
+    image: docker-regis.iex.ec/poco-chain:1.0.0-poco-v5.5.0-voucher-v1.0.0-nethermind
     restart: unless-stopped
-    networks:
-      - blockchain
     expose:
       - 8545
       - 8546
@@ -18,52 +10,63 @@ services:
       - 8546:8546
 
   ipfs:
-    image: ipfs/go-ipfs:v0.10.0
     restart: unless-stopped
-    networks:
-      - thegraph
+    image: ipfs/go-ipfs:v0.22.0
+    expose:
+      - 8080
+      - 5001
     ports:
+      - 8080:8080
       - 5001:5001
-    volumes:
-      - ${DATA}/ipfs:/data/ipfs
 
-  postgres:
-    image: postgres:12
+  graphnode-postgres:
+    image: postgres:16.4
     restart: unless-stopped
-    networks:
-      - thegraph
     command:
       - "postgres"
       - "-cshared_preload_libraries=pg_stat_statements"
-    ports:
-      - 5432:5432
+    expose:
+      - 5432
     environment:
-      POSTGRES_USER: "${DB_USER}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
 
   graphnode:
-    image: graphprotocol/graph-node:v0.27.0
+    image: graphprotocol/graph-node:v0.35.1
     restart: unless-stopped
-    networks:
-      - blockchain
-      - thegraph
-    depends_on:
-      - ipfs
-      - postgres
-      - chain
+    expose:
+      - 8000
+      - 8020
     ports:
-      - 8000:8000 # http
-      - 8001:8001 # ws
-      - 8020:8020 # deploy
-      - 8030:8030 # monitoring
-      - 8040:8040 # prometeus
+      - 8000:8000 # GraphQL HTTP
+      # - 8001:8001 # GraphQL WS
+      - 8020:8020 # admin RPC
+      # - 8040:8040 # metrics
     environment:
-      RUST_BACKTRACE: 1
-      postgres_host: postgres
-      postgres_user: "${DB_USER}"
-      postgres_pass: "${DB_PASSWORD}"
-      postgres_db: "${DB_NAME}"
-      ipfs: "ipfs:5001"
-      ethereum: "test:http://chain:8545"
-      GRAPH_NODE_ID: "graphnode_id"
+      postgres_host: graphnode-postgres
+      postgres_port: 5432
+      postgres_user: ${DB_USER}
+      postgres_pass: ${DB_PASSWORD}
+      postgres_db: ${DB_NAME}
+      ipfs: ipfs:5001
+      ethereum: ${NETWORK_NAME}:http://chain:8545
+    healthcheck:
+      test: netcat -w 1 0.0.0.0 8020
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  poco-subgraph-deployer:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
+    environment:
+      GRAPHNODE_URL: http://graphnode:8020
+      IPFS_URL: http://ipfs:5001
+      NETWORK_NAME: ${NETWORK_NAME}
+    depends_on:
+      graphnode:
+        condition: service_healthy

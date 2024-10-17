@@ -20,3 +20,5 @@ jobs:
         run: npm run test
       - name: Test build
         run: npm run build
+      - name: Run integration tests
+        run: npm run itest:all

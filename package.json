@@ -8,7 +8,14 @@
     "codegen": "graph codegen subgraph.template.yaml",
     "test": "npm run codegen && graph test",
     "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
-    "build": "npm run codegen && graph build subgraph.${NETWORK_NAME:-bellecour}.yaml"
+    "build": "npm run codegen && cp subgraph.template.yaml subgraph.yaml && graph build --network ${NETWORK_NAME:-bellecour}",
+    "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
+    "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
+    "deploy:all": "npm run build && npm run create && npm run deploy",
+    "down": "cd docker/test && docker compose down --remove-orphans ",
+    "up": "npm run down && cd docker/test && docker compose build --no-cache && docker compose up -d",
+    "itest": "ts-node itest/integration.test.ts",
+    "itest:all": "npm run up && sleep 30 && npm run itest && npm run down"
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -24,6 +31,7 @@
     "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
   },
   "devDependencies": {
+    "@graphprotocol/client-cli": "^3.0.7",
     "@graphprotocol/graph-cli": "^0.86.0",
     "@graphprotocol/graph-ts": "^0.35.1",
     "husky": "^9.1.6",
