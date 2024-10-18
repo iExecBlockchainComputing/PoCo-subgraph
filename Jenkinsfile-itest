@@ -1,18 +1,25 @@
 node('docker') {
-    stage('Clean Workspace') {
+    stage('Clone') {
         cleanWs()
-    }
-    stage('Checkout scm') {
-        checkout scm
+        checkoutInfo = checkout(scm)
+        echo "git checkout: ${checkoutInfo}"
     }
     stage('Up') {
-        sh './docker/test/up.sh'
+        withCredentials([
+            usernamePassword(credentialsId: 'docker-regis',
+            usernameVariable: 'username', passwordVariable: 'password')
+        ]) {
+            def registry = 'docker-regis.iex.ec'
+            sh "echo -n '${password}' | docker login --username '${username}' --password-stdin ${registry}"
+            sh './docker/test/up.sh'
+            sh "docker logout ${registry}"
+        }
     }
     docker.image('node:22-alpine').inside {
         stage('Init') {
             sh 'npm ci'
         }
-        stage('Test') {
+        stage('Integration tests') {
             sh 'npm run itest'
         }
     }
