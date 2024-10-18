@@ -14,7 +14,7 @@
     "deploy:all": "npm run build && npm run create && npm run deploy",
     "down": "./docker/test/down.sh",
     "up": "./docker/test/up.sh",
-    "itest": "ts-node itest/integration.test.ts",
+    "itest": "graphclient build && ts-node itest/integration.test.ts",
     "itest:all": "npm run up && sleep 30 && npm run itest && npm run down"
   },
   "lint-staged": {
