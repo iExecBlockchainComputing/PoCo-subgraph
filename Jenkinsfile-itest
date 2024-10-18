@@ -2,13 +2,21 @@ node('docker') {
     stage('Clean Workspace') {
         cleanWs()
     }
-
     stage('Checkout scm') {
         checkout scm
     }
-
-    stage('Run integration tests') {
-        sh 'npm ci'
-        sh 'npm run itest:all'
+    stage('Up') {
+        sh './docker/test/up.sh'
+    }
+    docker.image('node:22-alpine').inside {
+        stage('Init') {
+            sh 'npm ci'
+        }
+        stage('Test') {
+            sh 'npm run itest'
+        }
+    }
+    stage('Down') {
+        sh './docker/test/down.sh'
     }
 }
