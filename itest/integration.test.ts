@@ -1,24 +1,27 @@
-import { strictEqual } from 'assert';
-import { execute } from '../.graphclient';
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import assert from 'assert';
+
+const APIURL = 'http://localhost:8000/subgraphs/name/test/poco';
 
 async function main() {
     console.log('Running integration tests..');
-    const result = await execute(
-        `
-            query {
-                protocol(id: "iExec") {
-                    tvl
-                    id
+    const client = new ApolloClient({
+        uri: APIURL,
+        cache: new InMemoryCache(),
+    });
+    const result = await client.query({
+        query: gql(`
+                query {
+                    protocol(id: "iExec") {
+                        tvl
+                        id
+                    }
                 }
-            }
-        `,
-        {},
-    );
-    console.log(result);
-    strictEqual(
-        JSON.stringify(result.data),
-        JSON.stringify({ protocol: { tvl: '0.02025', id: 'iExec' } }),
-    );
+            `),
+    });
+    const protocol = result.data.protocol;
+    assert.equal(protocol.id, 'iExec');
+    assert.equal(protocol.tvl, '0.02025');
     console.log('integration tests completed ✔️');
 }
 
