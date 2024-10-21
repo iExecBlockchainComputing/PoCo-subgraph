@@ -4,6 +4,7 @@ node('docker') {
         checkoutInfo = checkout(scm)
         echo "git checkout: ${checkoutInfo}"
     }
+    /*
     stage('Up') {
         withCredentials([
             usernamePassword(credentialsId: 'docker-regis',
@@ -15,15 +16,18 @@ node('docker') {
             sh "docker logout ${registry}"
         }
     }
+    */
     docker.image('node:22-alpine').inside {
         stage('Init') {
             sh 'npm ci'
         }
         stage('Integration tests') {
-            sh 'npm run itest'
+            sh 'DEBUG=testcontainers:compose npm run itest'
         }
     }
+    /*
     stage('Down') {
         sh './docker/test/down.sh'
     }
+    */
 }
