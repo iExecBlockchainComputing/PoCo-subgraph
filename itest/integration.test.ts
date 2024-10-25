@@ -11,12 +11,15 @@ async function main() {
         'docker-compose.yml',
     ).withWaitStrategy(
         'poco-subgraph-deployer-1',
-        Wait.forLogMessage('Created subgraph: test/poco'),
+        Wait.forLogMessage('Deployed to http://graphnode:8000/subgraphs/name/test/poco/graphql'),
     );
     await environment.up();
-    const secondsToWait = 20;
+    // Wait for graphnode to ingest a few blocks before querying it
+    const secondsToWait = 5;
     console.log(`Waiting ${secondsToWait}s..`);
-    await new Promise((resolve) => setTimeout(resolve, secondsToWait * 1000));
+    await new Promise((resolve) => {
+        return setTimeout(resolve, secondsToWait * 1000);
+    });
     const client = new ApolloClient({
         uri: APIURL,
         cache: new InMemoryCache(),
