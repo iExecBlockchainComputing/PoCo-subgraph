@@ -17,12 +17,13 @@ node('docker') {
         }
     }
     */
-    docker.image('node:22-alpine').inside {
+    docker.image('node:22-alpine').inside('-v /var/run/docker.sock:/var/run/docker.sock --network=host --user=root') {
         stage('Init') {
+            sh 'apk add docker docker-compose'
             sh 'npm ci'
         }
         stage('Integration tests') {
-            sh 'DEBUG=testcontainers:compose npm run itest'
+            sh 'DEBUG=testcontainers:* npm run itest'
         }
     }
     /*
