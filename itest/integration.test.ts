@@ -7,7 +7,7 @@ const APIURL = 'http://localhost:8000/subgraphs/name/test/poco';
 async function main() {
     console.log('Running integration tests..');
     const environment = new DockerComposeEnvironment('docker/test/', 'docker-compose.yml')
-        .withStartupTimeout(2 * 60 * 1000)
+        .withStartupTimeout(3 * 60 * 1000)
         .withWaitStrategy(
             'poco-subgraph-deployer-1',
             Wait.forLogMessage(
