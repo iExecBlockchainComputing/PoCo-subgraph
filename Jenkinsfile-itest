@@ -4,19 +4,18 @@ node('docker') {
         checkoutInfo = checkout(scm)
         echo "git checkout: ${checkoutInfo}"
     }
-    /*
-    stage('Up') {
+    stage('Pull') {
         withCredentials([
             usernamePassword(credentialsId: 'docker-regis',
             usernameVariable: 'username', passwordVariable: 'password')
         ]) {
             def registry = 'docker-regis.iex.ec'
             sh "echo -n '${password}' | docker login --username '${username}' --password-stdin ${registry}"
-            sh './docker/test/up.sh'
+            sh 'cd docker/test/ && docker compose pull chain'
+            //sh './docker/test/up.sh'
             sh "docker logout ${registry}"
         }
     }
-    */
     docker.image('node:22-alpine').inside('-v /var/run/docker.sock:/var/run/docker.sock --network=host --user=root') {
         stage('Init') {
             sh 'apk add docker docker-compose'
