@@ -6,13 +6,14 @@ const APIURL = 'http://localhost:8000/subgraphs/name/test/poco';
 
 async function main() {
     console.log('Running integration tests..');
-    const environment = new DockerComposeEnvironment(
-        'docker/test/',
-        'docker-compose.yml',
-    ).withWaitStrategy(
-        'poco-subgraph-deployer-1',
-        Wait.forLogMessage('Deployed to http://graphnode:8000/subgraphs/name/test/poco/graphql'),
-    );
+    const environment = new DockerComposeEnvironment('docker/test/', 'docker-compose.yml')
+        .withStartupTimeout(2 * 60 * 1000)
+        .withWaitStrategy(
+            'poco-subgraph-deployer-1',
+            Wait.forLogMessage(
+                'Deployed to http://graphnode:8000/subgraphs/name/test/poco/graphql',
+            ),
+        );
     await environment.up();
     // Wait for graphnode to ingest a few blocks before querying it
     const secondsToWait = 5;
