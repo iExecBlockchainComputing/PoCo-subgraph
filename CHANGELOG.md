@@ -1,14 +1,8 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-## next
-
-### Added
-
-### Changed
-
-### Removed
+## vNext
+- Add integration test suite. (#21)
+- Add unit test suite. (#20)
 
 ## 1.0.0 - initial release
 
