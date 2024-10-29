@@ -7,7 +7,7 @@ services:
 #      - 8546
     ports:
       - 8545:8545
-      # - 8546:8546 # port (not required for integrations tests) fails to open on CI
+      # - 8546:8546 # port (not required for integration tests) fails to open on CI
 
   ipfs:
     restart: unless-stopped

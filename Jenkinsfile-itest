@@ -18,7 +18,7 @@ node('docker') {
     docker.image('node:22-alpine')
         .inside('-v /var/run/docker.sock:/var/run/docker.sock --network=host --user=root') {
             stage('Init') {
-                sh 'apk add docker docker-compose' // TODO: Use already built image for a faster job
+                sh 'apk add docker docker-compose' // TODO: Use already built image for a faster job execution
                 sh 'npm ci'
             }
             stage('Integration tests') {

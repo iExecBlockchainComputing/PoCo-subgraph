@@ -13,7 +13,7 @@ const client = new ApolloClient({
 describe('Integration tests', () => {
     /**
      * Services are started only once before running all tests to get a decent test
-     * time in case of multiple tests. Please switch to `beforeEach` if necessary.
+     * suite duration with multiple tests. Please switch to `beforeEach` if necessary.
      * Shutdown of services is handled by `testcontainers` framework.
      */
     before(async () => {
