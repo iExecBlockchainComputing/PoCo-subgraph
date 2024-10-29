@@ -10,9 +10,12 @@ node('docker') {
             usernameVariable: 'username', passwordVariable: 'password')
         ]) {
             def registry = 'docker-regis.iex.ec'
-            sh "echo -n '${password}' | docker login --username '${username}' --password-stdin ${registry}"
-            sh 'cd docker/test/ && docker compose pull chain'
-            sh "docker logout ${registry}"
+            try {
+                sh "echo -n '${password}' | docker login --username '${username}' --password-stdin ${registry}"
+                sh 'cd docker/test/ && docker compose pull chain'
+            } finally {
+                sh "docker logout ${registry}"
+            }
         }
     }
     docker.image('node:22-alpine')
