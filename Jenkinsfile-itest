@@ -4,7 +4,7 @@ node('docker') {
         checkoutInfo = checkout(scm)
         echo "git checkout: ${checkoutInfo}"
     }
-    stage('Pull') {
+    stage('Pull images') {
         withCredentials([
             usernamePassword(credentialsId: 'docker-regis',
             usernameVariable: 'username', passwordVariable: 'password')
@@ -12,22 +12,17 @@ node('docker') {
             def registry = 'docker-regis.iex.ec'
             sh "echo -n '${password}' | docker login --username '${username}' --password-stdin ${registry}"
             sh 'cd docker/test/ && docker compose pull chain'
-            //sh './docker/test/up.sh'
             sh "docker logout ${registry}"
         }
     }
-    docker.image('node:22-alpine').inside('-v /var/run/docker.sock:/var/run/docker.sock --network=host --user=root') {
-        stage('Init') {
-            sh 'apk add docker docker-compose'
-            sh 'npm ci'
+    docker.image('node:22-alpine')
+        .inside('-v /var/run/docker.sock:/var/run/docker.sock --network=host --user=root') {
+            stage('Init') {
+                sh 'apk add docker docker-compose' // TODO: Use already built image for a faster job
+                sh 'npm ci'
+            }
+            stage('Integration tests') {
+                sh 'npm run itest'
+            }
         }
-        stage('Integration tests') {
-            sh 'DEBUG=testcontainers:* npm run itest'
-        }
-    }
-    /*
-    stage('Down') {
-        sh './docker/test/down.sh'
-    }
-    */
 }
