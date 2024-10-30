@@ -2,9 +2,6 @@ services:
   chain:
     image: docker-regis.iex.ec/poco-chain:1.0.0-poco-v5.5.0-voucher-v1.0.0-nethermind
     restart: unless-stopped
-    expose:
-      - 8545
-#      - 8546
     ports:
       - 8545:8545
       # - 8546:8546 # port (not required for integration tests) fails to open on CI
@@ -12,9 +9,6 @@ services:
   ipfs:
     restart: unless-stopped
     image: ipfs/go-ipfs:v0.22.0
-    expose:
-      - 8080
-      - 5001
     ports:
       - 8080:8080
       - 5001:5001
@@ -36,9 +30,6 @@ services:
   graphnode:
     image: graphprotocol/graph-node:v0.35.1
     restart: unless-stopped
-    expose:
-      - 8000
-      - 8020
     ports:
       - 8000:8000 # GraphQL HTTP
       # - 8001:8001 # GraphQL WS
