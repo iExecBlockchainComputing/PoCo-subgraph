@@ -27,6 +27,7 @@ describe('Integration tests', () => {
                 ),
             );
         await environment.up();
+        const secondsToWait = 10;
         console.log(
             `Waiting ${secondsToWait}s for graphnode to ingest a few blocks before querying it..`,
         );
