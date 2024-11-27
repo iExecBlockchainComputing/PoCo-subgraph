@@ -47,6 +47,7 @@ describe('Integration tests', () => {
                     }
                 `),
         });
+        console.log('result  =>', result);
         const protocol = result.data.protocol;
         equal(protocol.id, 'iExec');
         equal(protocol.tvl, '0.02025');
