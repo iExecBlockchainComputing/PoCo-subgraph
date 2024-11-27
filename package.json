@@ -13,7 +13,7 @@
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
     "deploy:all": "npm run build && npm run create && npm run deploy",
-    "all-local-test": "npm run build:local-test && npm run create && npm run deploy",
+    "deploy:all-local-test": "npm run build:local-test && npm run create && npm run deploy",
     "itest": "DEBUG=testcontainers:* mocha",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
     "start-test-stack": "npm run stop-test-stack && cd test-stack && docker compose build && docker compose up -d"

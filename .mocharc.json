@@ -1,10 +1,6 @@
 {
-    "extension": [
-        "ts"
-    ],
+    "extension": ["ts"],
     "spec": "itest/**/*.ts",
-    "require": [
-        "ts-node/register"
-    ],
-    "timeout": 1000000
+    "require": ["ts-node/register"],
+    "timeout": 600000
 }
