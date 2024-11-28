@@ -436,6 +436,14 @@ type OrdersMatched implements DealEvent @entity {
   deal: Deal!
 }
 
+type DealSponsored implements DealEvent @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  deal: Deal!
+  sponsor: Account!
+}
+
 interface TaskEvent {
   id: ID!
   transaction: Transaction!
