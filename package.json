@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "@iexec/poco": "^5.5.0",
-    "@iexec/solidity": "0.1.0"
+    "@iexec/solidity": "^0.1.1"
   }
 }
