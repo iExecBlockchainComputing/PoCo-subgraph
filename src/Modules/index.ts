@@ -14,27 +14,22 @@
  * limitations under the License.                                             *
  ******************************************************************************/
 
-export { handleCreateCategory } from "./IexecCategoryManager";
+export { handleCreateCategory } from './IexecCategoryManager';
+
+export { handleLock, handleReward, handleSeize, handleTransfer, handleUnlock } from './IexecERC20';
 
 export {
-  handleTransfer,
-  handleReward,
-  handleSeize,
-  handleLock,
-  handleUnlock,
-} from "./IexecERC20";
-
-export {
-  handleOrdersMatched,
-  handleSchedulerNotice,
-  handleTaskInitialize,
-  handleTaskContribute,
-  handleTaskConsensus,
-  handleTaskReveal,
-  handleTaskReopen,
-  handleTaskFinalize,
-  handleTaskClaimed,
-  handleAccurateContribution,
-  handleFaultyContribution,
-  handleMatchOrders,
-} from "./IexecPoco";
+    handleAccurateContribution,
+    handleDealSponsored,
+    handleFaultyContribution,
+    handleMatchOrders,
+    handleOrdersMatched,
+    handleSchedulerNotice,
+    handleTaskClaimed,
+    handleTaskConsensus,
+    handleTaskContribute,
+    handleTaskFinalize,
+    handleTaskInitialize,
+    handleTaskReopen,
+    handleTaskReveal,
+} from './IexecPoco';
