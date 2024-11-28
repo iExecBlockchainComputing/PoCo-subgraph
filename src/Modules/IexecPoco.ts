@@ -436,12 +436,11 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
     workerAccount.score = faultyContributionEvent.score;
     workerAccount.save();
 }
-
 export function handleDealSponsored(event: DealSponsoredEvent): void {
     let dealSponsoredEvent = new DealSponsored(createEventID(event));
     dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.timestamp = event.block.timestamp;
-    dealSponsoredEvent.dealId = event.params.dealId.toHex();
+    dealSponsoredEvent.deal = event.params.dealId.toHex();
     dealSponsoredEvent.sponsor = event.params.sponsor.toHex();
     dealSponsoredEvent.save();
 }
