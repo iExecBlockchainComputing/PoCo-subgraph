@@ -15,7 +15,7 @@ generate_yaml() {
     local network=$1
     local config_file="config.json"
     local template_file="subgraph.template.yaml"
-    local output_file="subgraph.yaml"
+    local output_file="subgraph.${network}.yaml"
 
     # Read values from config.json
     local start_block=$(jq -r ".${network}.START_BLOCK" ${config_file})
@@ -24,13 +24,6 @@ generate_yaml() {
     local app_registry_address=$(jq -r ".${network}.APP_REGISTRY_ADDRESS" ${config_file})
     local dataset_registry_address=$(jq -r ".${network}.DATATSET_REGISTRY_ADDRESS" ${config_file})
     local workerpool_registry_address=$(jq -r ".${network}.WORKERPOOL_REGISTRY_ADDRESS" ${config_file})
-
-    if [ -n "$START_BLOCK" ]; then
-        echo "START_BLOCK is set to $START_BLOCK"
-        start_block=$START_BLOCK
-    else
-        echo "START_BLOCK is not set. Using start_block from config.json: $start_block"
-    fi
 
     # Replace placeholders in the template and create the output file
     sed -e "s/#NETWORK_NAME#/network: ${network}/g" \

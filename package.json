@@ -9,14 +9,10 @@
     "test": "npm run codegen && graph test",
     "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
     "build": "npm run codegen && cp subgraph.template.yaml subgraph.yaml && graph build --network ${NETWORK_NAME:-bellecour}",
-    "build:local-test": "npm run codegen && cp subgraph.template.yaml subgraph.yaml && graph build --network ${NETWORK_NAME:-bellecour} && ./generate_subgraph_file.sh ${NETWORK_NAME:-bellecour}",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
     "deploy:all": "npm run build && npm run create && npm run deploy",
-    "deploy:all-local-test": "npm run build:local-test && npm run create && npm run deploy",
-    "itest": "DEBUG=testcontainers:* mocha",
-    "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
-    "start-test-stack": "npm run stop-test-stack && cd test-stack && docker compose build && docker compose up -d"
+    "itest": "DEBUG=testcontainers:* mocha"
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -46,6 +42,6 @@
   },
   "dependencies": {
     "@iexec/poco": "^5.5.0",
-    "@iexec/solidity": "^0.1.1"
+    "@iexec/solidity": "0.1.0"
   }
 }
