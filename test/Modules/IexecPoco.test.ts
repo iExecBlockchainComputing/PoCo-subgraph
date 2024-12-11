@@ -9,8 +9,10 @@ import { handleDealSponsored } from '../../src/Modules';
 describe('IexecPoco', () => {
     test('Should handle DealSponsored', () => {
         // Define mock parameters
-        const dealId = Bytes.fromHexString('0x1234567890abcdef1234567890abcdef12345678');
-        const sponsor = Address.fromString('0xabcdef1234567890abcdef1234567890abcdef12');
+        const dealId = Bytes.fromHexString(
+            '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+        );
+        const sponsor = Address.fromHexString('0xabcdef1234567890abcdef1234567890abcdef12');
         const timestamp = BigInt.fromI32(123456789);
 
         // Create the mock event
