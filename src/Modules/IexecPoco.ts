@@ -423,6 +423,7 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
     workerAccount.score = faultyContributionEvent.score;
     workerAccount.save();
 }
+
 export function handleDealSponsored(event: DealSponsoredEvent): void {
     let dealSponsoredEvent = new DealSponsored(createEventID(event));
     dealSponsoredEvent.transaction = logTransaction(event).id;
