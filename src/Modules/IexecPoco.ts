@@ -428,7 +428,7 @@ export function handleDealSponsored(event: DealSponsoredEvent): void {
     let dealSponsoredEvent = new DealSponsored(createEventID(event));
     dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.timestamp = event.block.timestamp;
-    dealSponsoredEvent.deal = event.params.dealId.toHex();
+    dealSponsoredEvent.dealId = event.params.dealId.toHex();
     dealSponsoredEvent.sponsor = event.params.sponsor.toHex();
     dealSponsoredEvent.save();
 }
