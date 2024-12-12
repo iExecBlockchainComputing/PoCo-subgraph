@@ -12,7 +12,7 @@ describe('IexecPoco', () => {
         const dealId = Bytes.fromHexString(
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
         );
-        const sponsor = Address.fromHexString('0xabcdef1234567890abcdef1234567890abcdef12');
+        const sponsor = Address.fromString('0xabcdef1234567890abcdef1234567890abcdef12');
         const timestamp = BigInt.fromI32(123456789);
 
         // Create the mock event
@@ -31,7 +31,7 @@ describe('IexecPoco', () => {
             .concat('-')
             .concat(mockEvent.logIndex.toString());
 
-        assert.fieldEquals('DealSponsored', entityId, 'deal', dealId.toHex());
+        assert.fieldEquals('DealSponsored', entityId, 'dealId', dealId.toHex());
         assert.fieldEquals('DealSponsored', entityId, 'sponsor', sponsor.toHex());
         assert.fieldEquals('DealSponsored', entityId, 'timestamp', timestamp.toString());
 
