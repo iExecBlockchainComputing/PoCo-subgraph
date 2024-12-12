@@ -425,7 +425,11 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
 }
 
 export function handleDealSponsored(event: DealSponsoredEvent): void {
-    let dealSponsoredEvent = new DealSponsored(createEventID(event));
+    let dealSponsoredEvent = DealSponsored.load(createEventID(event));
+    if (!dealSponsoredEvent) {
+        dealSponsoredEvent = new DealSponsored(createEventID(event));
+    }
+    dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.timestamp = event.block.timestamp;
     dealSponsoredEvent.dealId = event.params.dealId.toHex();
