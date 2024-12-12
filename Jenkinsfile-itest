@@ -1,7 +1,7 @@
 node('docker') {
-    environment {
-        CI = 'true'
-    }
+    // environment {
+    //     CI = 'true'
+    // }
     stage('Clone') {
         cleanWs()
         checkoutInfo = checkout(scm)
