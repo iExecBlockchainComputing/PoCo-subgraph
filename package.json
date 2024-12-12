@@ -4,7 +4,7 @@
   "author": "iExec",
   "license": "Apache-2.0",
   "scripts": {
-    "prepare": "if [ \"$CI\" == \"true\" ]; then echo 'Skipping husky install in CI'; then 'husky install' && husky; fi",
+    "prepare": "if [ \"$CI\" == \"true\" ]; then echo 'Skipping husky install in CI'; else 'husky install' && husky; fi",
     "codegen": "graph codegen subgraph.template.yaml",
     "test": "npm run codegen && graph test",
     "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
