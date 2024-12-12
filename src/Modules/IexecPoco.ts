@@ -432,7 +432,7 @@ export function handleDealSponsored(event: DealSponsoredEvent): void {
     dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.transaction = logTransaction(event).id;
     dealSponsoredEvent.timestamp = event.block.timestamp;
-    dealSponsoredEvent.dealId = event.params.dealId.toHex();
+    dealSponsoredEvent.deal = event.params.dealId.toHex();
     dealSponsoredEvent.sponsor = event.params.sponsor.toHex();
     dealSponsoredEvent.save();
 }

@@ -440,7 +440,7 @@ type DealSponsored implements DealEvent @entity {
   id: ID!
   transaction: Transaction!
   timestamp: BigInt!
-  dealId: Deal!
+  deal: Deal!
   sponsor: Account!
 }
 

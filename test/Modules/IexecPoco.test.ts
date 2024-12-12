@@ -17,7 +17,7 @@ describe('IexecPoco', () => {
 
         // Create the mock event
         let mockEvent = newTypedMockEventWithParams<DealSponsored>([
-            new ethereum.EventParam('dealId', ethereum.Value.fromFixedBytes(dealId)),
+            new ethereum.EventParam('deal', ethereum.Value.fromFixedBytes(dealId)),
             new ethereum.EventParam('sponsor', ethereum.Value.fromAddress(sponsor)),
         ]);
         mockEvent.block.timestamp = timestamp;
@@ -31,7 +31,7 @@ describe('IexecPoco', () => {
             .concat('-')
             .concat(mockEvent.logIndex.toString());
 
-        assert.fieldEquals('DealSponsored', entityId, 'dealId', dealId.toHex());
+        assert.fieldEquals('DealSponsored', entityId, 'deal', dealId.toHex());
         assert.fieldEquals('DealSponsored', entityId, 'sponsor', sponsor.toHex());
         assert.fieldEquals('DealSponsored', entityId, 'timestamp', timestamp.toString());
 
