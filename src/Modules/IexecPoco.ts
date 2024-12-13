@@ -5,6 +5,7 @@ import { BigInt } from '@graphprotocol/graph-ts';
 
 import {
     AccurateContribution as AccurateContributionEvent,
+    DealSponsored as DealSponsoredEvent,
     FaultyContribution as FaultyContributionEvent,
     IexecInterfaceToken as IexecInterfaceTokenContract,
     MatchOrdersCall,
@@ -21,6 +22,7 @@ import {
 
 import {
     AccurateContribution,
+    DealSponsored,
     FaultyContribution,
     OrdersMatched,
     SchedulerNotice,
@@ -420,4 +422,17 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
     let workerAccount = fetchAccount(event.params.worker.toHex());
     workerAccount.score = faultyContributionEvent.score;
     workerAccount.save();
+}
+
+export function handleDealSponsored(event: DealSponsoredEvent): void {
+    let dealSponsoredEvent = DealSponsored.load(createEventID(event));
+    if (!dealSponsoredEvent) {
+        dealSponsoredEvent = new DealSponsored(createEventID(event));
+    }
+    dealSponsoredEvent.transaction = logTransaction(event).id;
+    dealSponsoredEvent.transaction = logTransaction(event).id;
+    dealSponsoredEvent.timestamp = event.block.timestamp;
+    dealSponsoredEvent.deal = event.params.dealId.toHex();
+    dealSponsoredEvent.sponsor = event.params.sponsor.toHex();
+    dealSponsoredEvent.save();
 }
