@@ -19,7 +19,7 @@ describe('Integration tests', () => {
     before(async () => {
         console.log('Starting services..');
         const environment = new DockerComposeEnvironment('docker/test/', 'docker-compose.yml')
-            .withStartupTimeout(3 * MINUTES)
+            .withStartupTimeout(5 * MINUTES)
             .withWaitStrategy(
                 'poco-subgraph-deployer-1',
                 Wait.forLogMessage(
