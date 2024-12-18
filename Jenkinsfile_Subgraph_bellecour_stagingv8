@@ -2,7 +2,7 @@
 
 @Library('global-jenkins-library@2.8.1') _
 deploySubGraph(
-  targetRemoteHostGraphNode : 'azubgrpbp-thegraph-bellecour.public.az2.internal',
+  targetRemoteHostGraphNode : 'azubgrpbx-thegraph-staging.public.az2.internal',
   targetRemoteHostIPFS : 'ipfs-gateway.stagingv8.wp-prod.az2.internal',
   subgraphFolder: './',
   subgraphFilename: 'subgraph.bellecour.yaml',
