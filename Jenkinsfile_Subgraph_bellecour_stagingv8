@@ -1,8 +1,9 @@
 //Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
 
-@Library('global-jenkins-library@2.7.7') _
+@Library('global-jenkins-library@2.8.1') _
 deploySubGraph(
-  targetRemoteHost : 'azubgrpbx-thegraph-staging.public.az2.internal',
+  targetRemoteHostGraphNode : 'azubgrpbp-thegraph-bellecour.public.az2.internal',
+  targetRemoteHostIPFS : 'ipfs-gateway.stagingv8.wp-prod.az2.internal',
   subgraphFolder: './',
   subgraphFilename: 'subgraph.bellecour.yaml',
   subgraphVersionLabel: 'v1.0.0-rc.1',
