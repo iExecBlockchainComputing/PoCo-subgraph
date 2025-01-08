@@ -20,4 +20,6 @@ jobs:
         run: npm run test
       - name: Test build
         run: npm run build
+      - name: Run Coverage
+        run: npm run coverage
     # See Jenkinsfile-itest for "Run integration tests" step
