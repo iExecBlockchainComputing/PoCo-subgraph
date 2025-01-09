@@ -1,6 +1,7 @@
 # Changelog
 
 ## vNext
+- Display coverage in Github PR checks. (#26)
 - Add integration test suite. (#21)
 - Add unit test suite. (#20)
 

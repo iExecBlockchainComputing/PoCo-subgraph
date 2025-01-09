@@ -4,6 +4,16 @@ A subgraph to explore the PoCo smarcontracts
 
 [CHANGELOG](./CHANGELOG.md)
 
+# Setup coverage⁠
+
+> In order for Matchstick to check which handlers are being run, those handlers need to be exported from the test file.
+
+Check how to export handlers with [Matchstick - Test Coverage documentation](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#test-coverage).
+
+> [!NOTE]
+> Since Matchstick code coverage is in very early stages, Matchstick cannot check for branch coverage, but rely on the assertion that a given handler has been called.
+
+
 ## local dev
 
 run local services:

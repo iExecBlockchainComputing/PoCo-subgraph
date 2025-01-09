@@ -1,7 +1,6 @@
 on:
   pull_request:
     branches:
-      - feature/* # TODO: Remove it
       - develop
       - main
 
@@ -17,7 +16,7 @@ jobs:
         run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat
       - name: Extract coverage
         run: echo "COVERAGE=$(cat /tmp/coverage.out | grep "Global test coverage")" >> $GITHUB_ENV
-      - name: Create coverage check run # Publish coverage summary to Github PR checks
+      - name: Display coverage in Github PR checks
         # See https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
         # and https://www.kenmuse.com/blog/creating-github-checks/
         env:
