@@ -1,11 +1,9 @@
 on:
   push:
+  pull_request:
     branches:
-      - feature/*
-      - bugfix/*
+      - feature/* # TODO: Remove it
       - develop
-      - release/*
-      - hotfix/*
       - main
 
 jobs:
