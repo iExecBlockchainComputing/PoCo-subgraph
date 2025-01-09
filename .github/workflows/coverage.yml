@@ -16,8 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Init
         run: npm ci
-      - name: Run unit tests
-        run: npm run test
-      - name: Test build
-        run: npm run build
-    # See Jenkinsfile-itest for "Run integration tests" step
+      - name: Run Coverage
+        run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat /tmp/coverage.out
+      - name: Check coverage
+        run: cat /tmp/coverage.out | grep "Global test coverage"
