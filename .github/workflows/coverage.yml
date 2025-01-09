@@ -15,12 +15,14 @@ jobs:
         run: npm ci
       - name: Run Coverage
         run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat
-      - name: Check coverage
-        run: cat /tmp/coverage.out | grep "Global test coverage"
+      - name: Extract coverage
+        run: echo "COVERAGE=$(cat /tmp/coverage.out | grep "Global test coverage")" >> $GITHUB_ENV
+      - name: Print coverage
+        run: echo $COVERAGE
       - name: Create Check Run
         env:
           GH_TOKEN: ${{ github.token }}
-          COVERAGE: 123
+          COVERAGE: $COVERAGE
         run: |
           curl -L -X POST \
            -H "Accept: application/vnd.github+json" \
