@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,6 +17,6 @@ jobs:
       - name: Init
         run: npm ci
       - name: Run Coverage
-        run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat /tmp/coverage.out
+        run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat
       - name: Check coverage
         run: cat /tmp/coverage.out | grep "Global test coverage"
