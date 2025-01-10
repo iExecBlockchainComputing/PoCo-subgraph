@@ -5,7 +5,6 @@ import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
 import { DealSponsored } from '../../generated/Core/IexecInterfaceToken';
 import { handleDealSponsored } from '../../src/Modules';
-export { handleDealSponsored };
 
 describe('IexecPoco', () => {
     test('Should handle DealSponsored', () => {
@@ -41,3 +40,5 @@ describe('IexecPoco', () => {
         assert.fieldEquals('Transaction', transactionId, 'id', transactionId);
     });
 });
+
+export { handleDealSponsored };
