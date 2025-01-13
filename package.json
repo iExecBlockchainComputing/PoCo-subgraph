@@ -7,6 +7,7 @@
     "prepare": "husky",
     "codegen": "graph codegen subgraph.template.yaml",
     "test": "npm run codegen && graph test",
+    "coverage": "npm run codegen && graph test -- -c",
     "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
     "build": "npm run codegen && cp subgraph.template.yaml subgraph.yaml && graph build --network ${NETWORK_NAME:-bellecour}",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",

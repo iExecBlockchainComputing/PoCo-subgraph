@@ -40,3 +40,5 @@ describe('IexecPoco', () => {
         assert.fieldEquals('Transaction', transactionId, 'id', transactionId);
     });
 });
+
+export { handleDealSponsored };

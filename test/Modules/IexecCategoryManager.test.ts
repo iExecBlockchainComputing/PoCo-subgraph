@@ -4,7 +4,7 @@
 import { ethereum } from '@graphprotocol/graph-ts';
 import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
 import { CreateCategory } from '../../generated/Core/IexecInterfaceToken';
-import { handleCreateCategory } from '../../src/Modules/IexecCategoryManager';
+import { handleCreateCategory } from '../../src/Modules';
 
 describe('IexecCategoryManager', () => {
     test('Should handle CreateCategory', () => {
@@ -33,3 +33,5 @@ describe('IexecCategoryManager', () => {
         });
     });
 });
+
+export { handleCreateCategory };
