@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # For 24.04+, see https://github.com/graphprotocol/graph-tooling/issues/1546#issuecomment-2589680195
     steps:
       - name: Checkout
         uses: actions/checkout@v4
