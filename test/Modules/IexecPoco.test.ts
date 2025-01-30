@@ -3,6 +3,7 @@
 
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
 import {
+    assert,
     createMockedFunction,
     describe,
     newTypedMockEventWithParams,
@@ -17,6 +18,10 @@ describe('IexecPoco', () => {
         const dealId = Bytes.fromHexString(
             '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
         );
+        const appHash = dealId;
+        const datasetHash = dealId;
+        const workerpoolHash = dealId;
+        const requestHash = dealId;
         const sponsor = Address.fromString('0xabcdef1234567890abcdef1234567890abcdef12');
         const timestamp = BigInt.fromI32(123456789);
         const assetAddress = Address.fromString('0x90cBa2Bbb19ecc291A12066Fd8329D65FA1f1947');
@@ -34,55 +39,64 @@ describe('IexecPoco', () => {
             .withArgs([ethereum.Value.fromFixedBytes(dealId)])
             .returns([
                 ethereum.Value.fromTuple(
-                    // app
                     changetype<ethereum.Tuple>([
-                        ethereum.Value.fromAddress(assetAddress),
-                        ethereum.Value.fromAddress(assetOwner),
-                        ethereum.Value.fromI32(assetPrice),
+                        ethereum.Value.fromTuple(
+                            // app
+                            changetype<ethereum.Tuple>([
+                                ethereum.Value.fromAddress(assetAddress),
+                                ethereum.Value.fromAddress(assetOwner),
+                                ethereum.Value.fromI32(assetPrice),
+                            ]),
+                        ),
+                        ethereum.Value.fromTuple(
+                            // dataset
+                            changetype<ethereum.Tuple>([
+                                ethereum.Value.fromAddress(assetAddress),
+                                ethereum.Value.fromAddress(assetOwner),
+                                ethereum.Value.fromI32(assetPrice),
+                            ]),
+                        ),
+                        ethereum.Value.fromTuple(
+                            // workerpool
+                            changetype<ethereum.Tuple>([
+                                ethereum.Value.fromAddress(assetAddress),
+                                ethereum.Value.fromAddress(assetOwner),
+                                ethereum.Value.fromI32(assetPrice),
+                            ]),
+                        ),
+                        ethereum.Value.fromI32(uint256), // trust
+                        ethereum.Value.fromI32(uint256), // category
+                        ethereum.Value.fromFixedBytes(bytes32), // tag
+                        ethereum.Value.fromAddress(address), // requester
+                        ethereum.Value.fromAddress(address), // beneficiary
+                        ethereum.Value.fromAddress(address), // callback
+                        ethereum.Value.fromString(string), // params
+                        ethereum.Value.fromI32(uint256), // startTime
+                        ethereum.Value.fromI32(uint256), // botFirst
+                        ethereum.Value.fromI32(uint256), // botSize
+                        ethereum.Value.fromI32(uint256), // workerStake
+                        ethereum.Value.fromI32(uint256), // schedulerRewardRatio
+                        ethereum.Value.fromAddress(sponsor), // sponsor
                     ]),
                 ),
-                ethereum.Value.fromTuple(
-                    // dataset
-                    changetype<ethereum.Tuple>([
-                        ethereum.Value.fromAddress(assetAddress),
-                        ethereum.Value.fromAddress(assetOwner),
-                        ethereum.Value.fromI32(assetPrice),
-                    ]),
-                ),
-                ethereum.Value.fromTuple(
-                    // workerpool
-                    changetype<ethereum.Tuple>([
-                        ethereum.Value.fromAddress(assetAddress),
-                        ethereum.Value.fromAddress(assetOwner),
-                        ethereum.Value.fromI32(assetPrice),
-                    ]),
-                ),
-                ethereum.Value.fromI32(uint256), // trust
-                ethereum.Value.fromI32(uint256), // category
-                ethereum.Value.fromFixedBytes(bytes32), // tag
-                ethereum.Value.fromAddress(address), // requester
-                ethereum.Value.fromAddress(address), // beneficiary
-                ethereum.Value.fromAddress(address), // callback
-                ethereum.Value.fromString(string), // params
-                ethereum.Value.fromI32(uint256), // startTime
-                ethereum.Value.fromI32(uint256), // botFirst
-                ethereum.Value.fromI32(uint256), // botSize
-                ethereum.Value.fromI32(uint256), // workerStake
-                ethereum.Value.fromI32(uint256), // schedulerRewardRatio
-                ethereum.Value.fromAddress(address), // sponsor
             ]);
 
         // Create the mock event
         let mockEvent = newTypedMockEventWithParams<OrdersMatched>([
-            new ethereum.EventParam('deal', ethereum.Value.fromFixedBytes(dealId)),
+            new ethereum.EventParam('dealid', ethereum.Value.fromFixedBytes(dealId)),
+            new ethereum.EventParam('appHash', ethereum.Value.fromFixedBytes(appHash)),
+            new ethereum.EventParam('datasetHash', ethereum.Value.fromFixedBytes(datasetHash)),
+            new ethereum.EventParam(
+                'workerpoolHash',
+                ethereum.Value.fromFixedBytes(workerpoolHash),
+            ),
+            new ethereum.EventParam('requestHash', ethereum.Value.fromFixedBytes(requestHash)),
         ]);
         mockEvent.block.timestamp = timestamp;
         mockEvent.address = pocoProxyAddress;
 
         // Call the handler
         handleOrdersMatched(mockEvent);
-
-        /*
 
         // Assert that the OrdersMatched entity was created and has correct fields
         const entityId = mockEvent.block.number
@@ -98,7 +112,6 @@ describe('IexecPoco', () => {
         // Assert that a transaction was logged (if applicable)
         const transactionId = mockEvent.transaction.hash.toHex();
         assert.fieldEquals('Transaction', transactionId, 'id', transactionId);
-        */
     });
 });
 

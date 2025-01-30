@@ -22,6 +22,7 @@ import {
 import {
     AccurateContribution,
     FaultyContribution,
+    OrdersMatched,
     SchedulerNotice,
     TaskClaimed,
     TaskConsensus,
@@ -127,13 +128,10 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     let contract = IexecInterfaceTokenContract.bind(event.address);
     let viewedDeal = contract.viewDeal(event.params.dealid);
 
-    /*
     fetchAccount(viewedDeal.requester.toHex()).save();
     fetchAccount(viewedDeal.beneficiary.toHex()).save();
     fetchAccount(viewedDeal.callback.toHex()).save();
-    */
     let deal = fetchDeal(event.params.dealid.toHex());
-    /*
     deal.app = viewedDeal.app.pointer.toHex();
     deal.appOwner = viewedDeal.app.owner.toHex();
     deal.appPrice = toRLC(viewedDeal.app.price);
@@ -162,9 +160,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.requestorder = event.params.requestHash.toHex();
     deal.timestamp = event.block.timestamp;
     deal.save();
-    */
 
-    /*
     const dataset = deal.dataset;
 
     let apporder = fetchApporder(event.params.appHash.toHex());
@@ -196,7 +192,6 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     protocol.dealsCount = protocol.dealsCount.plus(BigInt.fromI32(1));
     protocol.tasksCount = protocol.tasksCount.plus(deal.botSize);
     protocol.save();
-    */
 }
 
 export function handleSchedulerNotice(event: SchedulerNoticeEvent): void {
