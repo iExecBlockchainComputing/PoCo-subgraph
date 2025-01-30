@@ -9,6 +9,7 @@ import {
     test,
 } from 'matchstick-as/assembly/index';
 import { OrdersMatched } from '../../generated/Core/IexecInterfaceToken';
+import { handleOrdersMatched } from '../../src/Modules';
 
 describe('IexecPoco', () => {
     test('Should handle OrdersMatched', () => {
@@ -78,10 +79,10 @@ describe('IexecPoco', () => {
         mockEvent.block.timestamp = timestamp;
         mockEvent.address = pocoProxyAddress;
 
-        /*
-
         // Call the handler
         handleOrdersMatched(mockEvent);
+
+        /*
 
         // Assert that the OrdersMatched entity was created and has correct fields
         const entityId = mockEvent.block.number
