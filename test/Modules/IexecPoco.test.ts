@@ -34,21 +34,27 @@ describe('IexecPoco', () => {
         )
             .withArgs([ethereum.Value.fromFixedBytes(dealId)])
             .returns([
-                ethereum.Value.fromTuple([
-                    ethereum.Value.fromAddress(assetAddress),
-                    ethereum.Value.fromAddress(assetOwner),
-                    ethereum.Value.fromI32(assetPrice),
-                ]),
-                ethereum.Value.fromTuple([
-                    ethereum.Value.fromAddress(assetAddress),
-                    ethereum.Value.fromAddress(assetOwner),
-                    ethereum.Value.fromI32(assetPrice),
-                ]),
-                ethereum.Value.fromTuple([
-                    ethereum.Value.fromAddress(assetAddress),
-                    ethereum.Value.fromAddress(assetOwner),
-                    ethereum.Value.fromI32(assetPrice),
-                ]),
+                ethereum.Value.fromTuple(
+                    changetype<ethereum.Tuple>([
+                        ethereum.Value.fromAddress(assetAddress),
+                        ethereum.Value.fromAddress(assetOwner),
+                        ethereum.Value.fromI32(assetPrice),
+                    ]),
+                ),
+                ethereum.Value.fromTuple(
+                    changetype<ethereum.Tuple>([
+                        ethereum.Value.fromAddress(assetAddress),
+                        ethereum.Value.fromAddress(assetOwner),
+                        ethereum.Value.fromI32(assetPrice),
+                    ]),
+                ),
+                ethereum.Value.fromTuple(
+                    changetype<ethereum.Tuple>([
+                        ethereum.Value.fromAddress(assetAddress),
+                        ethereum.Value.fromAddress(assetOwner),
+                        ethereum.Value.fromI32(assetPrice),
+                    ]),
+                ),
                 ethereum.Value.fromI32(uint256),
                 ethereum.Value.fromI32(uint256),
                 ethereum.Value.fromFixedBytes(bytes32),
