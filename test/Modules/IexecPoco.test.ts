@@ -27,6 +27,7 @@ describe('IexecPoco', () => {
         )
             .withArgs([ethereum.Value.fromFixedBytes(dealId)])
             .returns([
+                /*
                 ethereum.Value.fromTuple(
                     // app
                     changetype<ethereum.Tuple>([
@@ -51,6 +52,7 @@ describe('IexecPoco', () => {
                         ethereum.Value.fromI32(assetPrice),
                     ]),
                 ),
+                */
                 ethereum.Value.fromI32(uint256), // trust
                 ethereum.Value.fromI32(uint256), // category
                 ethereum.Value.fromFixedBytes(bytes32), // tag
