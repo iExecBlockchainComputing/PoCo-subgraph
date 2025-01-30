@@ -2,7 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { Address, BigInt, Bytes, ethereum } from '@graphprotocol/graph-ts';
-import { createMockedFunction, describe, test } from 'matchstick-as/assembly/index';
+import {
+    createMockedFunction,
+    describe,
+    newTypedMockEventWithParams,
+    test,
+} from 'matchstick-as/assembly/index';
 import { OrdersMatched } from '../../generated/Core/IexecInterfaceToken';
 
 describe('IexecPoco', () => {
@@ -27,7 +32,6 @@ describe('IexecPoco', () => {
         )
             .withArgs([ethereum.Value.fromFixedBytes(dealId)])
             .returns([
-                /*
                 ethereum.Value.fromTuple(
                     // app
                     changetype<ethereum.Tuple>([
@@ -52,7 +56,6 @@ describe('IexecPoco', () => {
                         ethereum.Value.fromI32(assetPrice),
                     ]),
                 ),
-                */
                 ethereum.Value.fromI32(uint256), // trust
                 ethereum.Value.fromI32(uint256), // category
                 ethereum.Value.fromFixedBytes(bytes32), // tag
@@ -67,13 +70,15 @@ describe('IexecPoco', () => {
                 ethereum.Value.fromI32(uint256), // schedulerRewardRatio
                 ethereum.Value.fromAddress(address), // sponsor
             ]);
-        /*
+
         // Create the mock event
         let mockEvent = newTypedMockEventWithParams<OrdersMatched>([
             new ethereum.EventParam('deal', ethereum.Value.fromFixedBytes(dealId)),
         ]);
         mockEvent.block.timestamp = timestamp;
         mockEvent.address = pocoProxyAddress;
+
+        /*
 
         // Call the handler
         handleOrdersMatched(mockEvent);
