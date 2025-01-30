@@ -133,6 +133,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     fetchAccount(viewedDeal.callback.toHex()).save();
     */
 
+    /*
     let deal = fetchDeal(event.params.dealid.toHex());
     deal.app = viewedDeal.app.pointer.toHex();
     deal.appOwner = viewedDeal.app.owner.toHex();
@@ -162,6 +163,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.requestorder = event.params.requestHash.toHex();
     deal.timestamp = event.block.timestamp;
     deal.save();
+    */
 
     /*
     const dataset = deal.dataset;
