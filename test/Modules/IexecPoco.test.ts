@@ -32,7 +32,7 @@ describe('IexecPoco', () => {
             'viewDeal',
             'viewDeal(bytes32):(((address,address,uint256),(address,address,uint256),(address,address,uint256),uint256,uint256,bytes32,address,address,address,string,uint256,uint256,uint256,uint256,uint256,address))',
         )
-            .withArgs([ethereum.Value.fromBytes(dealId)])
+            .withArgs([ethereum.Value.fromFixedBytes(dealId)])
             .returns([
                 ethereum.Value.fromArray([
                     ethereum.Value.fromAddress(assetAddress),
@@ -51,7 +51,7 @@ describe('IexecPoco', () => {
                 ]),
                 ethereum.Value.fromI32(uint256),
                 ethereum.Value.fromI32(uint256),
-                ethereum.Value.fromBytes(bytes32),
+                ethereum.Value.fromFixedBytes(bytes32),
                 ethereum.Value.fromAddress(address),
                 ethereum.Value.fromAddress(address),
                 ethereum.Value.fromAddress(address),
