@@ -131,6 +131,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     fetchAccount(viewedDeal.requester.toHex()).save();
     fetchAccount(viewedDeal.beneficiary.toHex()).save();
     fetchAccount(viewedDeal.callback.toHex()).save();
+
     let deal = fetchDeal(event.params.dealid.toHex());
     deal.app = viewedDeal.app.pointer.toHex();
     deal.appOwner = viewedDeal.app.owner.toHex();
