@@ -6,6 +6,6 @@ deploySubGraph(
   targetRemoteHostIPFS : 'ipfs-upload.v8-bellecour.iex.ec',
   subgraphFolder: './',
   subgraphFilename: 'subgraph.bellecour.yaml',
-  subgraphVersionLabel: 'v1.0.0-rc.1',
+  subgraphVersionLabel: 'v1.1.0',
   subgraphLabel: 'bellecour/poco-v5'
 )
