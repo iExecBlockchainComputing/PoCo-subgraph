@@ -2,7 +2,9 @@
 
 ## vNext
 - Add `sponsor` to `deal`. (#31)
-- Update staging deployment hosts. (#29)
+- Update deployment hosts:
+    - production (#30)
+    - staging (#29)
 - Display coverage in Github PR checks. (#26)
 - Add integration test suite. (#21)
 - Add unit test suite. (#20)
