@@ -367,6 +367,7 @@ type Deal @entity {
   claimedTasksCount: BigInt!
   workerStake: BigInt!
   schedulerRewardRatio: BigInt!
+  sponsor: Account!
   timestamp: BigInt! # creation
   apporder: AppOrder # todo: not available if not broadcasted
   datasetorder: DatasetOrder # todo: not available if not broadcasted
@@ -434,14 +435,6 @@ type OrdersMatched implements DealEvent @entity {
   transaction: Transaction!
   timestamp: BigInt!
   deal: Deal!
-}
-
-type DealSponsored implements DealEvent @entity {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-  deal: Deal!
-  sponsor: Account!
 }
 
 interface TaskEvent {
