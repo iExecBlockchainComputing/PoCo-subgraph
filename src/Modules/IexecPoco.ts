@@ -5,7 +5,6 @@ import { BigInt } from '@graphprotocol/graph-ts';
 
 import {
     AccurateContribution as AccurateContributionEvent,
-    DealSponsored as DealSponsoredEvent,
     FaultyContribution as FaultyContributionEvent,
     IexecInterfaceToken as IexecInterfaceTokenContract,
     MatchOrdersCall,
@@ -22,7 +21,6 @@ import {
 
 import {
     AccurateContribution,
-    DealSponsored,
     FaultyContribution,
     OrdersMatched,
     SchedulerNotice,
@@ -156,6 +154,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.botSize = viewedDeal.botSize;
     deal.workerStake = viewedDeal.workerStake;
     deal.schedulerRewardRatio = viewedDeal.schedulerRewardRatio;
+    deal.sponsor = viewedDeal.sponsor.toHex();
     deal.apporder = event.params.appHash.toHex();
     deal.datasetorder = event.params.datasetHash.toHex();
     deal.workerpoolorder = event.params.workerpoolHash.toHex();
@@ -422,17 +421,4 @@ export function handleFaultyContribution(event: FaultyContributionEvent): void {
     let workerAccount = fetchAccount(event.params.worker.toHex());
     workerAccount.score = faultyContributionEvent.score;
     workerAccount.save();
-}
-
-export function handleDealSponsored(event: DealSponsoredEvent): void {
-    let dealSponsoredEvent = DealSponsored.load(createEventID(event));
-    if (!dealSponsoredEvent) {
-        dealSponsoredEvent = new DealSponsored(createEventID(event));
-    }
-    dealSponsoredEvent.transaction = logTransaction(event).id;
-    dealSponsoredEvent.transaction = logTransaction(event).id;
-    dealSponsoredEvent.timestamp = event.block.timestamp;
-    dealSponsoredEvent.deal = event.params.dealId.toHex();
-    dealSponsoredEvent.sponsor = event.params.sponsor.toHex();
-    dealSponsoredEvent.save();
 }

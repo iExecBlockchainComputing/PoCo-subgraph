@@ -7,7 +7,6 @@ export { handleLock, handleReward, handleSeize, handleTransfer, handleUnlock } f
 
 export {
     handleAccurateContribution,
-    handleDealSponsored,
     handleFaultyContribution,
     handleMatchOrders,
     handleOrdersMatched,
