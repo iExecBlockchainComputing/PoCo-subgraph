@@ -69,7 +69,6 @@ dataSources:
         - Seize
         - Lock
         - Unlock
-        - DealSponsored
       abis:
         - name: IexecInterfaceToken
           file: node_modules/@iexec/poco/artifacts/contracts/IexecInterfaceNative.sol/IexecInterfaceNative.json
@@ -108,8 +107,6 @@ dataSources:
           handler: handleLock
         - event: Unlock(address,uint256)
           handler: handleUnlock
-        - event: DealSponsored(bytes32,address)
-          handler: handleDealSponsored
       callHandlers:
         - function: matchOrders((address,uint256,uint256,bytes32,address,address,address,bytes32,bytes),(address,uint256,uint256,bytes32,address,address,address,bytes32,bytes),(address,uint256,uint256,bytes32,uint256,uint256,address,address,address,bytes32,bytes),(address,uint256,address,uint256,address,uint256,address,uint256,bytes32,uint256,uint256,address,address,string,bytes32,bytes))
           handler: handleMatchOrders
