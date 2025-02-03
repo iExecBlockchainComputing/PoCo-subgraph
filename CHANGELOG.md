@@ -1,7 +1,7 @@
 # Changelog
 
 ## vNext
-- Add `sponsor` to `deal`. (#30)
+- Add `sponsor` to `deal`. (#31)
 - Update staging deployment hosts. (#29)
 - Display coverage in Github PR checks. (#26)
 - Add integration test suite. (#21)

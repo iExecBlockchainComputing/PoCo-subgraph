@@ -5,9 +5,9 @@ import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
 import { OrdersMatched } from '../../generated/Core/IexecInterfaceToken';
 import { handleOrdersMatched } from '../../src/Modules';
+import { toRLC } from '../../src/utils';
 import { EventParamBuilder } from '../utils/EventParamBuilder';
 import { buildDeal, mockAddress, mockBytes32, mockViewDeal } from '../utils/mock';
-import { nRLCToRLC } from '../utils/utils';
 
 const pocoAddress = mockAddress('pocoAddress');
 const dealId = mockBytes32('dealId');
@@ -69,22 +69,17 @@ describe('IexecPoco', () => {
         // Check deal
         assert.fieldEquals('Deal', dealId.toHex(), 'app', appAddress.toHex());
         assert.fieldEquals('Deal', dealId.toHex(), 'appOwner', appOwner.toHex());
-        assert.fieldEquals('Deal', dealId.toHex(), 'appPrice', nRLCToRLC(appPrice).toString());
+        assert.fieldEquals('Deal', dealId.toHex(), 'appPrice', toRLC(appPrice).toString());
         assert.fieldEquals('Deal', dealId.toHex(), 'dataset', datasetAddress.toHex());
         assert.fieldEquals('Deal', dealId.toHex(), 'datasetOwner', datasetOwner.toHex());
-        assert.fieldEquals(
-            'Deal',
-            dealId.toHex(),
-            'datasetPrice',
-            nRLCToRLC(datasetPrice).toString(),
-        );
+        assert.fieldEquals('Deal', dealId.toHex(), 'datasetPrice', toRLC(datasetPrice).toString());
         assert.fieldEquals('Deal', dealId.toHex(), 'workerpool', workerpoolAddress.toHex());
         assert.fieldEquals('Deal', dealId.toHex(), 'workerpoolOwner', workerpoolOwner.toHex());
         assert.fieldEquals(
             'Deal',
             dealId.toHex(),
             'workerpoolPrice',
-            nRLCToRLC(workerpoolPrice).toString(),
+            toRLC(workerpoolPrice).toString(),
         );
         assert.fieldEquals('Deal', dealId.toHex(), 'trust', trust.toString());
         assert.fieldEquals('Deal', dealId.toHex(), 'category', category.toString());
