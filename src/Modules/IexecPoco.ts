@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2020-2024 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
 // SPDX-License-Identifier: Apache-2.0
 
-import { BigInt } from '@graphprotocol/graph-ts';
+import { Address, BigInt, dataSource } from '@graphprotocol/graph-ts';
+const chainName = dataSource.network();
 
 import {
     AccurateContribution as AccurateContributionEvent,
@@ -127,11 +128,16 @@ export function handleMatchOrders(call: MatchOrdersCall): void {
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     let contract = IexecInterfaceTokenContract.bind(event.address);
     let viewedDeal = contract.viewDeal(event.params.dealid);
-
+    // The `sponsor` has been introduced on Bellecour for the PoCo v5.5.0 release:
+    // https://blockscout.bellecour.iex.ec/tx/0x71b904f526a9be218d35748f57d74ef6da20d12c88f94cfa1ec5ae2de187cb98
+    const sponsor =
+        chainName == 'bellecour' && event.block.number < BigInt.fromI32(30277938)
+            ? Address.zero().toHexString()
+            : viewedDeal.sponsor.toHex();
     fetchAccount(viewedDeal.requester.toHex()).save();
     fetchAccount(viewedDeal.beneficiary.toHex()).save();
     fetchAccount(viewedDeal.callback.toHex()).save();
-    fetchAccount(viewedDeal.sponsor.toHex()).save();
+    fetchAccount(sponsor).save();
 
     let deal = fetchDeal(event.params.dealid.toHex());
     deal.app = viewedDeal.app.pointer.toHex();
@@ -155,7 +161,7 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.botSize = viewedDeal.botSize;
     deal.workerStake = viewedDeal.workerStake;
     deal.schedulerRewardRatio = viewedDeal.schedulerRewardRatio;
-    deal.sponsor = viewedDeal.sponsor.toHex();
+    deal.sponsor = sponsor;
     deal.apporder = event.params.appHash.toHex();
     deal.datasetorder = event.params.datasetHash.toHex();
     deal.workerpoolorder = event.params.workerpoolHash.toHex();
