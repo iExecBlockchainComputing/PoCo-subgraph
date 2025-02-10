@@ -1,16 +1,15 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## v1.1.0 - Support deal sponsor
+- Add `sponsor` to `deal`. (#31)
+- Update deployment hosts:
+    - production (#30)
+    - staging (#29)
+- Display coverage in Github PR checks. (#26)
+- Add integration test suite. (#21)
+- Add unit test suite. (#20)
 
-## next
-
-### Added
-
-### Changed
-
-### Removed
-
-## 1.0.0 - initial release
+## v1.0.0 - initial release
 
 ### features
 

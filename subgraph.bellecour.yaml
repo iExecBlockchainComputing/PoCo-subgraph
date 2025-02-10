@@ -71,7 +71,7 @@ dataSources:
         - Unlock
       abis:
         - name: IexecInterfaceToken
-          file: node_modules/@iexec/poco/build/contracts/IexecInterfaceNative.json
+          file: node_modules/@iexec/poco/artifacts/contracts/IexecInterfaceNative.sol/IexecInterfaceNative.json
       eventHandlers:
         - event: CreateCategory(uint256,string,string,uint256)
           handler: handleCreateCategory
