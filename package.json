@@ -1,6 +1,6 @@
 {
   "name": "@iexec/subgraph",
-  "version": "1.0.0-rc.1",
+  "version": "1.1.0",
   "author": "iExec",
   "license": "Apache-2.0",
   "scripts": {
@@ -14,7 +14,6 @@
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
     "deploy:all": "npm run build && npm run create && npm run deploy",
     "itest": "DEBUG=testcontainers:* mocha"
-   
   },
   "lint-staged": {
     "*.{js,ts}": [

@@ -1,6 +1,6 @@
 # Changelog
 
-## vNext
+## v1.1.0 - Support deal sponsor
 - Add `sponsor` to `deal`. (#31)
 - Update deployment hosts:
     - production (#30)
@@ -9,7 +9,7 @@
 - Add integration test suite. (#21)
 - Add unit test suite. (#20)
 
-## 1.0.0 - initial release
+## v1.0.0 - initial release
 
 ### features
 
