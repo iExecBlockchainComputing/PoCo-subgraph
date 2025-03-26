@@ -1,63 +1,68 @@
-@Library('global-jenkins-library@2.7.7') _
 
+//Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
+
+@Library('global-jenkins-library@feature/subgraph-networks') _
 def userInput
 
 node {
-    docker.image('node:20-alpine').inside('--user root') {
-        stage('Setup') {
-            checkout scm
+    stage('Choose deployment parameters') {
+        timeout(time: 5, unit: 'MINUTES') {
+            userInput = input(
+                id: 'deployment-params',
+                message: 'Select deployment parameters',
+                parameters: [
+                    choice(
+                        name: 'networkName',
+                        choices: ['bellecour', 'goerli', 'mainnet'],
+                        description: 'Select the target network'
+                    ),
+                    choice(
+                        name: 'environment',
+                        choices: ['staging','tmp','prod'],
+                        description: 'Select deployment environment'
+                    ),
+                    string(
+                        name: 'versionLabel',
+                        defaultValue: 'v1.0.0',
+                        description: 'Version label for the deployment'
+                    ),
+                    string(
+                        name: 'subgraphName',
+                        defaultValue: 'poco-v5',
+                        description: 'Name of the subgraph'
+                    )
+                ]
+            )
         }
 
-        stage('Choose network and host') {
-            timeout(time: 5, unit: 'MINUTES') {
-                userInput = input(
-                    id: 'select-deployment',
-                    message: 'Select environment & service',
-                    parameters: [
-                        string(name: 'network', description: 'Target network name of the subgraph'),
-                        string(name: 'targetRemoteHost', description: 'Hostname where to deploy the subgraph')
-                    ]
-                )
-            }
-            echo "Selected network: '${userInput.network}'"
-            echo "Selected hostname: '${userInput.targetRemoteHost}'"
-        }
-
-        stage('Setup Docker Image') {
-            sh 'apk add jq bash'
-        }
-
-        stage('Generate subgraph file') {
-            sh """
-            bash generate_subgraph_file.sh '${userInput.network}'
-            """
-            
-            // Validate subgraph file generation
-            sh """
-            FILE=./subgraph.${userInput.network}.yaml
-            if test -f "\$FILE"; then
-                echo "Subgraph file generated successfully"
-            else
-                echo "Failed to generate subgraph file"
-                exit 1
-            fi
-            """
-        }
-
-        stage('Build') {
-            sh """
-            yarn global add @graphprotocol/graph-cli &&
-            cd ./ &&
-            yarn install &&
-            graph codegen subgraph.${userInput.network}.yaml &&
-            graph build subgraph.${userInput.network}.yaml &&
-            graph create ${userInput.network}/poco-v5 --node http://${userInput.targetRemoteHost}:8020 &&
-            graph deploy ${userInput.network}/poco-v5 subgraph.${userInput.network}.yaml --node http://${userInput.targetRemoteHost}:8020 --ipfs http://${userInput.targetRemoteHost}:5001 --version-label v1.0.0-rc.1
-            """
-        }
-
-        stage('The End') {
-            echo 'The end.'
-        }
+        // Define host mappings
+        def hosts = [
+            'staging': [
+                'graphNode': 'azubgrpbx-thegraph-staging.public.az2.internal',
+                'ipfs': 'ipfs-upload.stagingv8.iex.ec',
+                'env' : 'staging-'
+            ],
+            'tmp': [
+                'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
+                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec'
+                'env' : 'tmp-'
+            ],
+            'prod': [
+                'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
+                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec'
+                'env' : ''
+            ]
+        ]
+        
+        // Call deploySubGraph with user inputs
+        deploySubGraph(
+            targetRemoteHostGraphNode: hosts[userInput.environment].graphNode,
+            targetRemoteHostIPFS: hosts[userInput.environment].ipfs,
+            subgraphFolder: './',
+            networkName: userInput.networkName,
+            deployEnv: hosts[userInput.environment].env,
+            subgraphName: userInput.subgraphName,
+            subgraphVersionLabel: userInput.versionLabel
+        )
     }
 }
