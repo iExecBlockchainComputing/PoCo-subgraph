@@ -47,6 +47,20 @@ node {
             ]
         ]
 
+        // Print user inputs and resolved hosts
+        println """
+        ========== Deployment Parameters ==========
+        Network Name: ${userInput.networkName}
+        Environment: ${userInput.environment}
+        Version Label: ${userInput.versionLabel}
+        Subgraph Name: ${userInput.subgraphName}
+        
+        ========== Resolved Hosts ==========
+        Graph Node: ${hosts[userInput.environment].graphNode}
+        IPFS: ${hosts[userInput.environment].ipfs}
+        =======================================
+        """
+
         // Call deploySubGraph with user inputs
         deploySubGraph(
             targetRemoteHostGraphNode: hosts[userInput.environment].graphNode,
