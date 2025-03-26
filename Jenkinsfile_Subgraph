@@ -5,7 +5,7 @@ deploySubGraph(
   targetRemoteHostGraphNode : 'azubgrpbx-thegraph-staging.public.az2.internal',
   targetRemoteHostIPFS : 'ipfs-upload.stagingv8.iex.ec',
   subgraphFolder: './',
-  networkName: 'bellcour',
+  networkName: 'bellecour',
   deployEnv: 'staging',
   subgraphName: 'poco-v5',
   subgraphVersionLabel: 'v1.1.0',
