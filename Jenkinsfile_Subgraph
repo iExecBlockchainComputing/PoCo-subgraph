@@ -38,8 +38,8 @@ node {
                 'ipfs': 'ipfs-upload.stagingv8.iex.ec'
             ],
             'tmp': [
-                'graphNode': 'azubgrpbx-thegraph-staging.public.az2.internal',
-                'ipfs': 'ipfs-upload.stagingv8.iex.ec'
+                'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
+                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec'
             ],
             'prod': [
                 'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
