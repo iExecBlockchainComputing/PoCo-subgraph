@@ -44,12 +44,12 @@ node {
             ],
             'tmp': [
                 'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
-                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec'
+                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec',
                 'env' : 'tmp-'
             ],
             'prod': [
                 'graphNode': 'azubgrpbp-thegraph.public.az2.internal',
-                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec'
+                'ipfs': 'ipfs-upload.v8-bellecour.iex.ec',
                 'env' : ''
             ]
         ]
