@@ -3,5 +3,4 @@ build
 generated
 yarn.lock
 test/.bin
-subgraph.yaml
 subgraph.test.yaml
