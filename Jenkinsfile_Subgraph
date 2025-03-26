@@ -6,7 +6,7 @@ deploySubGraph(
   targetRemoteHostIPFS : 'ipfs-upload.stagingv8.iex.ec',
   subgraphFolder: './',
   networkName: 'bellcour',
-  deployEnv: 'staging'
-  subgraphName: 'poco-v5'
+  deployEnv: 'staging',
+  subgraphName: 'poco-v5',
   subgraphVersionLabel: 'v1.1.0',
 )
