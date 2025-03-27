@@ -62,45 +62,70 @@ _NB_: other blockchains setups are availables in [docker/README.md](./docker/REA
 
 ---
 
-## Generating Subgraph and Jenkins Configuration Files
-
-This project includes a bash script, `generate_subgraph.sh`, to automate the creation of subgraph YAML configuration files and Jenkinsfiles based on the network settings in `config.json`.
+Here's the revised "Generating Subgraph and Jenkins Configuration Files" section for your README:
 
 
-**Run the script with the network name**:
-```bash
-bash generate_subgraph_file.sh <network-name>
-```
+## Deployment Configuration
 
-### Configuration
+### Jenkins Pipeline Deployment
 
-Ensure `config.json` is populated with the required values. Example:
+The project uses a Jenkins pipeline for automated deployment of the subgraph. The deployment can be triggered through Jenkins with interactive parameter selection.
+
+#### Available Parameters
+
+- **Network**: Choose the target blockchain network
+- **Environment**: Select deployment environment
+  - `staging`: Deploy to staging environment
+  - `tmp`: Deploy to temporary environment
+  - `prod`: Deploy to production environment
+- **Version Label**: Specify the version of the deployment (e.g., `v1.0.0`)
+- **Subgraph Name**: Name of the subgraph (default: `poco-v5`)
+
+#### Environment-specific Configurations
+
+Each environment has specific host configurations:
+
+### Adding New Networks
+
+To add support for a new network, update the `networks.json` file with the network configuration:
 
 ```json
 {
-    "bellecour": {
-        "START_BLOCK": 4543300,
-        "ERC1538_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-        "IEXECE_INTERFACE_TOKEN_CORE_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-        "APP_REGISTRY_ADDRESS": "0xB1C52075b276f87b1834919167312221d50c9D16",
-        "DATATSET_REGISTRY_ADDRESS": "0x799DAa22654128d0C64d5b79eac9283008158730",
-        "WORKERPOOL_REGISTRY_ADDRESS": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4"
+    "network-name": {
+        "ERC1538": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "Core": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "AppRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "DatasetRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "WorkerpoolRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        }
     }
 }
 ```
 
-### Files Generated
-
-- **subgraph.<network>.yaml**: Subgraph configuration with placeholders replaced.
-
-#### Example Command
-
-```bash
-bash generate_subgraph_file.sh bellecour
+Also, update the Jenkins pipeline choices to include the new network:
+```groovy
+choice(
+    name: 'networkName',
+    choices: ['bellecour', 'new-network'],
+    description: 'Select the target network'
+)
 ```
 
-This command generates `subgraph.bellecour.yaml`.
-
+The deployment process will automatically generate the appropriate subgraph configuration using the network-specific addresses and start blocks from `networks.json`.
 
 ## Resources
 
