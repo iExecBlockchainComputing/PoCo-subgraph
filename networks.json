@@ -43,50 +43,6 @@
             "startBlock": 4543300
         }        
     },
-    "c13": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 4543300
-        },
-        "Core": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 4543300
-        },
-        "AppRegistry": {
-            "address": "0xB1C52075b276f87b1834919167312221d50c9D16",
-            "startBlock": 4543300
-        },
-        "DatasetRegistry": {
-            "address": "0x799DAa22654128d0C64d5b79eac9283008158730",
-            "startBlock": 4543300
-        },
-        "WorkerpoolRegistry": {
-            "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
-            "startBlock": 4543300
-        }        
-    },
-    "goerli": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 2564000
-        },
-        "Core": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 2564000
-        },
-        "AppRegistry": {
-            "address": "0xB1C52075b276f87b1834919167312221d50c9D16",
-            "startBlock": 2564000
-        },
-        "DatasetRegistry": {
-            "address": "0x799DAa22654128d0C64d5b79eac9283008158730",
-            "startBlock": 2564000
-        },
-        "WorkerpoolRegistry": {
-            "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
-            "startBlock": 2564000
-        }        
-    },
     "mainnet": {
         "ERC1538": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
@@ -107,50 +63,6 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 9917600
-        }        
-    },
-    "rinkeby": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 6355862
-        },
-        "Core": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 6355862
-        },
-        "AppRegistry": {
-            "address": "0xB1C52075b276f87b1834919167312221d50c9D16",
-            "startBlock": 6355862
-        },
-        "DatasetRegistry": {
-            "address": "0x799DAa22654128d0C64d5b79eac9283008158730",
-            "startBlock": 6355862
-        },
-        "WorkerpoolRegistry": {
-            "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
-            "startBlock": 6355862
-        }        
-    },
-    "viviani": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 5556000
-        },
-        "Core": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 5556000
-        },
-        "AppRegistry": {
-            "address": "0xB1C52075b276f87b1834919167312221d50c9D16",
-            "startBlock": 5556000
-        },
-        "DatasetRegistry": {
-            "address": "0x799DAa22654128d0C64d5b79eac9283008158730",
-            "startBlock": 5556000
-        },
-        "WorkerpoolRegistry": {
-            "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
-            "startBlock": 5556000
         }        
     }
 }
