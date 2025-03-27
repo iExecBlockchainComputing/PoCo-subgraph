@@ -12,7 +12,7 @@ node {
                 parameters: [
                     choice(
                         name: 'networkName',
-                        choices: ['bellecour', 'goerli', 'mainnet'],
+                        choices: ['bellecour'],
                         description: 'Select the target network'
                     ),
                     choice(
