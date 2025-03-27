@@ -1,4 +1,3 @@
-
 //Readme @ http://gitlab.iex.ec:30000/iexec/jenkins-library
 
 @Library('global-jenkins-library@feature/subgraph-networks') _
