@@ -42,5 +42,27 @@
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 4543300
         }        
+    },
+    "mainnet": {
+        "ERC1538": {
+            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
+            "startBlock": 9917600
+        },
+        "Core": {
+            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
+            "startBlock": 9917600
+        },
+        "AppRegistry": {
+            "address": "0xB1C52075b276f87b1834919167312221d50c9D16",
+            "startBlock": 9917600
+        },
+        "DatasetRegistry": {
+            "address": "0x799DAa22654128d0C64d5b79eac9283008158730",
+            "startBlock": 9917600
+        },
+        "WorkerpoolRegistry": {
+            "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
+            "startBlock": 9917600
+        }        
     }
 }
