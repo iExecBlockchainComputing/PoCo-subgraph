@@ -1,7 +1,7 @@
 # Changelog
 
 ## vNEXT
-- Rewrite Jenkins CI for future migration (#36)
+- Rewrite Jenkins CI for future migration (#36, #37)
 
 ## v1.1.0 - Support deal sponsor
 - Add `sponsor` to `deal`. (#31)
