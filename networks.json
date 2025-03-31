@@ -1,4 +1,26 @@
 {
+    "fuji": {
+        "ERC1538": {
+            "address": "0x5490376b90ddA1D91a21E4b8793a6F5CfB64D913",
+            "startBlock": 38385285
+        },
+        "Core": {
+            "address": "0x5490376b90ddA1D91a21E4b8793a6F5CfB64D913",
+            "startBlock": 38385285
+        },
+        "AppRegistry": {
+            "address": "0x7a4bda805e91846e83cfa1f997a01130c34cb883",
+            "startBlock": 38385285
+        },
+        "DatasetRegistry": {
+            "address": "0x760446768084c081e4110e33a82ce07cc763bb89",
+            "startBlock": 38385285
+        },
+        "WorkerpoolRegistry": {
+            "address": "0xf23b229704c85d9336e62b4dd236e34eba42cab9",
+            "startBlock": 38385285
+        }
+    },
     "test": {
         "ERC1538": {
             "address": "0xc4b11f41746D3Ad8504da5B383E1aB9aa969AbC7",
@@ -19,7 +41,7 @@
         "WorkerpoolRegistry": {
             "address": "0x6Cb57fA761812c34645C945cA89AAe3602D42eD3",
             "startBlock": 0
-        }        
+        }
     },
     "bellecour": {
         "ERC1538": {
@@ -41,7 +63,7 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 4543300
-        }        
+        }
     },
     "mainnet": {
         "ERC1538": {
@@ -63,6 +85,6 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 9917600
-        }        
+        }
     }
 }
