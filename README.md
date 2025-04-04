@@ -87,7 +87,7 @@ docker run --rm \
   -e NETWORK_NAME=fork-test \
   -e IPFS_URL="http://ipfs:5001" \
   -e GRAPHNODE_URL="http://graphnode:8020" \
-  voucher-subgraph-deployer
+  poco-subgraph-deployer
 ```
 
 ## Deployment Configuration
