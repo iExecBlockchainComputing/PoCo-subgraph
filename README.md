@@ -64,6 +64,31 @@ _NB_: other blockchains setups are availables in [docker/README.md](./docker/REA
 
 Here's the revised "Generating Subgraph and Jenkins Configuration Files" section for your README:
 
+## Docker subgraph deployer
+
+docker image for deploying the subgraph
+
+### Build Image
+
+```sh
+docker build -f docker/Dockerfile . -t poco-subgraph-deployer
+```
+
+### Usage
+
+env:
+
+- `NETWORK_NAME` (optional): custom graphnode network name (default bellecour)
+- `IPFS_URL`: IPFS admin api url
+- `GRAPHNODE_URL`: graphnode admin api url
+
+```sh
+docker run --rm \
+  -e NETWORK_NAME=fork-test \
+  -e IPFS_URL="http://ipfs:5001" \
+  -e GRAPHNODE_URL="http://graphnode:8020" \
+  voucher-subgraph-deployer
+```
 
 ## Deployment Configuration
 
