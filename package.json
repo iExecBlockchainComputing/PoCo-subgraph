@@ -2,17 +2,20 @@
   "name": "@iexec/subgraph",
   "version": "1.1.0",
   "author": "iExec",
+  "type": "module",
   "license": "Apache-2.0",
   "scripts": {
     "prepare": "husky",
+    "clean": "rm -rf generated && rm -rf build",
     "codegen": "graph codegen ",
     "test": "npm run codegen && graph test",
     "coverage": "npm run codegen && graph test -- -c",
-    "test-docker": "npm run codegen && docker run -it --rm -v $(pwd):/matchstick/subgraph rainprotocol/matchstick:main",
-    "build": "npm run codegen && graph build --network ${NETWORK_NAME:-bellecour}",
+    "build": "graph build --network ${NETWORK_NAME:-bellecour}",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
-    "deploy:all": "npm run build && npm run create && npm run deploy",
+    "all": "npm run clean && npm run codegen && npm run build && npm run create && npm run deploy",
+    "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
+    "start-test-stack": "npm run stop-test-stack && cd test-stack && docker compose build && node prepare-test-env.js && docker compose up -d",
     "itest": "DEBUG=testcontainers:* mocha"
   },
   "lint-staged": {
