@@ -67,7 +67,7 @@ services:
       postgres_pass: password
       postgres_db: graphnode-db
       ipfs: ipfs:5001
-      ethereum: blockchain:http://blockchain-fork:8545
+      ethereum: ${NETWORK_NAME}:http://blockchain-fork:8545
       GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: $FORK_BLOCK
     depends_on:
       blockchain-fork:
@@ -90,6 +90,7 @@ services:
     environment:
       GRAPHNODE_URL: http://graphnode:8020
       IPFS_URL: http://ipfs:5001
+      NETWORK_NAME: ${NETWORK_NAME}
     depends_on:
       blockchain-fork:
         condition: service_healthy
