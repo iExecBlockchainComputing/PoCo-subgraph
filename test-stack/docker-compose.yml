@@ -96,3 +96,15 @@ services:
         condition: service_healthy
       graphnode:
         condition: service_healthy
+
+  stack-ready:
+    image: bash
+    command:
+      - echo "all services ready"
+    depends_on:
+      blockchain-fork:
+        condition: service_healthy
+      graphnode:
+        condition: service_healthy
+      poco-subgraph-deployer:
+        condition: service_completed_successfully

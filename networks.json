@@ -19,7 +19,7 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 4543300
-        }        
+        }
     },
     "mainnet": {
         "ERC1538": {
@@ -41,6 +41,6 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 9917600
-        }        
+        }
     }
 }
