@@ -1,54 +1,53 @@
-import { ApolloClient, gql, InMemoryCache } from '@apollo/client';
+import { InMemoryCache } from '@apollo/client/cache';
+import { ApolloClient, gql } from '@apollo/client/core';
 import { equal } from 'assert';
-import { DockerComposeEnvironment, Wait } from 'testcontainers';
+import { JsonRpcProvider, Wallet, ZeroHash } from 'ethers';
+import { AppRegistry__factory, IexecInterfaceToken__factory } from '../generated/typechain';
+import config from '../networks.json' assert { type: 'json' };
 
-const SECONDS = 1000;
-const MINUTES = 60 * SECONDS;
-const APIURL = 'http://localhost:8000/subgraphs/name/test/poco';
+const APIURL = `http://localhost:8000/subgraphs/name/${process.env.NETWORK_NAME}/poco`;
 const client = new ApolloClient({
     uri: APIURL,
     cache: new InMemoryCache(),
 });
+const networkName = process.env.NETWORK_NAME!;
+const iexecProxyAddress = (config as any)[networkName].ERC1538.address;
 
 describe('Integration tests', () => {
-    /**
-     * Services are started only once before running all tests to get a decent test
-     * suite duration with multiple tests. Please switch to `beforeEach` if necessary.
-     * Shutdown of services is handled by `testcontainers` framework.
-     */
-    before(async () => {
-        console.log('Starting services..');
-        const environment = new DockerComposeEnvironment('docker/test/', 'docker-compose.yml')
-            .withStartupTimeout(5 * MINUTES)
-            .withWaitStrategy(
-                'poco-subgraph-deployer-1',
-                Wait.forLogMessage(
-                    'Deployed to http://graphnode:8000/subgraphs/name/test/poco/graphql',
-                ),
-            );
-        await environment.up();
-        const secondsToWait = 10;
-        console.log(
-            `Waiting ${secondsToWait}s for graphnode to ingest a few blocks before querying it..`,
-        );
-        await new Promise((resolve) => {
-            return setTimeout(resolve, secondsToWait * SECONDS);
-        });
-    });
-
     it('should get protocol', async () => {
+        const provider = new JsonRpcProvider(`http://localhost:8545`);
+        const wallet = Wallet.createRandom(provider);
+
+        const iexecProxy = IexecInterfaceToken__factory.connect(iexecProxyAddress, wallet);
+        const appRegistryAddress = await iexecProxy.appregistry();
+        const appRegistry = AppRegistry__factory.connect(appRegistryAddress, wallet);
+
+        const appName = 'myy-app' + Date.now().toString();
+        const tx = await appRegistry.createApp(
+            wallet.address,
+            appName,
+            'DOCKER',
+            ZeroHash,
+            ZeroHash,
+            ZeroHash,
+        );
+        await tx.wait();
+
         const result = await client.query({
             query: gql(`
-                    query {
-                        protocol(id: "iExec") {
-                            id
-                            tvl
-                        }
-                    }
+                    {apps(where: {name:"${appName}"}) {
+                        id
+                        name
+                        multiaddr
+                        mrenclave
+                        checksum
+                    }}
                 `),
         });
-        const protocol = result.data.protocol;
-        equal(protocol.id, 'iExec');
-        equal(protocol.tvl, '0.02025');
+        const app = result.data.apps[0];
+        equal(app.name, appName);
+        equal(app.multiaddr, ZeroHash);
+        equal(app.mrenclave, ZeroHash);
+        equal(app.checksum, ZeroHash);
     });
 });

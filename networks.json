@@ -1,26 +1,4 @@
 {
-    "test": {
-        "ERC1538": {
-            "address": "0xc4b11f41746D3Ad8504da5B383E1aB9aa969AbC7",
-            "startBlock": 0
-        },
-        "Core": {
-            "address": "0xc4b11f41746D3Ad8504da5B383E1aB9aa969AbC7",
-            "startBlock": 0
-        },
-        "AppRegistry": {
-            "address": "0xd5Fe43e3cDD29812949dc9b368345537D7B73001",
-            "startBlock": 0
-        },
-        "DatasetRegistry": {
-            "address": "0xf3bd0602fA481230271c5396f146e5695D3750A6",
-            "startBlock": 0
-        },
-        "WorkerpoolRegistry": {
-            "address": "0x6Cb57fA761812c34645C945cA89AAe3602D42eD3",
-            "startBlock": 0
-        }        
-    },
     "bellecour": {
         "ERC1538": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
@@ -41,7 +19,7 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 4543300
-        }        
+        }
     },
     "mainnet": {
         "ERC1538": {
@@ -63,6 +41,6 @@
         "WorkerpoolRegistry": {
             "address": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4",
             "startBlock": 9917600
-        }        
+        }
     }
 }
