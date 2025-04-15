@@ -14,7 +14,7 @@ const networkName = process.env.NETWORK_NAME!;
 const iexecProxyAddress = (config as any)[networkName].ERC1538.address;
 
 describe('Integration tests', () => {
-    it('should get protocol', async () => {
+    it('should index a newly created app', async () => {
         const provider = new JsonRpcProvider(`http://localhost:8545`);
         const wallet = Wallet.createRandom(provider);
 
