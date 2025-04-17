@@ -19,7 +19,6 @@
     "itest": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
     "check-format": "prettier \"(src|test|test-stack)/**/*.{js,ts}\" --check",
     "format": "prettier  \"(src|test|test-stack)/**/*.{js,ts}\" --write"
-
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -36,8 +35,8 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.11.8",
-    "@graphprotocol/graph-cli": "^0.86.0",
-    "@graphprotocol/graph-ts": "^0.35.1",
+    "@graphprotocol/graph-cli": "^0.96.0",
+    "@graphprotocol/graph-ts": "^0.38.0",
     "@typechain/ethers-v6": "^0.5.1",
     "@types/mocha": "^10.0.9",
     "ethers": "^6.13.5",
@@ -51,6 +50,7 @@
   },
   "dependencies": {
     "@iexec/poco": "^5.5.0",
-    "@iexec/solidity": "^0.1.1"
+    "@iexec/solidity": "^0.1.1",
+    "ts-node": "^10.9.2"
   }
 }
