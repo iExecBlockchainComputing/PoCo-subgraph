@@ -15,10 +15,11 @@
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
     "all": "npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
-    "start-test-stack": "npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && node prepare-test-env.js && docker compose build && docker compose up -d",
+    "start-test-stack": "npm run generate:typechain & npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && node prepare-test-env.js && docker compose build && docker compose up -d",
     "itest": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
     "check-format": "prettier \"(src|test|test-stack)/**/*.{js,ts}\" --check",
     "format": "prettier  \"(src|test|test-stack)/**/*.{js,ts}\" --write"
+
   },
   "lint-staged": {
     "*.{js,ts}": [
