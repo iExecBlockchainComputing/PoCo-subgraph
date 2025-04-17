@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -40,17 +40,10 @@ async function getCurrentBlockNumber() {
  * @param {number} forkBlockNumber - The block number to fork from
  */
 async function createEnvFiles(forkBlockNumber) {
-    if (process.env.DRONE) {
-        const LOCAL_STACK_ENV_DIR = 'local-stack-env';
-        console.log(`Creating ${LOCAL_STACK_ENV_DIR} directory for drone test-stack`);
-        mkdirSync(LOCAL_STACK_ENV_DIR, { recursive: true });
-        writeFileSync(join(LOCAL_STACK_ENV_DIR, 'FORK_URL'), forkUrl);
-        writeFileSync(join(LOCAL_STACK_ENV_DIR, 'FORK_BLOCK'), `${forkBlockNumber}`);
-    } else {
-        console.log('Creating .env file for docker-compose test-stack');
-        writeFileSync(
-            '.env',
-            `############ THIS FILE IS GENERATED ############
+    console.log('Creating .env file for docker-compose test-stack');
+    writeFileSync(
+        '.env',
+        `############ THIS FILE IS GENERATED ############
             # run "node prepare-test-env.js" to regenerate #
             ################################################
 
@@ -58,8 +51,7 @@ async function createEnvFiles(forkBlockNumber) {
             FORK_URL=${forkUrl}
             # block number to fork from
             FORK_BLOCK=${forkBlockNumber}`,
-        );
-    }
+    );
 }
 
 /**
