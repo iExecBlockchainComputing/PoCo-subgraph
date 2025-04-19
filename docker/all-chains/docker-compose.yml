@@ -13,7 +13,7 @@ networks:
 
 services:
   ipfs:
-    image: ipfs/go-ipfs:v0.10.0
+    image: ipfs/go-ipfs:v0.34.1
     restart: unless-stopped
     networks:
       - thegraph-bellecour
@@ -44,7 +44,7 @@ services:
       - ${DATA}/viviani/postgres:/var/lib/postgresql/data
 
   graphnode-viviani:
-    image: graphprotocol/graph-node:v0.27.0
+    image: graphprotocol/graph-node:v0.37.0
     restart: unless-stopped
     networks:
       - viviani
@@ -86,7 +86,7 @@ services:
       - ${DATA}/bellecour/postgres:/var/lib/postgresql/data
 
   graphnode-bellecour:
-    image: graphprotocol/graph-node:v0.27.0
+    image: graphprotocol/graph-node:v0.37.0
     restart: unless-stopped
     networks:
       - bellecour
