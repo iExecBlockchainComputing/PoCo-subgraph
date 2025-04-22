@@ -43,7 +43,8 @@
     "mocha": "^10.7.3",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
-    "testcontainers": "^10.13.2"
+    "testcontainers": "^10.13.2",
+    "tsx": "^4.19.3"
   },
   "dependencies": {
     "@iexec/poco": "^5.5.0",

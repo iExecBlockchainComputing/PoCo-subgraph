@@ -3,9 +3,9 @@
 
 import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
-import { OrdersMatched } from '../../generated/Core/IexecInterfaceToken';
-import { handleOrdersMatched } from '../../src/Modules';
-import { toRLC } from '../../src/utils';
+import { OrdersMatched } from '../../../generated/Core/IexecInterfaceToken';
+import { handleOrdersMatched } from '../../../src/Modules';
+import { toRLC } from '../../../src/utils';
 import { EventParamBuilder } from '../utils/EventParamBuilder';
 import { buildDeal, mockAddress, mockBytes32, mockViewDeal } from '../utils/mock';
 
