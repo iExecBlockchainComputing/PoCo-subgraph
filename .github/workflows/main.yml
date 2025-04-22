@@ -40,10 +40,9 @@ jobs:
       - name: Prepare local stack env
         id: prepare
         run: |
-          cd test-stack
-          npx tsx prepare-test-env.ts
-          echo "bellecour_url=$(cat .env | grep FORK_URL | cut -d '=' -f2)" >> $GITHUB_OUTPUT
-          echo "bellecour_block=$(cat .env | grep FORK_BLOCK | cut -d '=' -f2)" >> $GITHUB_OUTPUT
+          npx tsx ./test-stack/prepare-test-env.ts
+          echo "bellecour_url=$(grep FORK_URL test-stack/.env | cut -d '=' -f2)" >> $GITHUB_OUTPUT
+          echo "bellecour_block=$(grep FORK_BLOCK test-stack/.env | cut -d '=' -f2)" >> $GITHUB_OUTPUT
 
       - name: Start Docker Compose Stack
         run: |
