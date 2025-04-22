@@ -2,6 +2,7 @@
 
 ## vNEXT
 
+- Remove unused files (#42)
 - Rewrite Jenkins CI for future migration (#36, #37)
 - Add a modern test stack, agnostic to the forked network. (#38)
 - Add a section in the README to explain how to use the Docker-based subgraph deployer. (#38)
