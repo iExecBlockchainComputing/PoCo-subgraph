@@ -34,7 +34,7 @@ jobs:
         run: npm run check-format
 
       - name: Run unit tests
-        run: npm run test
-        
+        run: npm run test:unit
+
       - name: Build
         run: npm run build
