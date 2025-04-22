@@ -44,10 +44,9 @@ jobs:
         env:
           NETWORK_NAME: ${{ github.event.inputs.networkName }}
           VERSION_LABEL: ${{ github.event.inputs.versionLabel }}
-          # The following variables must be defined in the GitHub Environment settings:
           GRAPHNODE_URL: ${{ vars.GRAPHNODE_URL }}
           IPFS_URL: ${{ vars.IPFS_URL }}
-          DEPLOY_ENV: ${{ vars.DEPLOY_ENV }}
+          DEPLOY_ENV: ${{ vars.ENV_NAME }}
         run: |
           echo "Starting deployment with the following parameters:"
           echo "  Network Name: $NETWORK_NAME"

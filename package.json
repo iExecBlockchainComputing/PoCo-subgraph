@@ -16,7 +16,7 @@
     "all": "npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
     "start-test-stack": "npm run generate:typechain & npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && node prepare-test-env.js && docker compose build && docker compose up -d",
-    "itest": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
+    "test:e2e": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
     "check-format": "prettier \"(src|test|test-stack)/**/*.{js,ts}\" --check",
     "format": "prettier  \"(src|test|test-stack)/**/*.{js,ts}\" --write"
   },
