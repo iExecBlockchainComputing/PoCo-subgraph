@@ -17,24 +17,49 @@ concurrency:
 jobs:
   build-subgraph:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-      - name: Init
+
+      - name: Install dependencies
         run: npm ci
+
       - name: Check Format
         run: npm run check-format
-      - name: Start services
-        run: npm run start-test-stack
-      # - name: Run unit tests
-      #   run: npm run test:unit
+
+      - name: Generate Typechain
+        run: npm run generate:typechain
+
+      - name: Prepare local stack env
+        id: prepare
+        run: |
+          cd test-stack
+          node prepare-test-env.js
+          echo "bellecour_url=$(cat .env | grep FORK_URL | cut -d '=' -f2)" >> $GITHUB_OUTPUT
+          echo "bellecour_block=$(cat .env | grep FORK_BLOCK | cut -d '=' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Start Docker Compose Stack
+        run: |
+          cd test-stack
+          export FORK_URL=${{ steps.prepare.outputs.bellecour_url }}
+          export FORK_BLOCK=${{ steps.prepare.outputs.bellecour_block }}
+          docker compose build
+          docker compose up -d
+
+      - name: Wait for services
+        run: |
+          cd test-stack
+          docker compose wait stack-ready
+
       - name: Run integration tests
         run: npm run test:e2e
+
       - name: Build
         run: npm run build
