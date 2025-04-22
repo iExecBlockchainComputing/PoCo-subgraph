@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -13,23 +14,14 @@ const networkName = process.env.NETWORK_NAME; // Get the network name from env
 const networksFilePath = join(__dirname, '..', 'networks.json');
 
 /**
- * Fetch the current block number from the fork URL
+ * Fetch the current block number from the fork URL using ethers
  * @returns {Promise<number>} The current block number
  */
 async function getCurrentBlockNumber() {
     try {
-        const response = await fetch(forkUrl, {
-            method: 'POST',
-            body: JSON.stringify({
-                jsonrpc: 2.0,
-                method: 'eth_blockNumber',
-                params: [],
-                id: 1,
-            }),
-        });
-
-        const jsonRes = await response.json();
-        return parseInt(jsonRes.result.substring(2), 16);
+        const provider = new ethers.JsonRpcProvider(forkUrl);
+        const blockNumber = await provider.getBlockNumber();
+        return blockNumber;
     } catch (error) {
         throw Error(`Failed to get current block number from ${forkUrl}: ${error}`);
     }
@@ -39,7 +31,7 @@ async function getCurrentBlockNumber() {
  * Create environment files for the test stack
  * @param {number} forkBlockNumber - The block number to fork from
  */
-async function createEnvFiles(forkBlockNumber) {
+async function createEnvFiles(forkBlockNumber: number) {
     console.log('Creating .env file for docker-compose test-stack');
     writeFileSync(
         '.env',
@@ -58,7 +50,7 @@ async function createEnvFiles(forkBlockNumber) {
  * Update networks.json file with the current block number
  * @param {number} forkBlockNumber - The block number to fork from
  */
-async function updateNetworksFile(forkBlockNumber) {
+async function updateNetworksFile(forkBlockNumber: number) {
     if (!networkName) {
         console.warn(
             'No NETWORK_NAME environment variable provided. The networks.json file will not be updated.',

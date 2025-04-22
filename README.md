@@ -36,6 +36,12 @@ generate code
 npm run codegen
 ```
 
+build the project and generate the necessary files:
+
+```sh
+npm run build
+```
+
 deploy the subgraph on local node
 
 ```sh
