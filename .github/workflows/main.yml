@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build-subgraph:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,37 +28,13 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Init
         run: npm ci
-
       - name: Check Format
         run: npm run check-format
 
-      - name: Generate Typechain
-        run: npm run generate:typechain
-
-      - name: Prepare local stack env
-        id: prepare
-        run: |
-          npx tsx ./test-stack/prepare-test-env.ts
-          echo "bellecour_url=$(grep FORK_URL test-stack/.env | cut -d '=' -f2)" >> $GITHUB_OUTPUT
-          echo "bellecour_block=$(grep FORK_BLOCK test-stack/.env | cut -d '=' -f2)" >> $GITHUB_OUTPUT
-
-      - name: Start Docker Compose Stack
-        run: |
-          cd test-stack
-          export FORK_URL=${{ steps.prepare.outputs.bellecour_url }}
-          export FORK_BLOCK=${{ steps.prepare.outputs.bellecour_block }}
-          docker compose build
-          docker compose up -d
-
-      - name: Wait for services
-        run: |
-          cd test-stack
-          docker compose wait stack-ready
-
-      - name: Run integration tests
-        run: npm run test:e2e
-
+      - name: Run unit tests
+        run: npm run test
+        
       - name: Build
         run: npm run build
