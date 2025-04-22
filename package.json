@@ -7,15 +7,14 @@
   "scripts": {
     "prepare": "husky",
     "generate:typechain": "typechain --target ethers-v6 --out-dir generated/typechain './node_modules/@iexec/poco/build/contracts/*.json' --ts-nocheck",
-    "codegen": "graph codegen",
-    "test": "npm run codegen && graph test",
-    "coverage": "npm run codegen && graph test -- -c",
-    "build": "rm -rf generated && rm -rf build && npm run codegen && graph build --network ${NETWORK_NAME:-bellecour}",
+    "build": "rm -rf generated && rm -rf build && npm run generate:typechain && graph codegen && graph build --network ${NETWORK_NAME:-bellecour}",
+    "test": "graph test",
+    "coverage": "graph test -- -c",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
     "all": "npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
-    "start-test-stack": "npm run generate:typechain & npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && tsx prepare-test-env.ts && docker compose build && docker compose up -d",
+    "start-test-stack": "npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && node prepare-test-env.js && docker compose build && docker compose up -d",
     "itest": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha"
   },
   "lint-staged": {
