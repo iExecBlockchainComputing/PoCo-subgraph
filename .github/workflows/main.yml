@@ -41,7 +41,7 @@ jobs:
         id: prepare
         run: |
           cd test-stack
-          tsx prepare-test-env.ts
+          npx tsx prepare-test-env.ts
           echo "bellecour_url=$(cat .env | grep FORK_URL | cut -d '=' -f2)" >> $GITHUB_OUTPUT
           echo "bellecour_block=$(cat .env | grep FORK_BLOCK | cut -d '=' -f2)" >> $GITHUB_OUTPUT
 
