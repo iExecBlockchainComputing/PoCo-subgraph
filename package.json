@@ -8,7 +8,9 @@
     "prepare": "husky",
     "generate:typechain": "typechain --target ethers-v6 --out-dir generated/typechain './node_modules/@iexec/poco/build/contracts/*.json' --ts-nocheck",
     "codegen": "graph codegen",
-    "test": "npm run codegen && graph test",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "npm run codegen && graph test",
+    "test:e2e": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
     "coverage": "npm run codegen && graph test -- -c",
     "build": "rm -rf generated && rm -rf build && npm run codegen && graph build --network ${NETWORK_NAME:-bellecour}",
     "create": "graph create --node ${GRAPHNODE_URL:-http://localhost:8020} ${NETWORK_NAME:-bellecour}${DEPLOY_ENV:-/}poco",
@@ -16,7 +18,6 @@
     "all": "npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
     "start-test-stack": "npm run generate:typechain & npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && node prepare-test-env.js && docker compose build && docker compose up -d",
-    "test:e2e": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
     "check-format": "prettier \"(src|test|test-stack)/**/*.{js,ts}\" --check",
     "format": "prettier  \"(src|test|test-stack)/**/*.{js,ts}\" --write"
   },

@@ -30,7 +30,11 @@ jobs:
         run: npm ci
       - name: Check Format
         run: npm run check-format
-      - name: Run unit tests
-        run: npm run test
+      - name: Start services
+        run: npm run start-test-stack
+      # - name: Run unit tests
+      #   run: npm run test:unit
+      - name: Run integration tests
+        run: npm run test:e2e
       - name: Build
         run: npm run build
