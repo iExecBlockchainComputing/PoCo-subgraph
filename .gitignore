@@ -4,5 +4,5 @@ generated
 yarn.lock
 subgraph.test.yaml
 test-stack/.env
-test/.bin
-test/.latest.json
+tests/.bin
+tests/.latest.json
