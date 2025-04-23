@@ -3,7 +3,7 @@ import { ApolloClient, gql } from '@apollo/client/core';
 import { equal } from 'assert';
 import { JsonRpcProvider, Wallet, ZeroHash } from 'ethers';
 import { AppRegistry__factory, IexecInterfaceToken__factory } from '../generated/typechain';
-import config from '../networks.json' assert { type: 'json' };
+import config from '../networks.json' with { type: 'json' };
 
 const APIURL = `http://localhost:8000/subgraphs/name/${process.env.NETWORK_NAME}/poco`;
 const client = new ApolloClient({
