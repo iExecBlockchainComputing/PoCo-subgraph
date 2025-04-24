@@ -40,9 +40,9 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
-      # - name: Prepare local stack env
-      #   id: prepare
-      #   run: npx tsx ./test-stack/prepare-test-env.ts
+      - name: Prepare local stack env
+        id: prepare
+        run: npx tsx ./test-stack/prepare-test-env.ts
 
       # - name: Fetch genesis block number
       #   id: fetch_block
@@ -52,13 +52,13 @@ jobs:
       #     echo "BLOCK=$BLOCK_NUMBER" >> $GITHUB_OUTPUT
       #     echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
 
-      - name: Docker Compose Action
+      - name: Start local stack
         uses: hoverkraft-tech/compose-action@v2.2.0
         with:
           compose-file: "./test-stack/docker-compose.yml"
         env:
           FORK_URL: "https://bellecour.iex.ec"
-          FORK_BLOCK: 33336357
+          FORK_BLOCK: 33336595
           NETWORK_NAME: "bellecour"
 
       - name: Run integration tests

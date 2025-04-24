@@ -36,13 +36,13 @@ async function createEnvFiles(forkBlockNumber: number) {
     writeFileSync(
         '.env',
         `############ THIS FILE IS GENERATED ############
-            # run "node prepare-test-env.js" to regenerate #
-            ################################################
+# run "node prepare-test-env.js" to regenerate #
+################################################
 
-            # blockchain node to use as the reference for the local fork
-            FORK_URL=${forkUrl}
-            # block number to fork from
-            FORK_BLOCK=${forkBlockNumber}`,
+# blockchain node to use as the reference for the local fork
+FORK_URL=${forkUrl}
+# block number to fork from
+FORK_BLOCK=${forkBlockNumber}`,
     );
 }
 
