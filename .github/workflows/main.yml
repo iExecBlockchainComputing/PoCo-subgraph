@@ -49,7 +49,7 @@ jobs:
       - name: Fetch genesis block number
         id: fetch_block
         run: |
-          source ./test-stack/.env
+          source .env
           echo "BLOCK=$FORK_BLOCK" >> $GITHUB_OUTPUT
           echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
 
