@@ -28,17 +28,17 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      # - name: Install dependencies
-      #   run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      # - name: Check Format
-      #   run: npm run check-format
+      - name: Check Format
+        run: npm run check-format
         
-      # - name: Build
-      #   run: npm run build
+      - name: Build
+        run: npm run build
 
-      # - name: Run unit tests
-      #   run: npm run test:unit
+      - name: Run unit tests
+        run: npm run test:unit
 
       # - name: Prepare local stack env
       #   id: prepare
