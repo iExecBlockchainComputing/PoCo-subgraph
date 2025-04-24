@@ -63,8 +63,8 @@ jobs:
           --host 0.0.0.0
           --port 8545
           --hardfork berlin
-          --fork-url ${{ secrets.FORK_URL || 'https://bellecour.iex.ec' }}
-          --fork-block-number ${{ secrets.FORK_BLOCK || '16758360' }}
+          --fork-url $(cat /local-stack-env/BELLECOUR_FORK_URL)
+          --fork-block-number $(cat /local-stack-env/BELLECOUR_FORK_BLOCK)
           --chain-id 134
           --gas-limit 6700000
           --gas-price 0
