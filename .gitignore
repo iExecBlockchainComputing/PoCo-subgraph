@@ -6,4 +6,3 @@ subgraph.test.yaml
 test-stack/.env
 tests/.bin
 tests/.latest.json
-.idea
