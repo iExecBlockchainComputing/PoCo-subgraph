@@ -15,8 +15,80 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-subgraph:
+  build-and-test:
     runs-on: ubuntu-latest
+    
+    services:
+      graphnode-postgres:
+        image: postgres:16.8
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: graphnode
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: graphnode-db
+          POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+        options: >-
+          --health-cmd "pg_isready -U graphnode -d graphnode-db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+      
+      ipfs:
+        image: ipfs/go-ipfs:v0.34.1
+        ports:
+          - 8080:8080
+          - 5001:5001
+        options: >-
+          --health-cmd "bash -c 'nc -z localhost 5001 && nc -z localhost 8080'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      
+      blockchain-fork:
+        image: ghcr.io/foundry-rs/foundry:v1.0.0
+        ports:
+          - 8545:8545
+        env:
+          FORK_URL: ${{ steps.prepare.outputs.bellecour_url }}
+          FORK_BLOCK: ${{ steps.prepare.outputs.bellecour_block }}
+        options: >-
+          --entrypoint anvil
+          --health-cmd "(echo >/dev/tcp/localhost/8545) &>/dev/null"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
+          --health-start-period 30s
+        command: >
+          --host 0.0.0.0
+          --port 8545
+          --hardfork berlin
+          --fork-url ${{ secrets.FORK_URL || 'https://bellecour.iex.ec' }}
+          --fork-block-number ${{ secrets.FORK_BLOCK || '16758360' }}
+          --chain-id 134
+          --gas-limit 6700000
+          --gas-price 0
+      
+      graphnode:
+        image: graphprotocol/graph-node:v0.37.0
+        ports:
+          - 8000:8000
+          - 8020:8020
+        env:
+          postgres_host: graphnode-postgres
+          postgres_port: 5432
+          postgres_user: graphnode
+          postgres_pass: password
+          postgres_db: graphnode-db
+          ipfs: ipfs:5001
+          ethereum: bellecour:http://blockchain-fork:8545
+          GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: ${{ secrets.FORK_BLOCK || '16758360' }}
+        options: >-
+          --health-cmd "netcat -w 1 localhost 8020"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --health-start-period 30s
     
     steps:
       - name: Checkout
@@ -28,7 +100,7 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Init
+      - name: Install dependencies
         run: npm ci
 
       - name: Check Format
@@ -40,3 +112,37 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare local stack env
+        id: prepare
+        run: |
+          node test/scripts/prepare-test-env.js
+
+      - name: Wait for services
+        run: |
+          # Wait for blockchain-fork to be ready
+          echo "Waiting for blockchain-fork to be ready..."
+          timeout 60 bash -c 'until (echo >/dev/tcp/localhost/8545) &>/dev/null; do sleep 2; done'
+          
+          # Wait for graph-node to be ready
+          echo "Waiting for graph-node to be ready..."
+          timeout 60 bash -c 'until curl -s http://localhost:8020/graphql > /dev/null; do sleep 2; done'
+
+      - name: Build and run subgraph deployer
+        run: |
+          cd test-stack
+          
+          # Build the deployer image
+          docker build -t poco-subgraph-deployer -f ./Dockerfile ..
+          
+          # Run the deployer container
+          docker run --network host \
+            -e GRAPHNODE_URL=http://localhost:8020 \
+            -e IPFS_URL=http://localhost:5001 \
+            -e NETWORK_NAME=bellecour \
+            poco-subgraph-deployer
+
+      - name: Run integration tests
+        run: npm run test:e2e
