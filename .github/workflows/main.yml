@@ -57,7 +57,7 @@ jobs:
         with:
           compose-file: "./test-stack/docker-compose.yml"
         env:
-          FORK_URL: "http://loclalhost:8545"
+          FORK_URL: "https://bellecour.iex.ec"
           FORK_BLOCK: 33336357
           NETWORK_NAME: "bellecour"
 
