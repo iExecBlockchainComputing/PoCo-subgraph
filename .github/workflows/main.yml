@@ -17,6 +17,8 @@ concurrency:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      NETWORK_NAME: "bellecour"
 
     steps:
       - name: Checkout
@@ -43,8 +45,6 @@ jobs:
       - name: Prepare local stack env
         id: prepare
         run: npx tsx ./test-stack/prepare-test-env.ts
-        env:
-          NETWORK_NAME: "bellecour"
 
       - name: Fetch genesis block number
         id: fetch_block
@@ -60,7 +60,6 @@ jobs:
         env:
           FORK_URL: ${{ steps.fetch_block.outputs.URL }}
           FORK_BLOCK: ${{ steps.fetch_block.outputs.BLOCK }}
-          NETWORK_NAME: "bellecour"
 
       - name: Run integration tests
         run: npm run test:e2e
