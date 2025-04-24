@@ -42,29 +42,6 @@ jobs:
           - 8080:8080
           - 5001:5001
 
-      blockchain-fork:
-        image: ghcr.io/foundry-rs/foundry:v1.0.0
-        ports:
-          - 8545:8545
-        env:
-          FORK_URL: ${{ steps.prepare.outputs.bellecour_url }}
-          FORK_BLOCK: ${{ steps.prepare.outputs.bellecour_block }}
-        options: >-
-          --entrypoint anvil
-          --health-cmd "(echo >/dev/tcp/localhost/8545) &>/dev/null"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-          --health-start-period 30s
-          -- --host 0.0.0.0
-          --port 8545
-          --hardfork berlin
-          --fork-url $(cat /local-stack-env/FORK_BLOCK)
-          --fork-block-number $(cat /local-stack-env/FORK_BLOCK)
-          --chain-id 134
-          --gas-limit 6700000
-          --gas-price 0
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
