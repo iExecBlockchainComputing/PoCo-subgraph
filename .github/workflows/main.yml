@@ -59,8 +59,7 @@ jobs:
           --health-timeout 5s
           --health-retries 3
           --health-start-period 30s
-        command: >
-          --host 0.0.0.0
+          -- --host 0.0.0.0
           --port 8545
           --hardfork berlin
           --fork-url $(cat /local-stack-env/BELLECOUR_FORK_URL)
@@ -82,7 +81,7 @@ jobs:
           postgres_db: graphnode-db
           ipfs: ipfs:5001
           ethereum: bellecour:http://blockchain-fork:8545
-          GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: ${{ secrets.FORK_BLOCK || '16758360' }}
+          GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: $(cat /local-stack-env/BELLECOUR_FORK_BLOCK)
         options: >-
           --health-cmd "netcat -w 1 localhost 8020"
           --health-interval 10s
