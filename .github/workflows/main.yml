@@ -94,8 +94,16 @@ jobs:
       - name: Fetch genesis block number
         id: fetch_block
         run: |
-          BLOCK_NUMBER=$(cat /local-stack-env/FORK_BLOCK)
+          BLOCK_NUMBER=$(cat /test-stack/FORK_BLOCK)
+          FORK_URL=$(cat /test-stack/FORK_URL)
           echo "BLOCK=$BLOCK_NUMBER" >> $GITHUB_OUTPUT
+          echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
+
+      - name: Start Anvil
+        uses: iExecBlockchainComputing/anvil-github-action@main
+        with:
+          fork-url: ${{ steps.fetch_block.outputs.URL }}
+          fork-block-number: ${{ steps.fetch_block.outputs.BLOCK }}
 
       - name: Start Graph Node
         run: |
