@@ -17,30 +17,6 @@ concurrency:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
-    services:
-      graphnode-postgres:
-        image: postgres:16.8
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: graphnode
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: graphnode-db
-          POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
-        options: >-
-              --health-cmd "pg_isready -U graphnode -d graphnode-db"
-              --health-interval 10s
-              --health-timeout 5s
-              --health-retries 3
-              -- postgres
-              -cshared_preload_libraries=pg_stat_statements
-      
-      ipfs:
-        image: ipfs/kubo:v0.34.1
-        ports:
-          - 8080:8080
-          - 5001:5001
 
     steps:
       - name: Checkout
@@ -64,9 +40,9 @@ jobs:
       # - name: Run unit tests
       #   run: npm run test:unit
 
-      - name: Prepare local stack env
-        id: prepare
-        run: npx tsx ./test-stack/prepare-test-env.ts
+      # - name: Prepare local stack env
+      #   id: prepare
+      #   run: npx tsx ./test-stack/prepare-test-env.ts
 
       # - name: Fetch genesis block number
       #   id: fetch_block
@@ -76,70 +52,14 @@ jobs:
       #     echo "BLOCK=$BLOCK_NUMBER" >> $GITHUB_OUTPUT
       #     echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
 
-      - name: Fetch genesis block number
-        id: fetch_block
-        run: |
-          BLOCK_NUMBER=33335100
-          FORK_URL="http://localhost:8545"
-          echo "BLOCK=$BLOCK_NUMBER" >> $GITHUB_OUTPUT
-          echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
-
-      - name: Start Anvil
-        uses: iExecBlockchainComputing/anvil-github-action@main
+      - name: Docker Compose Action
+        uses: hoverkraft-tech/compose-action@v2.2.0
         with:
-          fork-url: ${{ steps.fetch_block.outputs.URL }}
-          fork-block-number: ${{ steps.fetch_block.outputs.BLOCK }}
-
-      - name: Wait for IPFS
-        run: |
-          # Wait for IPFS to be ready
-          echo "Waiting for IPFS to be ready..."
-          timeout 60 bash -c 'until curl -s http://localhost:5001 > /dev/null; do sleep 2; done'
-
-      - name: Start Graph Node
-        run: |
-          docker run -d \
-            --name graphnode \
-            -p 8000:8000 \
-            -p 8020:8020 \
-            -e POSTGRES_HOST=graphnode-postgres \
-            -e POSTGRES_PORT=5432 \
-            -e POSTGRES_USER=graphnode \
-            -e POSTGRES_PASSWORD=password \
-            -e POSTGRES_DB=graphnode-db \
-            -e IPFS=http://localhost:5001 \
-            -e ETHEREUM=bellecour:"${{ steps.fetch_block.outputs.URL }}" \
-            -e GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER="${{ steps.fetch_block.outputs.BLOCK }}" \
-            --health-cmd "nc -w 1 localhost 8020" \
-            --health-interval 10s \
-            --health-timeout 5s \
-            --health-retries 5 \
-            --health-start-period 30s \
-            graphprotocol/graph-node:v0.37.0
-
-      - name: Wait for services
-        run: |
-          # Wait for blockchain-fork to be ready
-          echo "Waiting for blockchain-fork to be ready..."
-          timeout 60 bash -c 'until (echo >/dev/tcp/localhost/8545) &>/dev/null; do sleep 2; done'
-          
-          # Wait for graph-node to be ready
-          echo "Waiting for graph-node to be ready..."
-          timeout 60 bash -c 'until curl -s http://localhost:8020/graphql > /dev/null; do sleep 2; done'
-
-      - name: Build and run subgraph deployer
-        run: |
-          cd test-stack
-          
-          # Build the deployer image
-          docker build -t poco-subgraph-deployer -f ./Dockerfile ..
-          
-          # Run the deployer container
-          docker run --network host \
-            -e GRAPHNODE_URL=http://localhost:8020 \
-            -e IPFS_URL=http://localhost:5001 \
-            -e NETWORK_NAME=bellecour \
-            poco-subgraph-deployer
+          compose-file: "./test-stack/docker-compose.yml"
+        env:
+          FORK_URL: "http://loclalhost:8545"
+          FORK_BLOCK: 33336357
+          NETWORK_NAME: "bellecour"
 
       - name: Run integration tests
         run: npm run test:e2e
