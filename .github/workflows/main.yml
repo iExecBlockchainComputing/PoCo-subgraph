@@ -29,10 +29,12 @@ jobs:
           POSTGRES_DB: graphnode-db
           POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
         options: >-
-          --health-cmd "pg_isready -U graphnode -d graphnode-db"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
+              --health-cmd "pg_isready -U graphnode -d graphnode-db"
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 3
+              -- postgres
+              -cshared_preload_libraries=pg_stat_statements
       
       ipfs:
         image: ipfs/go-ipfs:v0.34.1
@@ -62,8 +64,8 @@ jobs:
           -- --host 0.0.0.0
           --port 8545
           --hardfork berlin
-          --fork-url $(cat /local-stack-env/BELLECOUR_FORK_URL)
-          --fork-block-number $(cat /local-stack-env/BELLECOUR_FORK_BLOCK)
+          --fork-url $(cat /local-stack-env/FORK_BLOCK)
+          --fork-block-number $(cat /local-stack-env/FORK_BLOCK)
           --chain-id 134
           --gas-limit 6700000
           --gas-price 0
@@ -81,7 +83,7 @@ jobs:
           postgres_db: graphnode-db
           ipfs: ipfs:5001
           ethereum: bellecour:http://blockchain-fork:8545
-          GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: $(cat /local-stack-env/BELLECOUR_FORK_BLOCK)
+          GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: $(cat /local-stack-env/FORK_BLOCK)
         options: >-
           --health-cmd "netcat -w 1 localhost 8020"
           --health-interval 10s
