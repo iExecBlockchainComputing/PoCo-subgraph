@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020-2024 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
+// SPDX-FileCopyrightText: 2020-2025 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
 // SPDX-License-Identifier: Apache-2.0
 
 export { handleCreateCategory } from './IexecCategoryManager';
@@ -8,7 +8,6 @@ export { handleLock, handleReward, handleSeize, handleTransfer, handleUnlock } f
 export {
     handleAccurateContribution,
     handleFaultyContribution,
-    handleMatchOrders,
     handleOrdersMatched,
     handleSchedulerNotice,
     handleTaskClaimed,
