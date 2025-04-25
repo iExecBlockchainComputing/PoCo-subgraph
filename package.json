@@ -9,7 +9,7 @@
     "generate:typechain": "typechain --target ethers-v6 --out-dir generated/typechain './node_modules/@iexec/poco/build/contracts/*.json' --ts-nocheck",
     "build": "rm -rf generated && rm -rf build && npm run generate:typechain && graph codegen && graph build --network ${NETWORK_NAME:-bellecour}",
     "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "graph test",
+    "test:unit": "graph test unit",
     "test:e2e": "mocha",
     "coverage": "graph test -- -c",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
