@@ -2,6 +2,7 @@
 
 ## vNEXT
 
+- Add Arbitrum & Avalanche networks. (#47)
 - Migrate integration tests from Jenkins to GitHub Actions. (#44)
 - Remove unused files to streamline the repository. (#42)
 - Rewrite Jenkins CI for future migration (#36, #37)
