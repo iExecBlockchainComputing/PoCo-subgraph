@@ -36,7 +36,7 @@ async function createEnvFiles(forkBlockNumber: number) {
     writeFileSync(
         '.env',
         `############ THIS FILE IS GENERATED ############
-# run "node prepare-test-env.js" to regenerate #
+# run "npx tsx prepare-test-env.ts" to regenerate #
 ################################################
 
 # blockchain node to use as the reference for the local fork
