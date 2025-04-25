@@ -30,12 +30,6 @@ install project deps
 npm ci
 ```
 
-generate code
-
-```sh
-npm run codegen
-```
-
 build the project and generate the necessary files:
 
 ```sh

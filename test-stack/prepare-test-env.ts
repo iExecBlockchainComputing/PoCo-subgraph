@@ -35,14 +35,14 @@ async function createEnvFiles(forkBlockNumber: number) {
     console.log('Creating .env file for docker-compose test-stack');
     writeFileSync(
         '.env',
-        `############ THIS FILE IS GENERATED ############
-            # run "node prepare-test-env.js" to regenerate #
-            ################################################
-
-            # blockchain node to use as the reference for the local fork
-            FORK_URL=${forkUrl}
-            # block number to fork from
-            FORK_BLOCK=${forkBlockNumber}`,
+        '############ THIS FILE IS GENERATED ############\n' +
+            '# run "node prepare-test-env.js" to regenerate #\n' +
+            '################################################\n' +
+            '\n' +
+            '# blockchain node to use as the reference for the local fork\n' +
+            `FORK_URL=${forkUrl}\n` +
+            '# block number to fork from\n' +
+            `FORK_BLOCK=${forkBlockNumber}\n`,
     );
 }
 
