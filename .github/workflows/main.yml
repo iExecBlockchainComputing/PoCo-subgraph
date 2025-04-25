@@ -42,24 +42,8 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
-      - name: Prepare local stack env
-        id: prepare
-        run: npx tsx ./test-stack/prepare-test-env.ts
-
-      - name: Fetch genesis block number
-        id: fetch_block
-        run: |
-          source .env
-          echo "BLOCK=$FORK_BLOCK" >> $GITHUB_OUTPUT
-          echo "URL=$FORK_URL" >> $GITHUB_OUTPUT
-
-      - name: Start local stack
-        uses: hoverkraft-tech/compose-action@v2.2.0
-        with:
-          compose-file: "./test-stack/docker-compose.yml"
-        env:
-          FORK_URL: ${{ steps.fetch_block.outputs.URL }}
-          FORK_BLOCK: ${{ steps.fetch_block.outputs.BLOCK }}
+      - name: Prepare test stack
+        run: npm run start-test-stack
 
       - name: Run integration tests
         run: npm run test:e2e
