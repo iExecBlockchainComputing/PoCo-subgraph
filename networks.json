@@ -1,4 +1,48 @@
 {
+    "avalancheFuji": {
+        "ERC1538": {
+            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
+            "startBlock": 39496460
+        },
+        "Core": {
+            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
+            "startBlock": 39496460
+        },
+        "AppRegistry": {
+            "address": "0x4a6531ce5150ee716b2d93865D0fbB9ce5492D17",
+            "startBlock": 39496460
+        },
+        "DatasetRegistry": {
+            "address": "0x3441A0C9FE488c51fcABa2bAAA048720f4D4F72D",
+            "startBlock": 39496460
+        },
+        "WorkerpoolRegistry": {
+            "address": "0xf81970E3CB0f8711bEaA79135e686873FfbBAC4A",
+            "startBlock": 39496460
+        }
+    },
+    "arbitrumSepolia": {
+        "ERC1538": {
+            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
+            "startBlock": 145249745
+        },
+        "Core": {
+            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
+            "startBlock": 145249745
+        },
+        "AppRegistry": {
+            "address": "0x4a6531ce5150ee716b2d93865D0fbB9ce5492D17",
+            "startBlock": 145249745
+        },
+        "DatasetRegistry": {
+            "address": "0x3441A0C9FE488c51fcABa2bAAA048720f4D4F72D",
+            "startBlock": 145249745
+        },
+        "WorkerpoolRegistry": {
+            "address": "0xf81970E3CB0f8711bEaA79135e686873FfbBAC4A",
+            "startBlock": 145249745
+        }
+    },
     "bellecour": {
         "ERC1538": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
