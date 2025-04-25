@@ -10,7 +10,7 @@
     "build": "rm -rf generated && rm -rf build && npm run generate:typechain && graph codegen && graph build --network ${NETWORK_NAME:-bellecour}",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "graph test",
-    "test:e2e": "NETWORK_NAME=${NETWORK_NAME:-bellecour} mocha",
+    "test:e2e": "mocha",
     "coverage": "graph test -- -c",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
@@ -39,6 +39,7 @@
     "@graphprotocol/graph-ts": "^0.38.0",
     "@typechain/ethers-v6": "^0.5.1",
     "@types/mocha": "^10.0.9",
+    "dotenv": "^16.5.0",
     "ethers": "^6.13.5",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
@@ -48,7 +49,8 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "testcontainers": "^10.13.2",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "zod": "^3.24.3"
   },
   "dependencies": {
     "@iexec/poco": "^5.5.0",
