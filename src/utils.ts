@@ -1,18 +1,5 @@
-/******************************************************************************
- * Copyright 2020 IEXEC BLOCKCHAIN TECH                                       *
- *                                                                            *
- * Licensed under the Apache License, Version 2.0 (the "License");            *
- * you may not use this file except in compliance with the License.           *
- * You may obtain a copy of the License at                                    *
- *                                                                            *
- *     http://www.apache.org/licenses/LICENSE-2.0                             *
- *                                                                            *
- * Unless required by applicable law or agreed to in writing, software        *
- * distributed under the License is distributed on an "AS IS" BASIS,          *
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   *
- * See the License for the specific language governing permissions and        *
- * limitations under the License.                                             *
- ******************************************************************************/
+// SPDX-FileCopyrightText: 2020-2025 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
+// SPDX-License-Identifier: Apache-2.0
 
 import {
   Address,
@@ -39,10 +26,6 @@ import {
 
 import {
   IexecInterfaceToken__domainResultValue0Struct as IEIP712Domain,
-  MatchOrdersCallValue0Struct as IAppOrder,
-  MatchOrdersCallValue1Struct as IDatasetOrder,
-  MatchOrdersCallValue2Struct as IWorkerpoolOrder,
-  MatchOrdersCallValue3Struct as IRequestOrder,
 } from "../generated/Core/IexecInterfaceToken";
 
 export function createEventID(event: ethereum.Event): string {
@@ -227,119 +210,6 @@ function hashDomain(domain: IEIP712Domain): ByteArray {
       )
     )!
   );
-}
-
-export function hashApporder(
-  domain: IEIP712Domain,
-  apporder: IAppOrder
-): ByteArray {
-  const structHash = crypto.keccak256(
-    ethereum.encode(
-      ethereum.Value.fromTuple(
-        changetype<ethereum.Tuple>([
-          encodeStringValue(
-            "AppOrder(address app,uint256 appprice,uint256 volume,bytes32 tag,address datasetrestrict,address workerpoolrestrict,address requesterrestrict,bytes32 salt)"
-          ),
-          ethereum.Value.fromAddress(apporder.app),
-          ethereum.Value.fromUnsignedBigInt(apporder.appprice),
-          ethereum.Value.fromUnsignedBigInt(apporder.volume),
-          ethereum.Value.fromFixedBytes(apporder.tag),
-          ethereum.Value.fromAddress(apporder.datasetrestrict),
-          ethereum.Value.fromAddress(apporder.workerpoolrestrict),
-          ethereum.Value.fromAddress(apporder.requesterrestrict),
-          ethereum.Value.fromFixedBytes(apporder.salt),
-        ]) // Change from 'as T' to 'changetype<T>'
-      )
-    )!
-  );
-  return hashEIP712(hashDomain(domain), structHash);
-}
-
-export function hashDatasetorder(
-  domain: IEIP712Domain,
-  datasetorder: IDatasetOrder
-): ByteArray {
-  const structHash = crypto.keccak256(
-    ethereum.encode(
-      ethereum.Value.fromTuple(
-        changetype<ethereum.Tuple>([
-          encodeStringValue(
-            "DatasetOrder(address dataset,uint256 datasetprice,uint256 volume,bytes32 tag,address apprestrict,address workerpoolrestrict,address requesterrestrict,bytes32 salt)"
-          ),
-          ethereum.Value.fromAddress(datasetorder.dataset),
-          ethereum.Value.fromUnsignedBigInt(datasetorder.datasetprice),
-          ethereum.Value.fromUnsignedBigInt(datasetorder.volume),
-          ethereum.Value.fromFixedBytes(datasetorder.tag),
-          ethereum.Value.fromAddress(datasetorder.apprestrict),
-          ethereum.Value.fromAddress(datasetorder.workerpoolrestrict),
-          ethereum.Value.fromAddress(datasetorder.requesterrestrict),
-          ethereum.Value.fromFixedBytes(datasetorder.salt),
-        ]) // Change from 'as T' to 'changetype<T>'
-      )
-    )!
-  );
-  return hashEIP712(hashDomain(domain), structHash);
-}
-
-export function hashWorkerpoolorder(
-  domain: IEIP712Domain,
-  workerpoolorder: IWorkerpoolOrder
-): ByteArray {
-  const structHash = crypto.keccak256(
-    ethereum.encode(
-      ethereum.Value.fromTuple(
-        changetype<ethereum.Tuple>([
-          encodeStringValue(
-            "WorkerpoolOrder(address workerpool,uint256 workerpoolprice,uint256 volume,bytes32 tag,uint256 category,uint256 trust,address apprestrict,address datasetrestrict,address requesterrestrict,bytes32 salt)"
-          ),
-          ethereum.Value.fromAddress(workerpoolorder.workerpool),
-          ethereum.Value.fromUnsignedBigInt(workerpoolorder.workerpoolprice),
-          ethereum.Value.fromUnsignedBigInt(workerpoolorder.volume),
-          ethereum.Value.fromFixedBytes(workerpoolorder.tag),
-          ethereum.Value.fromUnsignedBigInt(workerpoolorder.category),
-          ethereum.Value.fromUnsignedBigInt(workerpoolorder.trust),
-          ethereum.Value.fromAddress(workerpoolorder.apprestrict),
-          ethereum.Value.fromAddress(workerpoolorder.datasetrestrict),
-          ethereum.Value.fromAddress(workerpoolorder.requesterrestrict),
-          ethereum.Value.fromFixedBytes(workerpoolorder.salt),
-        ]) // Change from 'as T' to 'changetype<T>'
-      )
-    )!
-  );
-  return hashEIP712(hashDomain(domain), structHash);
-}
-
-export function hashRequestorder(
-  domain: IEIP712Domain,
-  requestorder: IRequestOrder
-): ByteArray {
-  const structHash = crypto.keccak256(
-    ethereum.encode(
-      ethereum.Value.fromTuple(
-        changetype<ethereum.Tuple>([
-          encodeStringValue(
-            "RequestOrder(address app,uint256 appmaxprice,address dataset,uint256 datasetmaxprice,address workerpool,uint256 workerpoolmaxprice,address requester,uint256 volume,bytes32 tag,uint256 category,uint256 trust,address beneficiary,address callback,string params,bytes32 salt)"
-          ),
-          ethereum.Value.fromAddress(requestorder.app),
-          ethereum.Value.fromUnsignedBigInt(requestorder.appmaxprice),
-          ethereum.Value.fromAddress(requestorder.dataset),
-          ethereum.Value.fromUnsignedBigInt(requestorder.datasetmaxprice),
-          ethereum.Value.fromAddress(requestorder.workerpool),
-          ethereum.Value.fromUnsignedBigInt(requestorder.workerpoolmaxprice),
-          ethereum.Value.fromAddress(requestorder.requester),
-          ethereum.Value.fromUnsignedBigInt(requestorder.volume),
-          ethereum.Value.fromFixedBytes(requestorder.tag),
-          ethereum.Value.fromUnsignedBigInt(requestorder.category),
-          ethereum.Value.fromUnsignedBigInt(requestorder.trust),
-          ethereum.Value.fromAddress(requestorder.beneficiary),
-          ethereum.Value.fromAddress(requestorder.callback),
-          encodeStringValue(requestorder.params),
-          ethereum.Value.fromFixedBytes(requestorder.salt),
-        ]) // Change from 'as T' to 'changetype<T>'
-      )
-    )!
-  );
-  return hashEIP712(hashDomain(domain), structHash);
 }
 
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
