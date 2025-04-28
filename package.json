@@ -36,7 +36,7 @@
   "devDependencies": {
     "@apollo/client": "^3.11.8",
     "@graphprotocol/graph-cli": "^0.96.0",
-    "@graphprotocol/graph-ts": "^0.38.0",
+    "@graphprotocol/graph-ts": "0.35.1",
     "@typechain/ethers-v6": "^0.5.1",
     "@types/mocha": "^10.0.9",
     "dotenv": "^16.5.0",
