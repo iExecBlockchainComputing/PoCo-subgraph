@@ -10,7 +10,7 @@
     "build": "rm -rf generated && rm -rf build && npm run generate:typechain && graph codegen && graph build --network ${NETWORK_NAME:-bellecour}",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "graph test unit",
-    "test:e2e": "mocha",
+    "test:e2e": "mocha tests/e2e/**/*.ts",
     "coverage": "graph test -- -c",
     "create": "graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}",
     "deploy": "graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001} --version-label ${VERSION_LABEL:-bellecour/poco-v5}",
