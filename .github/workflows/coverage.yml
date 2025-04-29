@@ -10,12 +10,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Init
         run: npm ci
+
       - name: Run Coverage
         run: (npm run coverage 2>&1) | tee /tmp/coverage.out | cat
+
       - name: Extract coverage
         run: echo "COVERAGE=$(cat /tmp/coverage.out | grep "Global test coverage")" >> $GITHUB_ENV
+
       - name: Display coverage in Github PR checks
         # See https://docs.github.com/en/rest/checks/runs?apiVersion=2022-11-28#create-a-check-run
         # and https://www.kenmuse.com/blog/creating-github-checks/

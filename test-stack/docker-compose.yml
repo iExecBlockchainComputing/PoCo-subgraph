@@ -1,0 +1,110 @@
+services:
+  blockchain-fork:
+    restart: "no"
+    image: ghcr.io/foundry-rs/foundry:v1.0.0
+    entrypoint: anvil
+    command: "--host 0.0.0.0 --port 8545 --hardfork berlin --fork-url $FORK_URL --fork-block-number $FORK_BLOCK --chain-id 134 --gas-limit 6700000 --gas-price 0"
+    expose:
+      - 8545
+    ports:
+      - 8545:8545
+    healthcheck:
+      test: (echo >/dev/tcp/$(hostname)/8545) &>/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  graphnode-postgres:
+    image: postgres:16.8
+    restart: unless-stopped
+    command:
+      - "postgres"
+      - "-cshared_preload_libraries=pg_stat_statements"
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: graphnode
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: graphnode-db
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+    healthcheck:
+      test: pg_isready -U graphnode -d graphnode-db
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  ipfs:
+    restart: unless-stopped
+    image: ipfs/kubo:v0.34.1
+    expose:
+      - 8080
+      - 5001
+    ports:
+      - 8080:8080
+      - 5001:5001
+
+  graphnode:
+    image: graphprotocol/graph-node:v0.37.0
+    restart: unless-stopped
+    expose:
+      - 8000
+      - 8020
+    ports:
+      # GraphQL HTTP
+      - 8000:8000
+      # GraphQL WS
+      # - 8001:8001
+      # admin RPC
+      - 8020:8020
+      # metrics
+      # - 8040:8040
+    environment:
+      postgres_host: graphnode-postgres
+      postgres_port: 5432
+      postgres_user: graphnode
+      postgres_pass: password
+      postgres_db: graphnode-db
+      ipfs: ipfs:5001
+      ethereum: ${NETWORK_NAME}:http://blockchain-fork:8545
+      GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: $FORK_BLOCK
+    depends_on:
+      blockchain-fork:
+        condition: service_healthy
+      graphnode-postgres:
+        condition: service_healthy
+      ipfs:
+        condition: service_started
+    healthcheck:
+      test: netcat -w 1 0.0.0.0 8020
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  poco-subgraph-deployer:
+    build:
+      context: ..
+      dockerfile: ./Dockerfile
+    environment:
+      GRAPHNODE_URL: http://graphnode:8020
+      IPFS_URL: http://ipfs:5001
+      NETWORK_NAME: ${NETWORK_NAME}
+    depends_on:
+      blockchain-fork:
+        condition: service_healthy
+      graphnode:
+        condition: service_healthy
+
+  stack-ready:
+    image: bash
+    command:
+      - echo "all services ready"
+    depends_on:
+      blockchain-fork:
+        condition: service_healthy
+      graphnode:
+        condition: service_healthy
+      poco-subgraph-deployer:
+        condition: service_completed_successfully

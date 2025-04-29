@@ -1,23 +1,47 @@
+name: default
+
 on:
   push:
     branches:
       - feature/*
       - bugfix/*
-      - develop
       - release/*
       - hotfix/*
+      - develop
       - main
 
+concurrency:
+  group: ci-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
-  test:
-    runs-on: ubuntu-22.04 # For 24.04+, see https://github.com/graphprotocol/graph-tooling/issues/1546#issuecomment-2589680195
+  build-and-test:
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Init
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
         run: npm ci
-      - name: Run unit tests
-        run: npm run test
-      - name: Test build
+
+      - name: Check Format
+        run: npm run check-format
+        
+      - name: Build
         run: npm run build
-    # See Jenkinsfile-itest for "Run integration tests" step
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Prepare test stack
+        run: npm run start-test-stack
+
+      - name: Run integration tests
+        run: npm run test:e2e
