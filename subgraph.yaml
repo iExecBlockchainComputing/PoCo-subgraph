@@ -40,6 +40,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Category
+        - Protocol
         - Account
         - AppOrder
         - DatasetOrder
