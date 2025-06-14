@@ -1,7 +1,7 @@
 services:
   blockchain-fork:
     restart: "no"
-    image: ghcr.io/foundry-rs/foundry:v1.0.0
+    image: ghcr.io/foundry-rs/foundry:v1.2.3
     entrypoint: anvil
     command: "--host 0.0.0.0 --port 8545 --hardfork berlin --fork-url $FORK_URL --fork-block-number $FORK_BLOCK --chain-id 134 --gas-limit 6700000 --gas-price 0"
     expose:
@@ -16,7 +16,7 @@ services:
       start_period: 30s
 
   graphnode-postgres:
-    image: postgres:16.8
+    image: postgres:16.9
     restart: unless-stopped
     command:
       - "postgres"
@@ -37,7 +37,7 @@ services:
 
   ipfs:
     restart: unless-stopped
-    image: ipfs/kubo:v0.34.1
+    image: ipfs/kubo:v0.35.0
     expose:
       - 8080
       - 5001
@@ -46,7 +46,7 @@ services:
       - 5001:5001
 
   graphnode:
-    image: graphprotocol/graph-node:v0.37.0
+    image: graphprotocol/graph-node:v0.39.1
     restart: unless-stopped
     expose:
       - 8000
