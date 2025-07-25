@@ -1,14 +1,7 @@
 name: default
 
 on:
-  push:
-    branches:
-      - feature/*
-      - bugfix/*
-      - release/*
-      - hotfix/*
-      - develop
-      - main
+  pull_request:
 
 concurrency:
   group: ci-${{ github.head_ref }}
