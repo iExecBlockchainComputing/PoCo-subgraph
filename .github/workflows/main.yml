@@ -1,14 +1,14 @@
 name: default
 
 on:
-  push:
-    branches:
-      - feature/*
-      - bugfix/*
-      - release/*
-      - hotfix/*
-      - develop
-      - main
+  pull_request:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version to use
+        required: false
+        type: number
+        default: 20
 
 concurrency:
   group: ci-${{ github.head_ref }}

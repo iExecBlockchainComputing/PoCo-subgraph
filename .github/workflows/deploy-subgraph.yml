@@ -12,18 +12,9 @@ on:
           - staging
           - production
           - tmp
-      # Add new networks when needed. Do not forget to add necessary data in the networks.json file.
-      networkName:
-        description: 'Network Name'
-        required: false
-        default: bellecour
-        type: choice
-        options:
-          - bellecour
       versionLabel:
         description: 'Version Label for Subgraph Deployment'
-        required: false
-        default: develop
+        required: true
         type: string
 
 jobs:
@@ -39,6 +30,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
