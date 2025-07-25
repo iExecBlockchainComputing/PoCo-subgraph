@@ -2,7 +2,6 @@ node_modules
 build
 generated
 yarn.lock
-subgraph.yaml
 test-stack/.env
 tests/.bin
 tests/.latest.json
