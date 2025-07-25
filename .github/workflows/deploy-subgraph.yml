@@ -18,6 +18,11 @@ on:
         type: string
 
 jobs:
+  build-and-test:
+    uses: ./.github/workflows/main.yml
+    with:
+      node-version: 20
+
   deploy:
     runs-on: ubuntu-latest
     # Associate the job with a GitHub Environment which has pre-defined variables and secrets.
