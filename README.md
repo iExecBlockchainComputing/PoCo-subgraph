@@ -13,7 +13,6 @@ Check how to export handlers with [Matchstick - Test Coverage documentation](htt
 > [!NOTE]
 > Since Matchstick code coverage is in very early stages, Matchstick cannot check for branch coverage, but rely on the assertion that a given handler has been called.
 
-
 ## local dev
 
 run local services:
@@ -31,76 +30,120 @@ install project deps
 npm ci
 ```
 
-generate code
+build the project and generate the necessary files:
 
 ```sh
-npx graph codegen subgraph.test.yaml
-npx graph build subgraph.test.yaml
+npm run build
 ```
 
 deploy the subgraph on local node
 
 ```sh
-# create once
-npx graph create test/poco --node http://127.0.0.1:8020
-npx graph deploy test/poco subgraph.test.yaml --node http://127.0.0.1:8020 --ipfs http://127.0.01:5001 --version-label dev
+npm run start-test-stack
+```
+
+run integration tests
+
+```sh
+npm run itest
 ```
 
 test/poco subgraph graphql API enpoints:
 
 - queries: <http://127.0.0.1:8000/subgraphs/name/test/poco>
-- subscriptions: <ws://127.0.0.1:8001/subgraphs/name/test/poco>
-
-debugging:
-
-- monitoring: <http://127.0.0.1:8030/>
-- prometeus: <http://127.0.0.1:8040/>
-- graphnode logs: `docker logs -f test_graphnode_1`
-
-_NB_: other blockchains setups are availables in [docker/README.md](./docker/README.md).
-
 
 ---
 
-## Generating Subgraph and Jenkins Configuration Files
+Here's the revised "Generating Subgraph and Jenkins Configuration Files" section for your README:
 
-This project includes a bash script, `generate_subgraph.sh`, to automate the creation of subgraph YAML configuration files and Jenkinsfiles based on the network settings in `config.json`.
+## Docker subgraph deployer
 
+docker image for deploying the subgraph
 
-**Run the script with the network name**:
-```bash
-bash generate_subgraph_file.sh <network-name>
+### Build Image
+
+```sh
+docker build -f docker/Dockerfile . -t poco-subgraph-deployer
 ```
 
-### Configuration
+### Usage
 
-Ensure `config.json` is populated with the required values. Example:
+env:
+
+- `NETWORK_NAME` (optional): custom graphnode network name (default bellecour)
+- `IPFS_URL`: IPFS admin api url
+- `GRAPHNODE_URL`: graphnode admin api url
+
+```sh
+docker run --rm \
+  -e NETWORK_NAME=fork-test \
+  -e IPFS_URL="http://ipfs:5001" \
+  -e GRAPHNODE_URL="http://graphnode:8020" \
+  poco-subgraph-deployer
+```
+
+## Deployment Configuration
+
+### Jenkins Pipeline Deployment
+
+The project uses a Jenkins pipeline for automated deployment of the subgraph. The deployment can be triggered through Jenkins with interactive parameter selection.
+
+#### Available Parameters
+
+- **Network**: Choose the target blockchain network
+- **Environment**: Select deployment environment
+  - `staging`: Deploy to staging environment
+  - `tmp`: Deploy to temporary environment
+  - `prod`: Deploy to production environment
+- **Version Label**: Specify the version of the deployment (e.g., `v1.0.0`)
+- **Subgraph Name**: Name of the subgraph (default: `poco-v5`)
+
+#### Environment-specific Configurations
+
+Each environment has specific host configurations:
+
+### Adding New Networks
+
+To add support for a new network, update the `networks.json` file with the network configuration:
 
 ```json
 {
-    "bellecour": {
-        "START_BLOCK": 4543300,
-        "ERC1538_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-        "IEXECE_INTERFACE_TOKEN_CORE_ADDRESS": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-        "APP_REGISTRY_ADDRESS": "0xB1C52075b276f87b1834919167312221d50c9D16",
-        "DATATSET_REGISTRY_ADDRESS": "0x799DAa22654128d0C64d5b79eac9283008158730",
-        "WORKERPOOL_REGISTRY_ADDRESS": "0xC76A18c78B7e530A165c5683CB1aB134E21938B4"
+    "network-name": {
+        "ERC1538": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "Core": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "AppRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "DatasetRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        },
+        "WorkerpoolRegistry": {
+            "address": "0x...",
+            "startBlock": 1234567
+        }
     }
 }
 ```
 
-### Files Generated
+Also, update the Jenkins pipeline choices to include the new network:
 
-- **subgraph.<network>.yaml**: Subgraph configuration with placeholders replaced.
-
-#### Example Command
-
-```bash
-bash generate_subgraph_file.sh bellecour
+```groovy
+choice(
+    name: 'networkName',
+    choices: ['bellecour', 'new-network'],
+    description: 'Select the target network'
+)
 ```
 
-This command generates `subgraph.bellecour.yaml`.
-
+The deployment process will automatically generate the appropriate subgraph configuration using the network-specific addresses and start blocks from `networks.json`.
 
 ## Resources
 
