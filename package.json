@@ -7,15 +7,15 @@
   "scripts": {
     "prepare": "husky",
     "generate:typechain": "typechain --target ethers-v6 --out-dir generated/typechain './node_modules/@iexec/poco/build/contracts/*.json' --ts-nocheck",
-    "codegen": " npm run generate:typechain && graph codegen subgraph.template.yaml",
-    "build": "dotenv -e .env -- sh -c 'npm run codegen && graph build subgraph.template.yaml --network ${NETWORK_NAME:-bellecour}'",
+    "codegen": " npm run generate:typechain && graph codegen",
+    "build": "dotenv -e .env -- sh -c 'npm run codegen && graph build --network ${NETWORK_NAME:-bellecour}'",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "graph test unit",
     "test:e2e": "mocha tests/e2e/**/*.ts",
     "coverage": "graph test -- -c",
     "create": "dotenv -e .env -- sh -c 'graph create ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020}'",
-    "deploy": "dotenv -e .env -- sh -c 'graph deploy ${NETWORK_NAME:-bellecour}/poco subgraph.template.yaml --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001}  --network ${NETWORK_NAME:-bellecour} --version-label ${VERSION_LABEL:-bellecour/poco-v5}'",
-    "deploy-chainX": "dotenv -e .env -- sh -c 'graph deploy ${SUBGRAPH_SLUG} subgraph.template.yaml --deploy-key ${SUBGRAPH_DEPLOY_KEY} --network ${SUBGRAPH_NETWORK_NAME} --version-label ${VERSION_LABEL}'",
+    "deploy": "dotenv -e .env -- sh -c 'graph deploy ${NETWORK_NAME:-bellecour}/poco --node ${GRAPHNODE_URL:-http://localhost:8020} --ipfs ${IPFS_URL:-http://localhost:5001}  --network ${NETWORK_NAME:-bellecour} --version-label ${VERSION_LABEL:-bellecour/poco-v5}'",
+    "deploy-chainX": "dotenv -e .env -- sh -c 'graph deploy ${SUBGRAPH_SLUG} --deploy-key ${SUBGRAPH_DEPLOY_KEY} --network ${SUBGRAPH_NETWORK_NAME} --version-label ${VERSION_LABEL}'",
     "all": "npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
     "start-test-stack": "npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && tsx prepare-test-env.ts && docker compose build && docker compose up -d",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {
-    "type": "git",
+    "type": "git", 
     "url": "git+https://github.com/iExecBlockchainComputing/PoCo-subgraph.git"
   },
   "bugs": {
