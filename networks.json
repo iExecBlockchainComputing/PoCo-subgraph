@@ -43,6 +43,28 @@
             "startBlock": 145249746
         }
     },
+    "arbitrum-one": {
+        "ERC1538": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 0
+        },
+        "Core": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 0
+        },
+        "AppRegistry": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 0
+        },
+        "DatasetRegistry": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 0
+        },
+        "WorkerpoolRegistry": {
+            "address": "0x0000000000000000000000000000000000000000",
+            "startBlock": 0
+        }
+    },
     "bellecour": {
         "ERC1538": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",

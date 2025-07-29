@@ -12,21 +12,17 @@ on:
           - staging
           - production
           - tmp
-      # Add new networks when needed. Do not forget to add necessary data in the networks.json file.
-      networkName:
-        description: 'Network Name'
-        required: false
-        default: bellecour
-        type: choice
-        options:
-          - bellecour
       versionLabel:
         description: 'Version Label for Subgraph Deployment'
-        required: false
-        default: develop
+        required: true
         type: string
 
 jobs:
+  build-and-test:
+    uses: ./.github/workflows/main.yml
+    with:
+      node-version: 20
+      
   deploy:
     runs-on: ubuntu-latest
     # Associate the job with a GitHub Environment which has pre-defined variables and secrets.
@@ -39,13 +35,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Deploy Subgraph
         env:
-          NETWORK_NAME: ${{ github.event.inputs.networkName }}
+          NETWORK_NAME: bellecour
           VERSION_LABEL: ${{ github.event.inputs.versionLabel }}
           GRAPHNODE_URL: ${{ vars.GRAPHNODE_URL }}
           IPFS_URL: ${{ vars.IPFS_URL }}
