@@ -1,9 +1,5 @@
 {
     "fuji": {
-        "ERC1538": {
-            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
-            "startBlock": 39496461
-        },
         "Core": {
             "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
             "startBlock": 39496461
@@ -22,10 +18,6 @@
         }
     },
     "arbitrum-sepolia": {
-        "ERC1538": {
-            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
-            "startBlock": 145249746
-        },
         "Core": {
             "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
             "startBlock": 145249746
@@ -44,10 +36,6 @@
         }
     },
     "arbitrum-one": {
-        "ERC1538": {
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": 0
-        },
         "Core": {
             "address": "0x0000000000000000000000000000000000000000",
             "startBlock": 0
@@ -66,10 +54,6 @@
         }
     },
     "bellecour": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 4543300
-        },
         "Core": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
             "startBlock": 4543300
@@ -88,10 +72,6 @@
         }
     },
     "mainnet": {
-        "ERC1538": {
-            "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
-            "startBlock": 9917600
-        },
         "Core": {
             "address": "0x3eca1B216A7DF1C7689aEb259fFB83ADFB894E7f",
             "startBlock": 9917600

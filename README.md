@@ -109,10 +109,6 @@ To add support for a new network, update the `networks.json` file with the netwo
 ```json
 {
     "network-name": {
-        "ERC1538": {
-            "address": "0x...",
-            "startBlock": 1234567
-        },
         "Core": {
             "address": "0x...",
             "startBlock": 1234567
