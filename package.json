@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
   "repository": {
-    "type": "git", 
+    "type": "git",
     "url": "git+https://github.com/iExecBlockchainComputing/PoCo-subgraph.git"
   },
   "bugs": {
