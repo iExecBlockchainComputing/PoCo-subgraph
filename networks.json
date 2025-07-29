@@ -19,20 +19,20 @@
     },
     "arbitrum-sepolia": {
         "Core": {
-            "address": "0x14B465079537655E1662F012e99EBa3863c8B9E0",
-            "startBlock": 145249746
+            "address": "0xB2157BF2fAb286b2A4170E3491Ac39770111Da3E",
+            "startBlock": 178282956
         },
         "AppRegistry": {
-            "address": "0x4a6531ce5150ee716b2d93865D0fbB9ce5492D17",
-            "startBlock": 145249746
+            "address": "0x9950D94fb074182ee93ff79A50Cd698C4983281F",
+            "startBlock": 178283215
         },
         "DatasetRegistry": {
-            "address": "0x3441A0C9FE488c51fcABa2bAAA048720f4D4F72D",
-            "startBlock": 145249746
+            "address": "0x07Cc4E1EA30dD02796795876509A3BfC5053128D",
+            "startBlock": 178283257
         },
         "WorkerpoolRegistry": {
-            "address": "0xf81970E3CB0f8711bEaA79135e686873FfbBAC4A",
-            "startBlock": 145249746
+            "address": "0xe3c13bb4A5068601c6A08041Cb50887B07B5F398",
+            "startBlock": 178283233
         }
     },
     "arbitrum-one": {
