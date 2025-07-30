@@ -7,29 +7,6 @@ repository: https://github.com/iExecBlockchainComputing/PoCo-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: ERC1538
-    kind: ethereum/contract
-    source:
-      abi: ERC1538
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      entities:
-        - ERC1538Module
-        - ERC1538Function
-        - ERC1538FunctionUpdateEvent
-        - ERC1538CommitMessageEvent
-      abis:
-        - name: ERC1538
-          file: node_modules/@iexec/solidity/build/contracts/IERC1538.json
-      eventHandlers:
-        - event: CommitMessage(string)
-          handler: handleCommitMessage
-        - event: FunctionUpdate(indexed bytes4,indexed address,indexed address,string)
-          handler: handleFunctionUpdate
-      file: ./src/ERC1538/ERC1538.ts
-
   - name: Core
     kind: ethereum/contract
     source:

@@ -109,10 +109,6 @@ To add support for a new network, update the `networks.json` file with the netwo
 ```json
 {
     "network-name": {
-        "ERC1538": {
-            "address": "0x...",
-            "startBlock": 1234567
-        },
         "Core": {
             "address": "0x...",
             "startBlock": 1234567
@@ -148,3 +144,8 @@ The deployment process will automatically generate the appropriate subgraph conf
 ## Resources
 
 - [thegraph docs](https://thegraph.com/docs/en/)
+
+## TODO
+
+- Rename the `Core` key to `Diamond` in `networks.json` and update all references accordingly.
+- Remove support and configuration entries for the `bellecour` network from `networks.json`, GHA pipeline, and related documentation.

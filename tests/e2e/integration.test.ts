@@ -12,7 +12,7 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 });
 const networkName = env.NETWORK_NAME!;
-const iexecProxyAddress = (config as any)[networkName].ERC1538.address;
+const iexecProxyAddress = (config as any)[networkName].Core.address;
 
 describe('Integration tests', () => {
     it('should index a newly created app', async () => {

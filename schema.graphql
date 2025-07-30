@@ -27,42 +27,6 @@ type Transaction @entity {
   workerpoolEvents: [WorkerpoolEvent!]! @derivedFrom(field: "transaction")
   ressourceTransferEvent: [RessourceTransferEvent!]!
     @derivedFrom(field: "transaction")
-  erc1538Events: [ERC1538Event!]! @derivedFrom(field: "transaction")
-}
-
-# ================================== ERC1538 ==================================
-type ERC1538Module @entity {
-  id: ID!
-  functions: [ERC1538Function!]! @derivedFrom(field: "module")
-}
-
-type ERC1538Function @entity {
-  id: ID!
-  module: ERC1538Module!
-  name: String!
-  updates: [ERC1538FunctionUpdate!]! @derivedFrom(field: "functionId")
-}
-
-interface ERC1538Event {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-}
-
-type ERC1538FunctionUpdate implements ERC1538Event @entity {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-  functionId: ERC1538Function!
-  oldmodule: ERC1538Module!
-  newmodule: ERC1538Module!
-}
-
-type ERC1538CommitMessage implements ERC1538Event @entity {
-  id: ID!
-  transaction: Transaction!
-  timestamp: BigInt!
-  message: String!
 }
 
 # ============================== Address objects ==============================

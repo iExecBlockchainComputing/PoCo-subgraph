@@ -56,7 +56,6 @@
     "zod": "^3.24.3"
   },
   "dependencies": {
-    "@iexec/poco": "^5.5.0",
-    "@iexec/solidity": "^0.1.1"
+    "@iexec/poco": "^5.5.0"
   }
 }
