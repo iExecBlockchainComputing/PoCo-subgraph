@@ -1,13 +1,19 @@
 # Changelog
 
-## vNEXT
+## [2.0.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v1.1.0...v2.0.0) (2025-07-30)
+
+### Added
 
 - Add Arbitrum & Avalanche networks. (#47)
+- Add a modern test stack, agnostic to the forked network. (#38)
+- Add a section in the README to explain how to use the Docker-based subgraph deployer. (#38)
+
+### Changed
+
+- [BREAKING] Remove ERC1538 references and update related configurations (#52)
 - Migrate integration tests from Jenkins to GitHub Actions. (#44)
 - Remove unused files to streamline the repository. (#42)
 - Rewrite Jenkins CI for future migration (#36, #37)
-- Add a modern test stack, agnostic to the forked network. (#38)
-- Add a section in the README to explain how to use the Docker-based subgraph deployer. (#38)
 
 ## v1.1.0 - Support deal sponsor
 
