@@ -9,6 +9,13 @@
 - Add a modern test stack, agnostic to the forked network. (#38)
 - Add a section in the README to explain how to use the Docker-based subgraph deployer. (#38)
 
+## [1.1.1](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v1.1.0...v1.1.1) (2025-07-30)
+
+
+### ✨ Polish
+
+* remove ERC1538 references and update related configurations ([#52](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/52)) ([5bf8680](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/5bf86802e562251cc1acdb832b371fd87a2db8df))
+
 ## v1.1.0 - Support deal sponsor
 
 - Add `sponsor` to `deal`. (#31)
