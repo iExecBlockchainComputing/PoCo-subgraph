@@ -144,3 +144,8 @@ The deployment process will automatically generate the appropriate subgraph conf
 ## Resources
 
 - [thegraph docs](https://thegraph.com/docs/en/)
+
+## TODO
+
+- Rename the `Core` key to `Diamond` in `networks.json` and update all references accordingly.
+- Remove support and configuration entries for the `bellecour` network from `networks.json`, GHA pipeline, and related documentation.
