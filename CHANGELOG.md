@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.1.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.0.0...v2.1.0) (2025-08-01)
+
+
+### 🚀 Features
+
+* add config for Arbitrum one deployment ([#54](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/54)) ([a59e6fe](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/a59e6fe49a182231a158fc12b95a7ebd867f9bbd))
+* add jenkinsfile for viviani subgraph deployement ([7eb5267](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/7eb5267d3cc8cc444ba45f7838dea7d9966c7883))
+* ajout pipeline pour subgraph bellecour ([211ca37](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/211ca3724003496e44c341ac7489cb53121f8dc4))
+* **jenkin:** add jenkins for subgraph ingestor to deploy pocosubgraph on c13 ([c319e69](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/c319e69e8878e912cc7f58613a14dbba04dda137))
+
+
+### 🐞 Bug Fixes
+
+* point to fixed jenkinslib ([22a8e25](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/22a8e25fe88baf89c9f26857045e7a76c0b7fc3c))
+* wrong server name, patched ([72f5581](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/72f558107c370182a535e1bc5e5f839d35c96620))
+
+
+### ✨ Polish
+
+* remove ERC1538 references and update related configurations ([#52](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/52)) ([5bf8680](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/5bf86802e562251cc1acdb832b371fd87a2db8df))
+
+
+### 🧰 Other
+
+* **main:** release 2.0.0 ([#53](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/53)) ([1d3d3f3](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/1d3d3f353599ef37e3653922d43e5cace4aa2c98))
+
 ## [2.0.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v1.1.0...v2.0.0) (2025-07-30)
 
 ### Added
