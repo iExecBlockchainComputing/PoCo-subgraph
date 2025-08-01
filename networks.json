@@ -37,20 +37,20 @@
     },
     "arbitrum-one": {
         "Core": {
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": 0
+            "address": "0x098bFCb1E50ebcA0BaA92C12eA0c3F045A1aD9f0",
+            "startBlock": 363864242
         },
         "AppRegistry": {
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": 0
+            "address": "0x9950D94fb074182ee93ff79A50Cd698C4983281F",
+            "startBlock": 363864415
         },
         "DatasetRegistry": {
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": 0
+            "address": "0x07Cc4E1EA30dD02796795876509A3BfC5053128D",
+            "startBlock": 363864422 
         },
         "WorkerpoolRegistry": {
-            "address": "0x0000000000000000000000000000000000000000",
-            "startBlock": 0
+            "address": "0xe3c13bb4A5068601c6A08041Cb50887B07B5F398",
+            "startBlock": 363864429
         }
     },
     "bellecour": {
