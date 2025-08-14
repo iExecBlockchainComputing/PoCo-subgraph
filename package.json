@@ -27,13 +27,13 @@
       "prettier --write"
     ]
   },
-  "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
+  "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iExecBlockchainComputing/PoCo-subgraph.git"
   },
   "bugs": {
-    "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
+    "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues"
   },
   "devDependencies": {
     "@apollo/client": "^3.11.8",
