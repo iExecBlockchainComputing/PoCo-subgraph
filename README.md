@@ -55,15 +55,31 @@ Check how to export handlers with [Matchstick - Test Coverage documentation](htt
 
 ### Thegraph network
 
-To deploy this subgraph on Thegraph network:
+#### CI/CD deployment (recommended)
 
-1. Set up your environment variables in `.env` file:
+The recommended approach to deploy the subgraph on The Graph network is to use
+the dedicated Github Actions workflow:
+
+1. Set up the Github environment for the target network (e.g. `arbitrum`) with
+the required environnment variables and secrets:
+    - `vars.SUBGRAPH_SLUG`
+    - `secrets.SUBGRAPH_DEPLOY_KEY`
+    - `vars.SUBGRAPH_NETWORK_NAME`
+    - `VERSION_LABEL` is a workfow input
+
+2. Trigger the deployment Action on Github and specify the `version_label` input.
+
+#### Manual deployment
+
+To deploy this subgraph on Thegraph network manually:
+
+1. Set up environment variables in `.env` file:
 
    ```bash
-   SUBGRAPH_SLUG=your-subgraph-slug
-   SUBGRAPH_DEPLOY_KEY=your-deploy-key
-   SUBGRAPH_NETWORK_NAME=your-network-name
-   VERSION_LABEL=your-version-label
+   SUBGRAPH_SLUG=<subgraph-slug>
+   SUBGRAPH_DEPLOY_KEY=<deploy-key>
+   SUBGRAPH_NETWORK_NAME=<network-name>
+   VERSION_LABEL=<version-label>
    ```
 
 2. Deploy using the npm script:
@@ -72,20 +88,17 @@ To deploy this subgraph on Thegraph network:
    npm run deploy-studio
    ```
 
-### Self-Hosted Subgraph Deployment Process
+### Self-hosted subgraph deployment
 
+The subgraph is deployed via a generated Docker image.
 
-## Docker subgraph deployer
-
-The subgraph is deploy via a generated Docker image.
-
-### Build image
+#### Build image
 
 ```sh
 docker build -f docker/Dockerfile . -t poco-subgraph-deployer
 ```
 
-### Usage
+#### Usage
 
 env:
 
@@ -101,13 +114,13 @@ docker run --rm \
   poco-subgraph-deployer
 ```
 
-## Deployment configuration
+### Deployment configuration
 
-### Jenkins pipeline deployment
+#### Jenkins pipeline deployment
 
 The project uses a Jenkins pipeline for automated deployment of the subgraph. The deployment can be triggered through Jenkins with interactive parameter selection.
 
-#### Available Parameters
+##### Available Parameters
 
 - **Network**: Choose the target blockchain network
 - **Environment**: Select deployment environment
@@ -117,7 +130,7 @@ The project uses a Jenkins pipeline for automated deployment of the subgraph. Th
 - **Version Label**: Specify the version of the deployment (e.g., `v1.0.0`)
 - **Subgraph Name**: Name of the subgraph (default: `poco-v5`)
 
-#### Environment-specific Configurations
+##### Environment-specific Configurations
 
 Each environment has specific host configurations:
 
