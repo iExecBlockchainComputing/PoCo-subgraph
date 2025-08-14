@@ -1,6 +1,6 @@
 {
   "name": "@iexec/subgraph",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "author": "iExec",
   "type": "module",
   "license": "Apache-2.0",
@@ -27,13 +27,13 @@
       "prettier --write"
     ]
   },
-  "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git#readme",
+  "homepage": "https://github.com/iExecBlockchainComputing/PoCo-subgraph#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/iExecBlockchainComputing/PoCo-subgraph.git"
   },
   "bugs": {
-    "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph.git/issues"
+    "url": "https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues"
   },
   "devDependencies": {
     "@apollo/client": "^3.11.8",

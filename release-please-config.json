@@ -2,9 +2,12 @@
   "packages": {
     ".": {
       "release-type": "node",
+      "changelog-path": "CHANGELOG.md",
       "include-v-in-tag": true,
       "include-component-in-tag": false,
-      "changelog-path": "CHANGELOG.md"
+      "prerelease": false,
+      "prerelease-type": "rc",
+      "versioning": "default"
     }
   },
   "changelog-sections": [
