@@ -1,21 +1,11 @@
-# iExec PoCo v5 - subgraph
+# iExec PoCo Subgraph
 
-A subgraph to explore the PoCo smarcontracts
+A subgraph to index the PoCo Smart Contracts.
 
-[CHANGELOG](./CHANGELOG.md)
 
-# Setup coverage⁠
+## Local development
 
-> In order for Matchstick to check which handlers are being run, those handlers need to be exported from the test file.
-
-Check how to export handlers with [Matchstick - Test Coverage documentation](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#test-coverage).
-
-> [!NOTE]
-> Since Matchstick code coverage is in very early stages, Matchstick cannot check for branch coverage, but rely on the assertion that a given handler has been called.
-
-## local dev
-
-run local services:
+Run local services:
 
 - blockchain with iExec PoCo deployed
 - graph node (with ipfs + DB)
@@ -24,43 +14,48 @@ run local services:
 docker-compose -f docker/test/docker-compose.yml up -d
 ```
 
-install project deps
+Install project dependencies
 
 ```sh
 npm ci
 ```
 
-build the project and generate the necessary files:
+Build the project and generate the necessary files:
 
 ```sh
 npm run build
 ```
 
-deploy the subgraph on local node
+Deploy the subgraph on local node
 
 ```sh
 npm run start-test-stack
 ```
 
-run integration tests
+Run integration tests
 
 ```sh
 npm run itest
 ```
 
-test/poco subgraph graphql API enpoints:
-
+The subgraph `test/poco` graphql API is accessible at:
 - queries: <http://127.0.0.1:8000/subgraphs/name/test/poco>
 
----
 
-Here's the revised "Generating Subgraph and Jenkins Configuration Files" section for your README:
+### Coverage setup
+
+> In order for Matchstick to check which handlers are being run, those handlers need to be exported from the test file.
+
+Check how to export handlers with [Matchstick - Test Coverage documentation](https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#test-coverage).
+
+> [!NOTE]
+> Since Matchstick code coverage is in very early stages, Matchstick cannot check for branch coverage, but rely on the assertion that a given handler has been called.
 
 ## Docker subgraph deployer
 
-docker image for deploying the subgraph
+The subgraph is deploy via a generated Docker image.
 
-### Build Image
+### Build image
 
 ```sh
 docker build -f docker/Dockerfile . -t poco-subgraph-deployer
@@ -82,9 +77,9 @@ docker run --rm \
   poco-subgraph-deployer
 ```
 
-## Deployment Configuration
+## Deployment configuration
 
-### Jenkins Pipeline Deployment
+### Jenkins pipeline deployment
 
 The project uses a Jenkins pipeline for automated deployment of the subgraph. The deployment can be triggered through Jenkins with interactive parameter selection.
 
@@ -141,9 +136,13 @@ choice(
 
 The deployment process will automatically generate the appropriate subgraph configuration using the network-specific addresses and start blocks from `networks.json`.
 
+## Changelog
+
+Changes to this project are tracked in [CHANGELOG.md](./CHANGELOG.md)
+
 ## Resources
 
-- [thegraph docs](https://thegraph.com/docs/en/)
+- [The Graph docs](https://thegraph.com/docs/en/)
 
 ## TODO
 
