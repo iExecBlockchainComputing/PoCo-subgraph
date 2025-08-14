@@ -114,13 +114,13 @@ docker run --rm \
   poco-subgraph-deployer
 ```
 
+#### Github Actions pipeline deployment
+
+The subgraph can be deployed using Github Actions (recommended). The dedicated job can be triggered with the desired configuration (environment, version, ...).
+
 ### Deployment configuration
 
-#### Jenkins pipeline deployment
-
-The project uses a Jenkins pipeline for automated deployment of the subgraph. The deployment can be triggered through Jenkins with interactive parameter selection.
-
-##### Available Parameters
+#### Available Parameters
 
 - **Network**: Choose the target blockchain network
 - **Environment**: Select deployment environment
@@ -130,7 +130,7 @@ The project uses a Jenkins pipeline for automated deployment of the subgraph. Th
 - **Version Label**: Specify the version of the deployment (e.g., `v1.0.0`)
 - **Subgraph Name**: Name of the subgraph (default: `poco-v5`)
 
-##### Environment-specific Configurations
+#### Environment-specific Configurations
 
 Each environment has specific host configurations:
 
@@ -159,16 +159,6 @@ To add support for a new network, update the `networks.json` file with the netwo
         }
     }
 }
-```
-
-Also, update the Jenkins pipeline choices to include the new network:
-
-```groovy
-choice(
-    name: 'networkName',
-    choices: ['bellecour', 'new-network'],
-    description: 'Select the target network'
-)
 ```
 
 ## Changelog
