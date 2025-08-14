@@ -51,6 +51,30 @@ Check how to export handlers with [Matchstick - Test Coverage documentation](htt
 > [!NOTE]
 > Since Matchstick code coverage is in very early stages, Matchstick cannot check for branch coverage, but rely on the assertion that a given handler has been called.
 
+## Deployment Options
+
+### Thegraph network
+
+To deploy this subgraph on Thegraph network:
+
+1. Set up your environment variables in `.env` file:
+
+   ```bash
+   SUBGRAPH_SLUG=your-subgraph-slug
+   SUBGRAPH_DEPLOY_KEY=your-deploy-key
+   SUBGRAPH_NETWORK_NAME=your-network-name
+   VERSION_LABEL=your-version-label
+   ```
+
+2. Deploy using the npm script:
+
+   ```bash
+   npm run deploy-studio
+   ```
+
+### Self-Hosted Subgraph Deployment Process
+
+
 ## Docker subgraph deployer
 
 The subgraph is deploy via a generated Docker image.
@@ -133,8 +157,6 @@ choice(
     description: 'Select the target network'
 )
 ```
-
-The deployment process will automatically generate the appropriate subgraph configuration using the network-specific addresses and start blocks from `networks.json`.
 
 ## Changelog
 
