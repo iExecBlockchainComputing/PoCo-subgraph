@@ -1,7 +1,14 @@
 // SPDX-FileCopyrightText: 2020-2025 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
 // SPDX-License-Identifier: Apache-2.0
 
-import { Address, BigInt, dataSource } from '@graphprotocol/graph-ts';
+import {
+    Address,
+    BigInt,
+    dataSource,
+    DataSourceContext,
+    DataSourceTemplate,
+    json,
+} from '@graphprotocol/graph-ts';
 const chainName = dataSource.network();
 
 import {
@@ -21,6 +28,7 @@ import {
 
 import {
     AccurateContribution,
+    Bulk,
     FaultyContribution,
     OrdersMatched,
     SchedulerNotice,
@@ -34,6 +42,7 @@ import {
 } from '../../generated/schema';
 
 import {
+    CONTEXT_REQUESTHASH,
     createContributionID,
     createEventID,
     fetchAccount,
@@ -93,6 +102,26 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.requestorder = event.params.requestHash.toHex();
     deal.timestamp = event.block.timestamp;
     deal.save();
+
+    // params including bulk_cid reference a dataset bulk
+    const params = json.try_fromString(viewedDeal.params);
+    if (params.isOk) {
+        const bulkCid = params.value.toObject().getEntry('bulk_cid');
+        if (bulkCid) {
+            // the same bulk is used by any deal using the same requestorder => we use requestorderHash as bulk ID
+            const bulkId = event.params.requestHash.toHex();
+            // create the bulk if not existing yet
+            const indexedBulk = Bulk.load(bulkId);
+            if (!indexedBulk) {
+                let context = new DataSourceContext();
+                context.setString(CONTEXT_REQUESTHASH, bulkId);
+                DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
+            }
+            // bulk may not be indexed, this is not an issue, the model will prune it
+            deal.bulk = bulkId;
+            deal.save();
+        }
+    }
 
     const dataset = deal.dataset;
 

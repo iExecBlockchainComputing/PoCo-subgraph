@@ -338,6 +338,24 @@ type Deal @entity {
   workerpoolorder: WorkerpoolOrder # todo: not available if not broadcasted
   requestorder: RequestOrder # todo: not available if not broadcasted
   events: [DealEvent!]! @derivedFrom(field: "deal")
+  bulk: Bulk
+}
+
+type Bulk @entity(immutable: true) {
+  id: ID!
+  hash: String!
+  content: String!
+  slices: [BulkSlice!] @derivedFrom(field: "bulk")
+  deals: [Deal!]! @derivedFrom(field: "bulk")
+}
+
+type BulkSlice @entity(immutable: true) {
+  id: ID!
+  hash: String!
+  content: String!
+  bulk: Bulk!
+  index: BigInt!
+  datasets: [Dataset!]
 }
 
 enum TaskStatus {
