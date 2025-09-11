@@ -232,8 +232,8 @@ type PolicyUpdate implements WorkerpoolEvent @entity {
 # ================================== Orders ===================================
 type AppOrder @entity {
   id: ID!
-  app: App!
-  appprice: BigDecimal!
+  app: App
+  appprice: BigDecimal
   volume: BigInt
   tag: Bytes
   datasetrestrict: Bytes
@@ -246,8 +246,8 @@ type AppOrder @entity {
 
 type DatasetOrder @entity {
   id: ID!
-  dataset: Dataset!
-  datasetprice: BigDecimal!
+  dataset: Dataset
+  datasetprice: BigDecimal
   volume: BigInt
   tag: Bytes
   apprestrict: Bytes
@@ -260,8 +260,8 @@ type DatasetOrder @entity {
 
 type WorkerpoolOrder @entity {
   id: ID!
-  workerpool: Workerpool!
-  workerpoolprice: BigDecimal!
+  workerpool: Workerpool
+  workerpoolprice: BigDecimal
   volume: BigInt
   tag: Bytes
   category: Category
@@ -282,7 +282,7 @@ type RequestOrder @entity {
   datasetmaxprice: BigDecimal
   workerpool: Workerpool # could be null or whitelist
   workerpoolmaxprice: BigDecimal
-  requester: Account!
+  requester: Account
   volume: BigInt
   tag: Bytes
   category: Category
@@ -355,7 +355,7 @@ type BulkSlice @entity(immutable: true) {
   content: String!
   bulk: Bulk!
   index: BigInt!
-  datasets: [Dataset!]
+  datasetOrders: [DatasetOrder!]
 }
 
 enum TaskStatus {

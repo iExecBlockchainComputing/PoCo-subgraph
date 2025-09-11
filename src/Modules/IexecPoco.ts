@@ -42,6 +42,7 @@ import {
 } from '../../generated/schema';
 
 import {
+    CONTEXT_DOMAIN_SEPARATOR_HASH,
     CONTEXT_REQUESTHASH,
     createContributionID,
     createEventID,
@@ -115,6 +116,9 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
             if (!indexedBulk) {
                 let context = new DataSourceContext();
                 context.setString(CONTEXT_REQUESTHASH, bulkId);
+                // pass the domainSeparator to the template, as it cannot be retrieved from the contract in the template
+                const domainSeparator = contract.eip712domain_separator();
+                context.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
                 DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
             }
             // bulk may not be indexed, this is not an issue, the model will prune it

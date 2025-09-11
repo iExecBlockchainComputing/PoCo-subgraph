@@ -14,6 +14,8 @@ import {
 import {
     Account,
     AppOrder,
+    Bulk,
+    BulkSlice,
     Contribution,
     DatasetOrder,
     Deal,
@@ -100,6 +102,22 @@ export function fetchRequestorder(id: string): RequestOrder {
     return requestorder as RequestOrder;
 }
 
+export function fetchBulk(id: string): Bulk {
+    let bulk = Bulk.load(id);
+    if (bulk == null) {
+        bulk = new Bulk(id);
+    }
+    return bulk as Bulk;
+}
+
+export function fetchBulkSlice(id: string): BulkSlice {
+    let bulkSlice = BulkSlice.load(id);
+    if (bulkSlice == null) {
+        bulkSlice = new BulkSlice(id);
+    }
+    return bulkSlice as BulkSlice;
+}
+
 export function fetchProtocol(): Protocol {
     let protocol = Protocol.load('iExec');
     if (protocol == null) {
@@ -158,6 +176,11 @@ export function toRLC(value: BigInt): BigDecimal {
     return value.divDecimal(BigDecimal.fromString('1000000000'));
 }
 
+export function toNRlc(value: BigDecimal): BigInt {
+    const rlcValue = value.times(BigDecimal.fromString('1000000000')).toString();
+    return BigInt.fromString(rlcValue);
+}
+
 export function intToAddress(value: BigInt): Address {
     return Address.fromString(value.toHex().substr(2).padStart(40, '0')) as Address;
 }
@@ -177,6 +200,39 @@ function encodeStringValue(string: string): ethereum.Value {
     return ethereum.Value.fromFixedBytes(
         changetype<Bytes>(crypto.keccak256(ByteArray.fromUTF8(string))), // Change from 'as T' to 'changetype<T>'
     );
+}
+
+export function hashDatasetOrder(
+    dataset: Address,
+    datasetprice: BigInt,
+    volume: BigInt,
+    tag: Bytes,
+    apprestrict: Address,
+    workerpoolrestrict: Address,
+    requesterrestrict: Address,
+    salt: Bytes,
+    domainHash: ByteArray,
+): ByteArray {
+    const structHash = crypto.keccak256(
+        ethereum.encode(
+            ethereum.Value.fromTuple(
+                changetype<ethereum.Tuple>([
+                    encodeStringValue(
+                        'DatasetOrder(address dataset,uint256 datasetprice,uint256 volume,bytes32 tag,address apprestrict,address workerpoolrestrict,address requesterrestrict,bytes32 salt)',
+                    ),
+                    ethereum.Value.fromAddress(dataset),
+                    ethereum.Value.fromUnsignedBigInt(datasetprice),
+                    ethereum.Value.fromUnsignedBigInt(volume),
+                    ethereum.Value.fromFixedBytes(tag),
+                    ethereum.Value.fromAddress(apprestrict),
+                    ethereum.Value.fromAddress(workerpoolrestrict),
+                    ethereum.Value.fromAddress(requesterrestrict),
+                    ethereum.Value.fromFixedBytes(salt),
+                ]),
+            ),
+        )!,
+    );
+    return hashEIP712(domainHash, structHash);
 }
 
 function hashEIP712(domainHash: ByteArray, structHash: ByteArray): ByteArray {
@@ -206,8 +262,73 @@ function hashDomain(domain: IEIP712Domain): ByteArray {
     );
 }
 
+export function isIntegerString(str: string): boolean {
+    // empty string is not valid
+    if (str.length == 0) {
+        return false;
+    }
+    // 0 prefixed string is not valid
+    if (str[0] == '0' && str.length > 1) {
+        return false;
+    }
+    // non numeric character is not valid
+    for (let i = 0; i < str.length; i++) {
+        if (!['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(str[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function isHexString(str: string): boolean {
+    if (str.length < 2 || str[0] != '0' || str[1] != 'x') {
+        return false;
+    }
+    for (let i = 2; i < str.length; i++) {
+        if (
+            ![
+                '0',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                'a',
+                'b',
+                'c',
+                'd',
+                'e',
+                'f',
+            ].includes(str[i])
+        ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function isHexStringWithLength(str: string, length: number): boolean {
+    if (str.length !== length) {
+        return false;
+    }
+    return isHexString(str);
+}
+
+export function isAddressString(str: string): boolean {
+    return isHexStringWithLength(str, 42);
+}
+
+export function isBytes32String(str: string): boolean {
+    return isHexStringWithLength(str, 66);
+}
+
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 export const CONTEXT_REQUESTHASH = 'REQUESTHASH';
+export const CONTEXT_DOMAIN_SEPARATOR_HASH = 'DOMAIN_SEPARATOR_HASH';
 export const CONTEXT_BULK = 'BULK';
 export const CONTEXT_INDEX = 'INDEX';
