@@ -47,34 +47,31 @@ export function handleBulk(content: Bytes): void {
     bulk.content = content.toString();
 
     const jsonContent = json.try_fromBytes(content);
-    if (jsonContent.isOk && jsonContent.value.kind == JSONValueKind.OBJECT) {
-        const contentObject = jsonContent.value.toObject();
+    if (jsonContent.isOk && jsonContent.value.kind == JSONValueKind.ARRAY) {
+        const contentArray = jsonContent.value.toArray();
 
-        for (let i = 0; i < contentObject.entries.length; i++) {
-            const entry = contentObject.entries[i];
+        for (let i = 0; i < contentArray.length; i++) {
+            const entry = contentArray[i];
+            const index = BigInt.fromI32(i);
+            if (
+                // exclude slice out of deal bot range
+                index >= botFirst &&
+                index < botFirst.plus(botSize) &&
+                entry.kind == JSONValueKind.OBJECT
+            ) {
+                let sliceCid = entry.toObject().getEntry('orders');
+                if (sliceCid != null && sliceCid.value.kind == JSONValueKind.STRING) {
+                    let sliceContext = new DataSourceContext();
+                    sliceContext.setString(CONTEXT_BULK, bulkId);
+                    sliceContext.setString(CONTEXT_DEAL, dealId);
+                    sliceContext.setBigInt(CONTEXT_INDEX, index);
+                    sliceContext.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
 
-            if (isIntegerString(entry.key)) {
-                const index = BigInt.fromString(entry.key);
-                if (
-                    // exclude slice out of deal bot range
-                    index >= botFirst &&
-                    index < botFirst.plus(botSize) &&
-                    entry.value.kind == JSONValueKind.OBJECT
-                ) {
-                    let sliceCid = entry.value.toObject().getEntry('orders');
-                    if (sliceCid != null && sliceCid.value.kind == JSONValueKind.STRING) {
-                        let sliceContext = new DataSourceContext();
-                        sliceContext.setString(CONTEXT_BULK, bulkId);
-                        sliceContext.setString(CONTEXT_DEAL, dealId);
-                        sliceContext.setBigInt(CONTEXT_INDEX, index);
-                        sliceContext.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
-
-                        DataSourceTemplate.createWithContext(
-                            'BulkSlice',
-                            [sliceCid.value.toString()],
-                            sliceContext,
-                        );
-                    }
+                    DataSourceTemplate.createWithContext(
+                        'BulkSlice',
+                        [sliceCid.value.toString()],
+                        sliceContext,
+                    );
                 }
             }
         }
