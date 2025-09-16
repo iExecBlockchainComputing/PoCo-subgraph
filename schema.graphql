@@ -149,6 +149,7 @@ type Dataset implements Ressource @entity {
   checksum: Bytes!
   timestamp: BigInt! # last transfer
   usages: [Deal!]! @derivedFrom(field: "dataset")
+  bulkUsages: [BulkSlice!]! @derivedFrom(field: "datasets")
   orders: [DatasetOrder!]! @derivedFrom(field: "dataset")
   transfers: [DatasetTransfer!]! @derivedFrom(field: "dataset")
 }
@@ -344,18 +345,20 @@ type Deal @entity {
 type Bulk @entity(immutable: true) {
   id: ID!
   hash: String!
-  content: String!
   slices: [BulkSlice!] @derivedFrom(field: "bulk")
-  deals: [Deal!]! @derivedFrom(field: "bulk")
+  deal: Deal! @derivedFrom(field: "bulk")
+  content: String! # raw content (is it useful?)
 }
 
 type BulkSlice @entity(immutable: true) {
   id: ID!
+  bulk: Bulk! 
   hash: String!
-  content: String!
-  bulk: Bulk!
+  task: Task # task may not be initialized at the time of BulkSlice creation
   index: BigInt!
-  datasetOrders: [DatasetOrder!]
+  datasets: [Dataset!]!
+  datasetOrders: [DatasetOrder!]!
+  content: String! # raw content (is it useful?)
 }
 
 enum TaskStatus {
@@ -384,6 +387,7 @@ type Task @entity {
   rewards: [Reward!]! @derivedFrom(field: "task")
   seizes: [Seize!]! @derivedFrom(field: "task")
   events: [TaskEvent!]! @derivedFrom(field: "task")
+  bulkSlice: BulkSlice @derivedFrom(field: "task")
 }
 
 enum ContributionStatus {

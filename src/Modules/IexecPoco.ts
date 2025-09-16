@@ -42,8 +42,10 @@ import {
 } from '../../generated/schema';
 
 import {
+    CONTEXT_BOT_FIRST,
+    CONTEXT_BOT_SIZE,
+    CONTEXT_DEAL,
     CONTEXT_DOMAIN_SEPARATOR_HASH,
-    CONTEXT_REQUESTHASH,
     createContributionID,
     createEventID,
     fetchAccount,
@@ -110,14 +112,16 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
         const bulkCid = params.value.toObject().getEntry('bulk_cid');
         if (bulkCid) {
             // the same bulk is used by any deal using the same requestorder => we use requestorderHash as bulk ID
-            const bulkId = event.params.requestHash.toHex();
+            const bulkId = event.params.dealid.toHex();
             // create the bulk if not existing yet
             const indexedBulk = Bulk.load(bulkId);
             if (!indexedBulk) {
                 let context = new DataSourceContext();
-                context.setString(CONTEXT_REQUESTHASH, bulkId);
-                // pass the domainSeparator to the template, as it cannot be retrieved from the contract in the template
+                // Pass onchain data that will be needed in file handlers
                 const domainSeparator = contract.eip712domain_separator();
+                context.setString(CONTEXT_DEAL, deal.id);
+                context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
+                context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
                 context.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
                 DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
             }

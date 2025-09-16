@@ -36,8 +36,31 @@ export function createContributionID(taskid: string, worker: string): string {
     return taskid.concat('-').concat(worker);
 }
 
-export function createBulkSliceID(bulk: string, index: BigInt): string {
-    return bulk.concat('-').concat(index.toString());
+export function createBulkSliceID(dealId: string, index: BigInt): string {
+    return dealId.concat('-').concat(index.toString());
+}
+
+export function createBulkOrderID(taskId: string, orderIndex: BigInt): string {
+    return taskId.concat('-').concat(orderIndex.toString());
+}
+
+export function computeTaskId(dealid: string, idx: BigInt): string | null {
+    const dealidBytes = Bytes.fromHexString(dealid);
+    if (dealidBytes !== null) {
+        return crypto
+            .keccak256(
+                ethereum.encode(
+                    ethereum.Value.fromTuple(
+                        changetype<ethereum.Tuple>([
+                            ethereum.Value.fromFixedBytes(dealidBytes),
+                            ethereum.Value.fromUnsignedBigInt(idx),
+                        ]),
+                    ),
+                )!,
+            )
+            .toHex();
+    }
+    return null;
 }
 
 export function fetchAccount(id: string): Account {
@@ -65,6 +88,7 @@ export function fetchTask(id: string): Task {
     let task = Task.load(id);
     if (task == null) {
         task = new Task(id);
+        task.contributions = new Array<string>();
         task.status = 'UNSET';
     }
     return task as Task;
@@ -330,5 +354,8 @@ export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
 export const CONTEXT_REQUESTHASH = 'REQUESTHASH';
 export const CONTEXT_DOMAIN_SEPARATOR_HASH = 'DOMAIN_SEPARATOR_HASH';
+export const CONTEXT_DEAL = 'DEAL';
 export const CONTEXT_BULK = 'BULK';
 export const CONTEXT_INDEX = 'INDEX';
+export const CONTEXT_BOT_FIRST = 'BOT_FIRST';
+export const CONTEXT_BOT_SIZE = 'BOT_SIZE';
