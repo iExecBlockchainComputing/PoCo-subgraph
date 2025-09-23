@@ -106,28 +106,34 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.timestamp = event.block.timestamp;
     deal.save();
 
-    // params including bulk_cid reference a dataset bulk
-    const params = json.try_fromString(viewedDeal.params);
-    if (params.isOk) {
-        const bulkCid = params.value.toObject().getEntry('bulk_cid');
-        if (bulkCid) {
-            // the same bulk is used by any deal using the same requestorder => we use requestorderHash as bulk ID
-            const bulkId = event.params.dealid.toHex();
-            // create the bulk if not existing yet
-            const indexedBulk = Bulk.load(bulkId);
-            if (!indexedBulk) {
-                let context = new DataSourceContext();
-                // Pass onchain data that will be needed in file handlers
-                const domainSeparator = contract.eip712domain_separator();
-                context.setString(CONTEXT_DEAL, deal.id);
-                context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
-                context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
-                context.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
-                DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
+    // if no dataset, check if params include a bulk_cid reference
+    if (deal.dataset == Address.zero().toHex()) {
+        const params = json.try_fromString(viewedDeal.params);
+        if (params.isOk) {
+            const bulkCid = params.value.toObject().getEntry('bulk_cid');
+            if (bulkCid) {
+                // the same bulk is used by any deal using the same requestorder => we use requestorderHash as bulk ID
+                const bulkId = event.params.dealid.toHex();
+                // create the bulk if not existing yet
+                const indexedBulk = Bulk.load(bulkId);
+                if (!indexedBulk) {
+                    let context = new DataSourceContext();
+                    // Pass onchain data that will be needed in file handlers
+                    const domainSeparator = contract.eip712domain_separator();
+                    context.setString(CONTEXT_DEAL, deal.id);
+                    context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
+                    context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
+                    context.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
+                    DataSourceTemplate.createWithContext(
+                        'Bulk',
+                        [bulkCid.value.toString()],
+                        context,
+                    );
+                }
+                // bulk may not be indexed, this is not an issue, the model will prune it
+                deal.bulk = bulkId;
+                deal.save();
             }
-            // bulk may not be indexed, this is not an issue, the model will prune it
-            deal.bulk = bulkId;
-            deal.save();
         }
     }
 
