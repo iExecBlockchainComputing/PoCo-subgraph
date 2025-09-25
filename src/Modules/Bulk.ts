@@ -57,22 +57,15 @@ export function handleBulk(content: Bytes): void {
                 // exclude slice out of deal bot range
                 index >= botFirst &&
                 index < botFirst.plus(botSize) &&
-                entry.kind == JSONValueKind.OBJECT
+                entry.kind == JSONValueKind.STRING
             ) {
-                let sliceCid = entry.toObject().getEntry('orders');
-                if (sliceCid != null && sliceCid.value.kind == JSONValueKind.STRING) {
-                    let sliceContext = new DataSourceContext();
-                    sliceContext.setString(CONTEXT_BULK, bulkId);
-                    sliceContext.setString(CONTEXT_DEAL, dealId);
-                    sliceContext.setBigInt(CONTEXT_INDEX, index);
-                    sliceContext.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
-
-                    DataSourceTemplate.createWithContext(
-                        'BulkSlice',
-                        [sliceCid.value.toString()],
-                        sliceContext,
-                    );
-                }
+                const sliceCid = entry.toString();
+                let sliceContext = new DataSourceContext();
+                sliceContext.setString(CONTEXT_BULK, bulkId);
+                sliceContext.setString(CONTEXT_DEAL, dealId);
+                sliceContext.setBigInt(CONTEXT_INDEX, index);
+                sliceContext.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
+                DataSourceTemplate.createWithContext('BulkSlice', [sliceCid], sliceContext);
             }
         }
     }
