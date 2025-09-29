@@ -15,7 +15,6 @@ import {
     CONTEXT_BOT_SIZE,
     CONTEXT_BULK,
     CONTEXT_DEAL,
-    CONTEXT_DOMAIN_SEPARATOR_HASH,
     CONTEXT_INDEX,
     createBulkOrderID,
     createBulkSliceID,
@@ -30,13 +29,11 @@ import {
 export function handleBulk(content: Bytes): void {
     const hash = dataSource.stringParam();
     const context = dataSource.context();
-    const domainSeparator = context.getBytes(CONTEXT_DOMAIN_SEPARATOR_HASH);
     const dealId = context.getString(CONTEXT_DEAL);
     const botFirst = context.getBigInt(CONTEXT_BOT_FIRST);
     const botSize = context.getBigInt(CONTEXT_BOT_SIZE);
 
     const bulkId = dealId;
-
     let bulk = Bulk.load(bulkId);
     if (bulk != null) {
         // immutable bulk already exists nothing to do
@@ -64,7 +61,6 @@ export function handleBulk(content: Bytes): void {
                 sliceContext.setString(CONTEXT_BULK, bulkId);
                 sliceContext.setString(CONTEXT_DEAL, dealId);
                 sliceContext.setBigInt(CONTEXT_INDEX, index);
-                sliceContext.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
                 DataSourceTemplate.createWithContext('BulkSlice', [sliceCid], sliceContext);
             }
         }
@@ -168,22 +164,6 @@ export function handleBulkSlice(content: Bytes): void {
                         );
                         datasetOrder.salt = Bytes.fromHexString(saltEntry.value.toString());
                         datasetOrder.sign = Bytes.fromHexString(signEntry.value.toString());
-
-                        // todo: it may be useful to keep on order entity?
-                        // compute order hash with domain separator from contract
-                        // const domainSeparator = context.getBytes(CONTEXT_DOMAIN_SEPARATOR_HASH);
-                        // const orderHash = hashDatasetOrder(
-                        //     Address.fromString(datasetEntry.value.toString()),
-                        //     BigInt.fromString(datasetPriceEntry.value.toString()),
-                        //     BigInt.fromString(volumeEntry.value.toString()),
-                        //     Bytes.fromHexString(tagEntry.value.toString()),
-                        //     Address.fromString(apprestrictEntry.value.toString()),
-                        //     Address.fromString(workerpoolrestrictEntry.value.toString()),
-                        //     Address.fromString(requesterrestrictEntry.value.toString()),
-                        //     Bytes.fromHexString(saltEntry.value.toString()),
-                        //     domainSeparator,
-                        // );
-                        // order.hash = orderHash;
                         datasetOrder.save();
 
                         let datasetOrders = bulkSlice.datasetOrders;

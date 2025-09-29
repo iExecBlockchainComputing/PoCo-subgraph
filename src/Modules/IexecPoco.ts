@@ -28,7 +28,6 @@ import {
 
 import {
     AccurateContribution,
-    Bulk,
     FaultyContribution,
     OrdersMatched,
     SchedulerNotice,
@@ -45,7 +44,6 @@ import {
     CONTEXT_BOT_FIRST,
     CONTEXT_BOT_SIZE,
     CONTEXT_DEAL,
-    CONTEXT_DOMAIN_SEPARATOR_HASH,
     createContributionID,
     createEventID,
     fetchAccount,
@@ -112,24 +110,14 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
         if (params.isOk) {
             const bulkCid = params.value.toObject().getEntry('bulk_cid');
             if (bulkCid) {
-                // the same bulk is used by any deal using the same requestorder => we use requestorderHash as bulk ID
+                // the same bulk may be used by many deals => we use dealid as bulk ID to avoid collisions
                 const bulkId = event.params.dealid.toHex();
-                // create the bulk if not existing yet
-                const indexedBulk = Bulk.load(bulkId);
-                if (!indexedBulk) {
-                    let context = new DataSourceContext();
-                    // Pass onchain data that will be needed in file handlers
-                    const domainSeparator = contract.eip712domain_separator();
-                    context.setString(CONTEXT_DEAL, deal.id);
-                    context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
-                    context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
-                    context.setBytes(CONTEXT_DOMAIN_SEPARATOR_HASH, domainSeparator);
-                    DataSourceTemplate.createWithContext(
-                        'Bulk',
-                        [bulkCid.value.toString()],
-                        context,
-                    );
-                }
+                let context = new DataSourceContext();
+                // Pass onchain data that will be needed in file handlers
+                context.setString(CONTEXT_DEAL, deal.id);
+                context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
+                context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
+                DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
                 // bulk may not be indexed, this is not an issue, the model will prune it
                 deal.bulk = bulkId;
                 deal.save();

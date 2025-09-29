@@ -26,8 +26,6 @@ import {
     WorkerpoolOrder,
 } from '../generated/schema';
 
-import { IexecInterfaceToken__domainResultValue0Struct as IEIP712Domain } from '../generated/Core/IexecInterfaceToken';
-
 export function createEventID(event: ethereum.Event): string {
     return event.block.number.toString().concat('-').concat(event.logIndex.toString());
 }
@@ -220,72 +218,6 @@ export function concatByteArrays(a: ByteArray, b: ByteArray): ByteArray {
     return changetype<ByteArray>(out); // Change from 'as T' to 'changetype<T>'
 }
 
-function encodeStringValue(string: string): ethereum.Value {
-    return ethereum.Value.fromFixedBytes(
-        changetype<Bytes>(crypto.keccak256(ByteArray.fromUTF8(string))), // Change from 'as T' to 'changetype<T>'
-    );
-}
-
-export function hashDatasetOrder(
-    dataset: Address,
-    datasetprice: BigInt,
-    volume: BigInt,
-    tag: Bytes,
-    apprestrict: Address,
-    workerpoolrestrict: Address,
-    requesterrestrict: Address,
-    salt: Bytes,
-    domainHash: ByteArray,
-): ByteArray {
-    const structHash = crypto.keccak256(
-        ethereum.encode(
-            ethereum.Value.fromTuple(
-                changetype<ethereum.Tuple>([
-                    encodeStringValue(
-                        'DatasetOrder(address dataset,uint256 datasetprice,uint256 volume,bytes32 tag,address apprestrict,address workerpoolrestrict,address requesterrestrict,bytes32 salt)',
-                    ),
-                    ethereum.Value.fromAddress(dataset),
-                    ethereum.Value.fromUnsignedBigInt(datasetprice),
-                    ethereum.Value.fromUnsignedBigInt(volume),
-                    ethereum.Value.fromFixedBytes(tag),
-                    ethereum.Value.fromAddress(apprestrict),
-                    ethereum.Value.fromAddress(workerpoolrestrict),
-                    ethereum.Value.fromAddress(requesterrestrict),
-                    ethereum.Value.fromFixedBytes(salt),
-                ]),
-            ),
-        )!,
-    );
-    return hashEIP712(domainHash, structHash);
-}
-
-function hashEIP712(domainHash: ByteArray, structHash: ByteArray): ByteArray {
-    return crypto.keccak256(
-        concatByteArrays(
-            ByteArray.fromHexString('0x1901'),
-            concatByteArrays(domainHash, structHash),
-        ),
-    );
-}
-
-function hashDomain(domain: IEIP712Domain): ByteArray {
-    return crypto.keccak256(
-        ethereum.encode(
-            ethereum.Value.fromTuple(
-                changetype<ethereum.Tuple>([
-                    encodeStringValue(
-                        'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)',
-                    ),
-                    encodeStringValue(domain.name),
-                    encodeStringValue(domain.version),
-                    ethereum.Value.fromUnsignedBigInt(domain.chainId),
-                    ethereum.Value.fromAddress(domain.verifyingContract),
-                ]), // Change from 'as T' to 'changetype<T>'
-            ),
-        )!,
-    );
-}
-
 export function isIntegerString(str: string): boolean {
     // empty string is not valid
     if (str.length == 0) {
@@ -352,8 +284,6 @@ export function isBytes32String(str: string): boolean {
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000';
 
-export const CONTEXT_REQUESTHASH = 'REQUESTHASH';
-export const CONTEXT_DOMAIN_SEPARATOR_HASH = 'DOMAIN_SEPARATOR_HASH';
 export const CONTEXT_DEAL = 'DEAL';
 export const CONTEXT_BULK = 'BULK';
 export const CONTEXT_INDEX = 'INDEX';
