@@ -41,7 +41,6 @@ export function handleBulk(content: Bytes): void {
     }
     bulk = new Bulk(bulkId);
     bulk.hash = hash;
-    bulk.content = content.toString();
 
     const jsonContent = json.try_fromBytes(content);
     if (jsonContent.isOk && jsonContent.value.kind == JSONValueKind.ARRAY) {
@@ -89,7 +88,6 @@ export function handleBulkSlice(content: Bytes): void {
         bulkSlice.hash = hash;
         bulkSlice.bulk = bulk;
         bulkSlice.index = index;
-        bulkSlice.content = content.toString();
         bulkSlice.datasets = new Array<string>();
         bulkSlice.datasetOrders = new Array<string>();
 

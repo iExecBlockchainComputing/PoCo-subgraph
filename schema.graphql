@@ -347,7 +347,6 @@ type Bulk @entity(immutable: true) {
   hash: String!
   slices: [BulkSlice!] @derivedFrom(field: "bulk")
   deal: Deal! @derivedFrom(field: "bulk")
-  content: String! # raw content (is it useful?)
 }
 
 type BulkSlice @entity(immutable: true) {
@@ -358,7 +357,6 @@ type BulkSlice @entity(immutable: true) {
   index: BigInt!
   datasets: [Dataset!]!
   datasetOrders: [DatasetOrder!]!
-  content: String! # raw content (is it useful?)
 }
 
 enum TaskStatus {
