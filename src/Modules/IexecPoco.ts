@@ -132,10 +132,12 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     apporder.appprice = deal.appPrice;
     apporder.save();
 
-    let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
-    if (dataset) datasetorder.dataset = dataset;
-    datasetorder.datasetprice = deal.datasetPrice;
-    datasetorder.save();
+    if (dataset != Address.zero().toHex()) {
+        let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
+        if (dataset) datasetorder.dataset = dataset;
+        datasetorder.datasetprice = deal.datasetPrice;
+        datasetorder.save();
+    }
 
     let workerpoolorder = fetchWorkerpoolorder(event.params.workerpoolHash.toHex());
     workerpoolorder.workerpool = deal.workerpool;

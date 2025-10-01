@@ -233,8 +233,8 @@ type PolicyUpdate implements WorkerpoolEvent @entity {
 # ================================== Orders ===================================
 type AppOrder @entity {
   id: ID!
-  app: App
-  appprice: BigDecimal
+  app: App!
+  appprice: BigDecimal!
   volume: BigInt
   tag: Bytes
   datasetrestrict: Bytes
@@ -247,8 +247,8 @@ type AppOrder @entity {
 
 type DatasetOrder @entity {
   id: ID!
-  dataset: Dataset
-  datasetprice: BigDecimal
+  dataset: Dataset # nullable: off-chain bulk datasetorder could reference non-existing dataset
+  datasetprice: BigDecimal!
   volume: BigInt
   tag: Bytes
   apprestrict: Bytes
@@ -261,8 +261,8 @@ type DatasetOrder @entity {
 
 type WorkerpoolOrder @entity {
   id: ID!
-  workerpool: Workerpool
-  workerpoolprice: BigDecimal
+  workerpool: Workerpool!
+  workerpoolprice: BigDecimal!
   volume: BigInt
   tag: Bytes
   category: Category
@@ -283,7 +283,7 @@ type RequestOrder @entity {
   datasetmaxprice: BigDecimal
   workerpool: Workerpool # could be null or whitelist
   workerpoolmaxprice: BigDecimal
-  requester: Account
+  requester: Account!
   volume: BigInt
   tag: Bytes
   category: Category
@@ -334,10 +334,10 @@ type Deal @entity {
   schedulerRewardRatio: BigInt!
   sponsor: Account!
   timestamp: BigInt! # creation
-  apporder: AppOrder # todo: not available if not broadcasted
-  datasetorder: DatasetOrder # todo: not available if not broadcasted
-  workerpoolorder: WorkerpoolOrder # todo: not available if not broadcasted
-  requestorder: RequestOrder # todo: not available if not broadcasted
+  apporder: AppOrder 
+  datasetorder: DatasetOrder
+  workerpoolorder: WorkerpoolOrder
+  requestorder: RequestOrder
   events: [DealEvent!]! @derivedFrom(field: "deal")
   bulk: Bulk
 }
@@ -345,7 +345,7 @@ type Deal @entity {
 type Bulk @entity(immutable: true) {
   id: ID!
   hash: String!
-  slices: [BulkSlice!] @derivedFrom(field: "bulk")
+  slices: [BulkSlice!]! @derivedFrom(field: "bulk")
   deal: Deal! @derivedFrom(field: "bulk")
 }
 
@@ -353,7 +353,7 @@ type BulkSlice @entity(immutable: true) {
   id: ID!
   bulk: Bulk! 
   hash: String!
-  task: Task # task may not be initialized at the time of BulkSlice creation
+  task: Task # nullable: task may not be initialized at the time of BulkSlice creation
   index: BigInt!
   datasets: [Dataset!]!
   datasetOrders: [DatasetOrder!]!
