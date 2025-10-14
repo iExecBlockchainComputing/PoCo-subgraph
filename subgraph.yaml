@@ -147,8 +147,8 @@ dataSources:
           handler: handleTransferWorkerpool
       file: ./src/Registries/index.ts
 
-# ============================ Workerpool template ============================
 templates:
+  # ============================ Workerpool template ============================
   - name: Workerpool
     kind: ethereum/contract
     source:
@@ -167,3 +167,31 @@ templates:
         - event: PolicyUpdate(uint256,uint256,uint256,uint256)
           handler: handlePolicyUpdate
       file: ./src/Registries/index.ts
+  # ================================ Bulk templates ================================  
+  - kind: file/ipfs
+    name: Bulk
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Bulk
+      abis:
+        - name: IexecInterfaceToken
+          file: node_modules/@iexec/poco/artifacts/contracts/IexecInterfaceNative.sol/IexecInterfaceNative.json
+      handler: handleBulk
+      file: ./src/Modules/Bulk.ts
+  - kind: file/ipfs
+    name: BulkSlice
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - BulkSlice
+        - DatasetOrder
+      abis:
+        - name: IexecInterfaceToken
+          file: node_modules/@iexec/poco/artifacts/contracts/IexecInterfaceNative.sol/IexecInterfaceNative.json
+      handler: handleBulkSlice
+      file: ./src/Modules/Bulk.ts

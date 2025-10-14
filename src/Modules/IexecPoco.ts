@@ -1,7 +1,14 @@
 // SPDX-FileCopyrightText: 2020-2025 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
 // SPDX-License-Identifier: Apache-2.0
 
-import { Address, BigInt, dataSource } from '@graphprotocol/graph-ts';
+import {
+    Address,
+    BigInt,
+    dataSource,
+    DataSourceContext,
+    DataSourceTemplate,
+    json,
+} from '@graphprotocol/graph-ts';
 const chainName = dataSource.network();
 
 import {
@@ -34,6 +41,9 @@ import {
 } from '../../generated/schema';
 
 import {
+    CONTEXT_BOT_FIRST,
+    CONTEXT_BOT_SIZE,
+    CONTEXT_DEAL,
     createContributionID,
     createEventID,
     fetchAccount,
@@ -94,6 +104,27 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     deal.timestamp = event.block.timestamp;
     deal.save();
 
+    // if no dataset, check if params include a bulk_cid reference
+    if (deal.dataset == Address.zero().toHex()) {
+        const params = json.try_fromString(viewedDeal.params);
+        if (params.isOk) {
+            const bulkCid = params.value.toObject().getEntry('bulk_cid');
+            if (bulkCid) {
+                // the same bulk may be used by many deals => we use dealid as bulk ID to avoid collisions
+                const bulkId = event.params.dealid.toHex();
+                let context = new DataSourceContext();
+                // Pass onchain data that will be needed in file handlers
+                context.setString(CONTEXT_DEAL, deal.id);
+                context.setBigInt(CONTEXT_BOT_FIRST, deal.botFirst);
+                context.setBigInt(CONTEXT_BOT_SIZE, deal.botSize);
+                DataSourceTemplate.createWithContext('Bulk', [bulkCid.value.toString()], context);
+                // bulk may not be indexed, this is not an issue, the model will prune it
+                deal.bulk = bulkId;
+                deal.save();
+            }
+        }
+    }
+
     const dataset = deal.dataset;
 
     let apporder = fetchApporder(event.params.appHash.toHex());
@@ -101,10 +132,12 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     apporder.appprice = deal.appPrice;
     apporder.save();
 
-    let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
-    if (dataset) datasetorder.dataset = dataset;
-    datasetorder.datasetprice = deal.datasetPrice;
-    datasetorder.save();
+    if (dataset != Address.zero().toHex()) {
+        let datasetorder = fetchDatasetorder(event.params.datasetHash.toHex());
+        if (dataset) datasetorder.dataset = dataset;
+        datasetorder.datasetprice = deal.datasetPrice;
+        datasetorder.save();
+    }
 
     let workerpoolorder = fetchWorkerpoolorder(event.params.workerpoolHash.toHex());
     workerpoolorder.workerpool = deal.workerpool;
