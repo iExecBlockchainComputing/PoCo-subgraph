@@ -135,7 +135,6 @@ describe('Bulk Module', () => {
                 assert.i32Equals(loadedSlice.datasetOrders.length, 1);
                 assert.i32Equals(loadedSlice.datasets.length, 1);
                 assert.stringEquals(loadedSlice.datasets[0], datasetAddr);
-            }
         });
     });
 
