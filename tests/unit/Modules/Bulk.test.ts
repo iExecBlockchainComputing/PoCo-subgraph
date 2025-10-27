@@ -132,7 +132,6 @@ describe('Bulk Module', () => {
             // Verify BulkSlice has dataset order
             let loadedSlice = BulkSlice.load(sliceId);
             assert.assertTrue(loadedSlice != null);
-            if (loadedSlice != null) {
                 assert.i32Equals(loadedSlice.datasetOrders.length, 1);
                 assert.i32Equals(loadedSlice.datasets.length, 1);
                 assert.stringEquals(loadedSlice.datasets[0], datasetAddr);
