@@ -217,11 +217,9 @@ describe('Bulk Module', () => {
             // Verify
             let loadedSlice = BulkSlice.load(sliceId);
             assert.assertTrue(loadedSlice != null);
-            if (loadedSlice != null) {
-                assert.i32Equals(loadedSlice.datasetOrders.length, 2);
-                assert.stringEquals(loadedSlice.datasetOrders[0], orderIds[0]);
-                assert.stringEquals(loadedSlice.datasetOrders[1], orderIds[1]);
-            }
+            assert.i32Equals(loadedSlice!.datasetOrders.length, 2);
+            assert.stringEquals(loadedSlice!.datasetOrders[0], orderIds[0]);
+            assert.stringEquals(loadedSlice!.datasetOrders[1], orderIds[1]);
         });
     });
 });
