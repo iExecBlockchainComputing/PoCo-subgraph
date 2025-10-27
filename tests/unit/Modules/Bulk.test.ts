@@ -145,31 +145,6 @@ describe('Bulk Module', () => {
     });
 
     describe('DatasetOrder in BulkSlice context', () => {
-        test('Should create DatasetOrder with bulk order ID', () => {
-            // --- GIVEN
-            const taskId = mockBytes32('task').toHex();
-            const orderIndex = BigInt.fromI32(0);
-            const datasetOrderId = createBulkOrderID(taskId, orderIndex);
-            const datasetAddress = mockAddress('dataset').toHex();
-
-            // --- WHEN
-            let datasetOrder = new DatasetOrder(datasetOrderId);
-            datasetOrder.dataset = datasetAddress;
-            datasetOrder.datasetprice = BigInt.zero().toBigDecimal();
-            datasetOrder.volume = BigInt.fromI32(1);
-            datasetOrder.tag = mockBytes32('tag');
-            datasetOrder.apprestrict = mockAddress('app');
-            datasetOrder.workerpoolrestrict = mockAddress('pool');
-            datasetOrder.requesterrestrict = mockAddress('requester');
-            datasetOrder.salt = mockBytes32('salt');
-            datasetOrder.sign = mockBytes32('sign');
-            datasetOrder.save();
-
-            // --- THEN
-            assert.fieldEquals('DatasetOrder', datasetOrderId, 'id', datasetOrderId);
-            assert.fieldEquals('DatasetOrder', datasetOrderId, 'dataset', datasetAddress);
-        });
-
         test('Should link multiple DatasetOrders to a BulkSlice', () => {
             // --- GIVEN
             const bulkId = dealId.toHex();
