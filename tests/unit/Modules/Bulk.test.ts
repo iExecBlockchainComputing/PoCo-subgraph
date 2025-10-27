@@ -85,7 +85,7 @@ describe('Bulk Module', () => {
             assert.fieldEquals('BulkSlice', sliceId, 'id', sliceId);
             assert.fieldEquals('BulkSlice', sliceId, 'hash', hash);
             assert.fieldEquals('BulkSlice', sliceId, 'bulk', bulkId);
-            assert.fieldEquals('BulkSlice', sliceId, 'index', '0');
+            assert.fieldEquals('BulkSlice', sliceId, 'index', index);
         });
 
         test('Should create BulkSlice entity from JSON content with a dataset order', () => {
