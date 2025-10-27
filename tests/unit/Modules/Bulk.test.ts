@@ -88,7 +88,7 @@ describe('Bulk Module', () => {
             assert.fieldEquals('BulkSlice', sliceId, 'index', '0');
         });
 
-        test('Should create BulkSlice with dataset orders', () => {
+        test('Should create BulkSlice entity from JSON content with a dataset order', () => {
             // --- GIVEN
             const bulkId = dealId.toHex();
             const index = BigInt.fromI32(0);
