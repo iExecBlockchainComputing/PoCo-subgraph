@@ -85,7 +85,7 @@ describe('Bulk Module', () => {
             assert.fieldEquals('BulkSlice', sliceId, 'id', sliceId);
             assert.fieldEquals('BulkSlice', sliceId, 'hash', hash);
             assert.fieldEquals('BulkSlice', sliceId, 'bulk', bulkId);
-            assert.fieldEquals('BulkSlice', sliceId, 'index', index);
+            assert.fieldEquals('BulkSlice', sliceId, 'index', '0');
         });
 
         test('Should create BulkSlice entity from JSON content with a dataset order', () => {
@@ -132,9 +132,9 @@ describe('Bulk Module', () => {
             // Verify BulkSlice has dataset order
             let loadedSlice = BulkSlice.load(sliceId);
             assert.assertTrue(loadedSlice != null);
-                assert.i32Equals(loadedSlice.datasetOrders.length, 1);
-                assert.i32Equals(loadedSlice.datasets.length, 1);
-                assert.stringEquals(loadedSlice.datasets[0], datasetAddr);
+            assert.i32Equals(loadedSlice.datasetOrders.length, 1);
+            assert.i32Equals(loadedSlice.datasets.length, 1);
+            assert.stringEquals(loadedSlice.datasets[0], datasetAddr);
         });
     });
 
