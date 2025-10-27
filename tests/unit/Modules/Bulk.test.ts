@@ -60,7 +60,7 @@ describe('Bulk Module', () => {
     });
 
     describe('handleBulkSlice', () => {
-        test('Should create BulkSlice entity from JSON content with empty dataset orders', () => {
+        test('Should create BulkSlice entity from JSON content with empty dataset order', () => {
             // --- GIVEN
             const bulkId = dealId.toHex();
             const index = BigInt.fromI32(0);
