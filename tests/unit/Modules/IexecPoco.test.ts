@@ -1,8 +1,15 @@
 // SPDX-FileCopyrightText: 2024-2025 IEXEC BLOCKCHAIN TECH <contact@iex.ec>
 // SPDX-License-Identifier: Apache-2.0
 
-import { BigInt, ethereum } from '@graphprotocol/graph-ts';
-import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
+import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts';
+import {
+    assert,
+    beforeEach,
+    clearStore,
+    describe,
+    newTypedMockEventWithParams,
+    test,
+} from 'matchstick-as/assembly/index';
 import { OrdersMatched } from '../../../generated/Core/IexecInterfaceToken';
 import { App, Workerpool } from '../../../generated/schema';
 import { handleOrdersMatched } from '../../../src/Modules';
@@ -41,6 +48,10 @@ const schedulerRewardRatio = BigInt.fromI32(10);
 const sponsor = mockAddress('sponsor');
 
 describe('IexecPoco', () => {
+    beforeEach(() => {
+        clearStore();
+    });
+
     test('Should handle OrdersMatched', () => {
         // Create app and workerpool entities first (they should exist from registry)
         let app = new App(appAddress.toHex());
@@ -295,6 +306,65 @@ describe('IexecPoco', () => {
             'lastUsageTimestamp',
             timestamp2.toString(),
         );
+    });
+
+    test('Should handle OrdersMatched with bulk_cid when no dataset', () => {
+        const bulkCid = 'QmBulkCID123456789';
+        const paramsWithBulkCid = `{"bulk_cid": "${bulkCid}"}`;
+
+        // Create a deal without dataset (Address.zero()) but with bulk_cid in params
+        const dealWithBulkCid = buildDeal(
+            appAddress,
+            appOwner,
+            appPrice,
+            Address.zero(), // zero address for dataset
+            Address.zero(), // zero address for dataset owner
+            BigInt.zero(), // zero price for dataset
+            workerpoolAddress,
+            workerpoolOwner,
+            workerpoolPrice,
+            trust,
+            category,
+            tag,
+            requester,
+            beneficiary,
+            callback,
+            paramsWithBulkCid, // params containing bulk_cid
+            startTime,
+            botFirst,
+            botSize,
+            workerStake,
+            schedulerRewardRatio,
+            sponsor,
+        );
+
+        mockViewDeal(pocoAddress, dealId).returns([dealWithBulkCid]);
+
+        // Create the mock event
+        let mockEvent = newTypedMockEventWithParams<OrdersMatched>(
+            EventParamBuilder.init()
+                .bytes('dealid', dealId)
+                .bytes('appHash', appHash)
+                .bytes('datasetHash', datasetHash)
+                .bytes('workerpoolHash', workerpoolHash)
+                .bytes('requestHash', requestHash)
+                .build(),
+        );
+        mockEvent.block.timestamp = timestamp;
+        mockEvent.address = pocoAddress;
+
+        // Call the handler
+        handleOrdersMatched(mockEvent);
+
+        // Assert that the deal was created with bulk reference
+        assert.fieldEquals(
+            'Deal',
+            dealId.toHex(),
+            'dataset',
+            '0x0000000000000000000000000000000000000000',
+        );
+        assert.fieldEquals('Deal', dealId.toHex(), 'bulk', dealId.toHex()); // bulk ID should be the dealId
+        assert.fieldEquals('Deal', dealId.toHex(), 'params', paramsWithBulkCid);
     });
 });
 
