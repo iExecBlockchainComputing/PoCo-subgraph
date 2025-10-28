@@ -85,7 +85,7 @@ describe('Bulk Module', () => {
             assert.fieldEquals('BulkSlice', sliceId, 'id', sliceId);
             assert.fieldEquals('BulkSlice', sliceId, 'hash', hash);
             assert.fieldEquals('BulkSlice', sliceId, 'bulk', bulkId);
-            assert.fieldEquals('BulkSlice', sliceId, 'index', '0');
+            assert.fieldEquals('BulkSlice', sliceId, 'index', index.toString());
 
             // Verify no dataset orders are created
             let loadedSlice = BulkSlice.load(sliceId);
@@ -101,6 +101,8 @@ describe('Bulk Module', () => {
             const hash = 'QmSliceHash';
             const sliceId = createBulkSliceID(bulkId, index);
             const datasetAddr = mockAddress('dataset').toHex().toLowerCase();
+            const datasetPrice = '1000000000';
+            const volume = '1';
             const appAddr = mockAddress('app').toHex().toLowerCase();
             const poolAddr = mockAddress('pool').toHex().toLowerCase();
             const requesterAddr = mockAddress('requester').toHex().toLowerCase();
@@ -111,8 +113,8 @@ describe('Bulk Module', () => {
             // Create JSON content with one valid dataset order
             const jsonContent = `[{
                 "dataset": "${datasetAddr}",
-                "datasetprice": "1000000000",
-                "volume": "1",
+                "datasetprice": "${datasetPrice}",
+                "volume": "${volume}",
                 "tag": "${tagHex}",
                 "apprestrict": "${appAddr}",
                 "workerpoolrestrict": "${poolAddr}",
