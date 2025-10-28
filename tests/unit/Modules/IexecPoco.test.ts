@@ -4,6 +4,7 @@
 import { BigInt, ethereum } from '@graphprotocol/graph-ts';
 import { assert, describe, newTypedMockEventWithParams, test } from 'matchstick-as/assembly/index';
 import { OrdersMatched } from '../../../generated/Core/IexecInterfaceToken';
+import { App, Workerpool } from '../../../generated/schema';
 import { handleOrdersMatched } from '../../../src/Modules';
 import { toRLC } from '../../../src/utils';
 import { EventParamBuilder } from '../utils/EventParamBuilder';
@@ -41,6 +42,29 @@ const sponsor = mockAddress('sponsor');
 
 describe('IexecPoco', () => {
     test('Should handle OrdersMatched', () => {
+        // Create app and workerpool entities first (they should exist from registry)
+        let app = new App(appAddress.toHex());
+        app.owner = appOwner.toHex();
+        app.name = 'TestApp';
+        app.type = 'DOCKER';
+        app.multiaddr = mockBytes32('multiaddr');
+        app.checksum = mockBytes32('checksum');
+        app.mrenclave = mockBytes32('mrenclave');
+        app.timestamp = BigInt.zero();
+        app.usageCount = BigInt.zero();
+        app.lastUsageTimestamp = BigInt.zero();
+        app.save();
+
+        let workerpool = new Workerpool(workerpoolAddress.toHex());
+        workerpool.owner = workerpoolOwner.toHex();
+        workerpool.description = 'TestWorkerpool';
+        workerpool.workerStakeRatio = BigInt.fromI32(50);
+        workerpool.schedulerRewardRatio = BigInt.fromI32(10);
+        workerpool.timestamp = BigInt.zero();
+        workerpool.usageCount = BigInt.zero();
+        workerpool.lastUsageTimestamp = BigInt.zero();
+        workerpool.save();
+
         mockViewDeal(pocoAddress, dealId).returns([buildDefaultDeal()]);
         // Create the mock event
         let mockEvent = newTypedMockEventWithParams<OrdersMatched>(
@@ -104,6 +128,173 @@ describe('IexecPoco', () => {
         // Assert that a transaction was logged (if applicable)
         const transactionId = mockEvent.transaction.hash.toHex();
         assert.fieldEquals('Transaction', transactionId, 'id', transactionId);
+
+        // Assert that app usage statistics were updated
+        assert.fieldEquals('App', appAddress.toHex(), 'usageCount', botSize.toString());
+        assert.fieldEquals('App', appAddress.toHex(), 'lastUsageTimestamp', timestamp.toString());
+
+        // Assert that workerpool usage statistics were updated
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'usageCount',
+            botSize.toString(),
+        );
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'lastUsageTimestamp',
+            timestamp.toString(),
+        );
+    });
+
+    test('Should accumulate usage counts for multiple deals', () => {
+        const dealId1 = mockBytes32('dealId1');
+        const dealId2 = mockBytes32('dealId2');
+        const timestamp1 = BigInt.fromI32(123456789);
+        const timestamp2 = BigInt.fromI32(123456999);
+        const botSize1 = BigInt.fromI32(5);
+        const botSize2 = BigInt.fromI32(3);
+
+        // Create app and workerpool entities first (they should exist from registry)
+        let app = new App(appAddress.toHex());
+        app.owner = appOwner.toHex();
+        app.name = 'TestApp';
+        app.type = 'DOCKER';
+        app.multiaddr = mockBytes32('multiaddr');
+        app.checksum = mockBytes32('checksum');
+        app.mrenclave = mockBytes32('mrenclave');
+        app.timestamp = BigInt.zero();
+        app.usageCount = BigInt.zero();
+        app.lastUsageTimestamp = BigInt.zero();
+        app.save();
+
+        let workerpool = new Workerpool(workerpoolAddress.toHex());
+        workerpool.owner = workerpoolOwner.toHex();
+        workerpool.description = 'TestWorkerpool';
+        workerpool.workerStakeRatio = BigInt.fromI32(50);
+        workerpool.schedulerRewardRatio = BigInt.fromI32(10);
+        workerpool.timestamp = BigInt.zero();
+        workerpool.usageCount = BigInt.zero();
+        workerpool.lastUsageTimestamp = BigInt.zero();
+        workerpool.save();
+
+        // First deal
+        mockViewDeal(pocoAddress, dealId1).returns([
+            buildDeal(
+                appAddress,
+                appOwner,
+                appPrice,
+                datasetAddress,
+                datasetOwner,
+                datasetPrice,
+                workerpoolAddress,
+                workerpoolOwner,
+                workerpoolPrice,
+                trust,
+                category,
+                tag,
+                requester,
+                beneficiary,
+                callback,
+                params,
+                startTime,
+                botFirst,
+                botSize1,
+                workerStake,
+                schedulerRewardRatio,
+                sponsor,
+            ),
+        ]);
+
+        let mockEvent1 = newTypedMockEventWithParams<OrdersMatched>(
+            EventParamBuilder.init()
+                .bytes('dealid', dealId1)
+                .bytes('appHash', appHash)
+                .bytes('datasetHash', datasetHash)
+                .bytes('workerpoolHash', workerpoolHash)
+                .bytes('requestHash', requestHash)
+                .build(),
+        );
+        mockEvent1.block.timestamp = timestamp1;
+        mockEvent1.address = pocoAddress;
+
+        handleOrdersMatched(mockEvent1);
+
+        // Verify first deal usage
+        assert.fieldEquals('App', appAddress.toHex(), 'usageCount', botSize1.toString());
+        assert.fieldEquals('App', appAddress.toHex(), 'lastUsageTimestamp', timestamp1.toString());
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'usageCount',
+            botSize1.toString(),
+        );
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'lastUsageTimestamp',
+            timestamp1.toString(),
+        );
+
+        // Second deal
+        mockViewDeal(pocoAddress, dealId2).returns([
+            buildDeal(
+                appAddress,
+                appOwner,
+                appPrice,
+                datasetAddress,
+                datasetOwner,
+                datasetPrice,
+                workerpoolAddress,
+                workerpoolOwner,
+                workerpoolPrice,
+                trust,
+                category,
+                tag,
+                requester,
+                beneficiary,
+                callback,
+                params,
+                startTime,
+                botFirst,
+                botSize2,
+                workerStake,
+                schedulerRewardRatio,
+                sponsor,
+            ),
+        ]);
+
+        let mockEvent2 = newTypedMockEventWithParams<OrdersMatched>(
+            EventParamBuilder.init()
+                .bytes('dealid', dealId2)
+                .bytes('appHash', mockBytes32('appHash2'))
+                .bytes('datasetHash', mockBytes32('datasetHash2'))
+                .bytes('workerpoolHash', mockBytes32('workerpoolHash2'))
+                .bytes('requestHash', mockBytes32('requestHash2'))
+                .build(),
+        );
+        mockEvent2.block.timestamp = timestamp2;
+        mockEvent2.address = pocoAddress;
+
+        handleOrdersMatched(mockEvent2);
+
+        // Verify accumulated usage
+        const totalUsage = botSize1.plus(botSize2);
+        assert.fieldEquals('App', appAddress.toHex(), 'usageCount', totalUsage.toString());
+        assert.fieldEquals('App', appAddress.toHex(), 'lastUsageTimestamp', timestamp2.toString());
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'usageCount',
+            totalUsage.toString(),
+        );
+        assert.fieldEquals(
+            'Workerpool',
+            workerpoolAddress.toHex(),
+            'lastUsageTimestamp',
+            timestamp2.toString(),
+        );
     });
 });
 

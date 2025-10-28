@@ -47,6 +47,8 @@ export function handleTransferApp(ev: TransferEvent): void {
   app.checksum = contract.m_appChecksum();
   app.mrenclave = contract.m_appMREnclave();
   app.timestamp = ev.block.timestamp;
+  app.usageCount = BigInt.zero();
+  app.lastUsageTimestamp = BigInt.zero();
   app.save();
 
   let transfer = new AppTransfer(createEventID(ev));

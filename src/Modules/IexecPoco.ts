@@ -47,6 +47,7 @@ import {
     createContributionID,
     createEventID,
     fetchAccount,
+    fetchApp,
     fetchApporder,
     fetchContribution,
     fetchDatasetorder,
@@ -54,6 +55,7 @@ import {
     fetchProtocol,
     fetchRequestorder,
     fetchTask,
+    fetchWorkerpool,
     fetchWorkerpoolorder,
     logTransaction,
     toRLC,
@@ -147,6 +149,22 @@ export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     let requestorder = fetchRequestorder(event.params.requestHash.toHex());
     requestorder.requester = viewedDeal.requester.toHex();
     requestorder.save();
+
+    // Update app usage statistics
+    let app = fetchApp(deal.app);
+    if (app != null) {
+        app.usageCount = app.usageCount.plus(deal.botSize);
+        app.lastUsageTimestamp = event.block.timestamp;
+        app.save();
+    }
+
+    // Update workerpool usage statistics
+    let workerpool = fetchWorkerpool(deal.workerpool);
+    if (workerpool != null) {
+        workerpool.usageCount = workerpool.usageCount.plus(deal.botSize);
+        workerpool.lastUsageTimestamp = event.block.timestamp;
+        workerpool.save();
+    }
 
     let orderMatchedEvent = new OrdersMatched(createEventID(event));
     orderMatchedEvent.transaction = logTransaction(event).id;

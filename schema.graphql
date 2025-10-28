@@ -136,6 +136,8 @@ type App implements Ressource @entity {
   checksum: Bytes!
   mrenclave: Bytes!
   timestamp: BigInt! # last transfer
+  usageCount: BigInt!
+  lastUsageTimestamp: BigInt!
   usages: [Deal!]! @derivedFrom(field: "app")
   orders: [AppOrder!]! @derivedFrom(field: "app")
   transfers: [AppTransfer!]! @derivedFrom(field: "app")
@@ -161,6 +163,8 @@ type Workerpool implements Ressource @entity {
   workerStakeRatio: BigInt!
   schedulerRewardRatio: BigInt!
   timestamp: BigInt! # last transfer
+  usageCount: BigInt!
+  lastUsageTimestamp: BigInt!
   usages: [Deal!]! @derivedFrom(field: "workerpool")
   orders: [WorkerpoolOrder!]! @derivedFrom(field: "workerpool")
   events: [WorkerpoolEvent!]! @derivedFrom(field: "workerpool")
