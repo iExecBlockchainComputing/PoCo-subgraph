@@ -24,15 +24,17 @@ jobs:
       node-version: 20
       
   deploy:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: Azure_runners
+    needs: build-and-test
     # Associate the job with a GitHub Environment which has pre-defined variables and secrets.
     environment: ${{ github.event.inputs.environment }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: 'npm'
