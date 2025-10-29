@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.0.0...v2.1.0) (2025-10-29)
+
+
+### 🚀 Features
+
+* add unit tests for Bulk and BulkSlice entities ([#59](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/59)) ([a10d31f](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/a10d31ffdc02de22b5ac768cb701fab5d2ad43be))
+* add usage tracking for `app` and `workerpool` ([#60](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/60)) ([c7a2ad3](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/c7a2ad30ae7124cd1efda74da6b08e8069ec524c))
+* index bulks ([#57](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/57)) ([0462170](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/0462170920a58416a2dc4260e1528e0e88adc036))
+
 ## [2.0.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v1.1.0...v2.0.0) (2025-08-14)
 
 ### 🚀 Changes
