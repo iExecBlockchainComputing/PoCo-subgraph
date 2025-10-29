@@ -13,6 +13,7 @@ import {
 
 import {
     Account,
+    App,
     AppOrder,
     Bulk,
     BulkSlice,
@@ -23,6 +24,7 @@ import {
     RequestOrder,
     Task,
     Transaction,
+    Workerpool,
     WorkerpoolOrder,
 } from '../generated/schema';
 
@@ -70,6 +72,14 @@ export function fetchAccount(id: string): Account {
         account.score = BigInt.zero();
     }
     return account as Account;
+}
+
+export function fetchApp(id: string): App | null {
+    return App.load(id);
+}
+
+export function fetchWorkerpool(id: string): Workerpool | null {
+    return Workerpool.load(id);
 }
 
 export function fetchDeal(id: string): Deal {
