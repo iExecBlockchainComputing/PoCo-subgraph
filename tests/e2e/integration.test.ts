@@ -6,7 +6,7 @@ import { env } from '../../config/env';
 import { AppRegistry__factory, IexecInterfaceToken__factory } from '../../generated/typechain';
 import config from '../../networks.json' with { type: 'json' };
 
-const APIURL = `http://localhost:8000/subgraphs/name/${env.NETWORK_NAME}/poco`;
+const APIURL = `http://localhost:8000/subgraphs/name/${env.NETWORK_NAME}/poco-v5`;
 const client = new ApolloClient({
     uri: APIURL,
     cache: new InMemoryCache(),
