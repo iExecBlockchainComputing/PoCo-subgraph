@@ -49,7 +49,6 @@ jobs:
           GRAPHNODE_URL: ${{ vars.GRAPHNODE_URL }}
           IPFS_URL: ${{ vars.IPFS_URL }}
           DEPLOY_ENV: ${{ vars.ENV_NAME }}
-          NODE_TLS_REJECT_UNAUTHORIZED: '0'
         run: |
           echo "Starting deployment with the following parameters:"
           echo "  Network Name: $NETWORK_NAME"
