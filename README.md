@@ -114,6 +114,43 @@ docker run --rm \
   poco-subgraph-deployer
 ```
 
+#### Manual Deployment with Custom Values
+
+To deploy the subgraph manually using the deploy script, follow these steps:
+
+1. Set up environment variables in the `.env` file:
+
+   ```bash
+   NETWORK_NAME=<network-name>
+   DEPLOY_ENV=<deploy-environment>
+   IPFS_URL=<ipfs-url>
+   GRAPHNODE_URL=<graphnode-url>
+   VERSION_LABEL=<version-label>
+   ```
+
+   Example:
+
+   ```bash
+   NETWORK_NAME=bellecour
+   DEPLOY_ENV=staging
+   IPFS_URL=http://localhost:5001
+   GRAPHNODE_URL=http://localhost:8020
+   VERSION_LABEL=1.0.0
+   ```
+
+   **DEPLOY_ENV Possible Values:**
+   - `''`: For production deployment.
+   - `'tmp'`: For temporary indexing and avoiding downtime during production deployment.
+   - `'staging'`: For staging environment deployment.
+
+2. Run the deploy script:
+
+   ```bash
+   npm run deploy
+   ```
+
+   This will deploy the subgraph using the specified values, including the `DEPLOY_ENV` variable for environment-specific configurations.
+
 #### Github Actions pipeline deployment
 
 The subgraph can be deployed using Github Actions (recommended). The dedicated job can be triggered with the desired configuration (environment, version, ...).
