@@ -25,6 +25,7 @@ jobs:
             echo "computed_tag=${latest_tag}+dev+${GITHUB_SHA}" >> $GITHUB_OUTPUT
           else
             echo "computed_tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          fi
 
   build:
     needs: compute-tag
