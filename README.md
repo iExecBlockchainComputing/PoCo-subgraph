@@ -139,9 +139,9 @@ To deploy the subgraph manually using the deploy script, follow these steps:
    ```
 
    **DEPLOY_ENV Possible Values:**
-   - `empty`: For production deployment.
-   - `tmp`: For temporary indexing and avoiding downtime during production deployment.
-   - `staging`: For staging environment deployment.
+   - `''`: For production deployment.
+   - `'tmp'`: For temporary indexing and avoiding downtime during production deployment.
+   - `'staging'`: For staging environment deployment.
 
 2. Run the deploy script:
 
