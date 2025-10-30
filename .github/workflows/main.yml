@@ -45,3 +45,8 @@ jobs:
 
       - name: Run integration tests
         run: npm run test:e2e
+
+  deployer-docker-dry-run:
+    uses: ./.github/workflows/reusable-subgraph-deployer-docker.yml
+    with:
+      dry-run: true
