@@ -6,7 +6,7 @@ jobs:
   build-test:
     uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v2.3.1
     with:
-      image-name: 'iexechub/voucher-subgraph-deployer'
+      image-name: 'iexechub/poco-subgraph-deployer'
       image-tag: ${{ github.sha }}
       push: false
       security-scan: true

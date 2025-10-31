@@ -25,16 +25,13 @@ jobs:
             echo "computed_tag=${latest_tag}+dev+${GITHUB_SHA}" >> $GITHUB_OUTPUT
           else
             echo "computed_tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          fi
 
   build:
     needs: compute-tag
-    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v2.3.1
+    uses: ./.github/workflows/reusable-subgraph-deployer-docker.yml
     with:
-      image-name: 'iexechub/voucher-subgraph-deployer'
-      image-tag: ${{ needs.compute-tag.outputs.computed_tag }}
-      security-scan: false
-      hadolint: false
-      push: true
+      tag: ${{ needs.compute-tag.outputs.computed_tag }}
     secrets:
-      username: ${{ secrets.DOCKERHUB_USERNAME }}
-      password: ${{ secrets.DOCKERHUB_PAT }}
+      docker-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      docker-password: ${{ secrets.DOCKERHUB_PAT }}
