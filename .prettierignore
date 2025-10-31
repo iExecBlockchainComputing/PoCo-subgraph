@@ -1,6 +1,3 @@
 *.graphql
 *.md
 *.yml
-
-##TODO: To remove and format this folder in an other PR
-src/** 
