@@ -10,7 +10,7 @@ on:
         type: choice
         options:
           - staging
-          - production
+          - prod
           - tmp
       versionLabel:
         description: 'Version Label for Subgraph Deployment'
