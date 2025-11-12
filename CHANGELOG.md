@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.1](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.1.0...v2.1.1) (2025-11-10)
+
+
+### 🐞 Bug Fixes
+
+* add missing fi statement and rename published image ([#64](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/64)) ([adce9d6](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/adce9d6864b343b8651b1d711d06d98e8aa6a445))
+* deployment ci for `bellecour` network ([#61](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/61)) ([19d7658](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/19d76589435cc081cabb612e2436c47a8bb774a6))
+* deployment scripts for consistency with versioning ([#63](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/63)) ([7b1c57c](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/7b1c57c9cfc09b1e72cbad0ef4ff618263a93a79))
+* format code ([#65](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/65)) ([068fe2a](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/068fe2a128ef672cf164578888337f81fa75348b))
+* update deployment environment option from 'production' to 'prod' ([#66](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/66)) ([d9cc130](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/d9cc1306f068e71237f7b16dd8147d2e34fa83e7))
+
 ## [2.1.0](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.0.0...v2.1.0) (2025-10-29)
 
 
