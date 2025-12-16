@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.2](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.1.1...v2.1.2) (2025-12-16)
+
+
+### 🐞 Bug Fixes
+
+* allow updating start block with START_BLOCK env ([#67](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/67)) ([0794cf8](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/0794cf86a4af314eac9d78b74c31c307a4421f5c))
+
 ## [2.1.1](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.1.0...v2.1.1) (2025-11-10)
 
 
