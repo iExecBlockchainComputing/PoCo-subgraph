@@ -8,6 +8,7 @@ COPY package*.json .
 COPY schema.graphql .
 COPY subgraph.yaml .
 COPY networks.json .
+COPY update-networks.js .
 COPY src ./src
 
 RUN npm ci
