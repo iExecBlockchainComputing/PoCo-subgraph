@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.1.2...v2.1.3) (2026-08-14)
+
+
+### 🧰 Other
+
+* remove deprecated deploy-subgraph workflow ([#69](https://github.com/iExecBlockchainComputing/PoCo-subgraph/issues/69)) ([167b03f](https://github.com/iExecBlockchainComputing/PoCo-subgraph/commit/167b03f853999017dcd92881047b1d04d11d6442))
+
 ## [2.1.2](https://github.com/iExecBlockchainComputing/PoCo-subgraph/compare/v2.1.1...v2.1.2) (2025-12-16)
 
 
