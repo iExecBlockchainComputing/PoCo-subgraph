@@ -4,9 +4,12 @@ on: [pull_request]
 
 jobs:
   build-test:
-    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v2.3.1
+    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v3.5.1
     with:
       image-name: 'iexechub/poco-subgraph-deployer'
       image-tag: ${{ github.sha }}
       push: false
       security-scan: true
+    secrets:
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN_PULL_ONLY }}

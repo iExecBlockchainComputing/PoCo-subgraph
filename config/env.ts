@@ -9,7 +9,7 @@ const envSchema = z.object({
             message: 'DEPLOY_ENV must be one of: tmp, staging, or empty',
         }),
 
-    NETWORK_NAME: z.string().min(1, 'NETWORK_NAME is required').default('bellecour'),
+    NETWORK_NAME: z.string().min(1, 'NETWORK_NAME is required').default('arbitrum-sepolia'),
 
     GRAPHNODE_URL: z
         .string()

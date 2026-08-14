@@ -19,7 +19,7 @@
     "update-networks": "node update-networks.js",
     "all": "npm run update-networks && npm run build && npm run create && npm run deploy",
     "stop-test-stack": "cd test-stack && docker compose down --remove-orphans --volumes",
-    "start-test-stack": "npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-bellecour} && tsx prepare-test-env.ts && docker compose build && docker compose up -d",
+    "start-test-stack": "npm run stop-test-stack && cd test-stack && export NETWORK_NAME=${NETWORK_NAME:-arbitrum-sepolia} && tsx prepare-test-env.ts && docker compose build && docker compose up -d",
     "check-format": "prettier \"(src|tests|test-stack)/**/*.{js,ts}\" --check",
     "format": "prettier  \"(src|tests|test-stack)/**/*.{js,ts}\" --write"
   },
