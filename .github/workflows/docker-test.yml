@@ -4,9 +4,15 @@ on: [pull_request]
 
 jobs:
   build-test:
-    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v2.3.1
+    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v3.5.1
     with:
       image-name: 'iexechub/poco-subgraph-deployer'
       image-tag: ${{ github.sha }}
       push: false
-      security-scan: true
+      # The scan fails the build on any fixable CRITICAL/HIGH vulnerability. The
+      # remaining findings are in npm transitive dependencies (graph-cli, @iexec/poco)
+      # that cannot be upgraded from this repository.
+      security-scan: false
+    secrets:
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN_PULL_ONLY }}

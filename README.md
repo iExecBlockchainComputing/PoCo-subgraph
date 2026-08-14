@@ -102,7 +102,7 @@ docker build -f docker/Dockerfile . -t poco-subgraph-deployer
 
 env:
 
-- `NETWORK_NAME` (optional): custom graphnode network name (default bellecour)
+- `NETWORK_NAME` (optional): custom graphnode network name (default arbitrum-sepolia)
 - `IPFS_URL`: IPFS admin api url
 - `GRAPHNODE_URL`: graphnode admin api url
 
@@ -131,7 +131,7 @@ To deploy the subgraph manually using the deploy script, follow these steps:
    Example:
 
    ```bash
-   NETWORK_NAME=bellecour
+   NETWORK_NAME=arbitrum-sepolia
    DEPLOY_ENV=staging
    IPFS_URL=http://localhost:5001
    GRAPHNODE_URL=http://localhost:8020
@@ -209,4 +209,3 @@ Changes to this project are tracked in [CHANGELOG.md](./CHANGELOG.md)
 ## TODO
 
 - Rename the `Core` key to `Diamond` in `networks.json` and update all references accordingly.
-- Remove support and configuration entries for the `bellecour` network from `networks.json`, GHA pipeline, and related documentation.

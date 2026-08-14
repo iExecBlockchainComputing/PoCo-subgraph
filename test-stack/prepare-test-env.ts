@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const forkUrl = process.env.FORK_URL || 'https://bellecour.iex.ec';
+const forkUrl = process.env.FORK_URL || 'https://sepolia-rollup.arbitrum.io/rpc';
 const networkName = process.env.NETWORK_NAME; // Get the network name from env
 
 // Path to the networks.json file (one directory up)
@@ -42,15 +42,18 @@ async function createEnvFiles(forkBlockNumber: number) {
             '# blockchain node to use as the reference for the local fork\n' +
             `FORK_URL=${forkUrl}\n` +
             '# block number to fork from\n' +
-            `FORK_BLOCK=${forkBlockNumber}\n`,
+            `FORK_BLOCK=${forkBlockNumber}\n` +
+            '# first block indexed by graph-node (the fork block itself is a real network\n' +
+            '# block whose non-standard transaction receipts cannot be served by anvil)\n' +
+            `GENESIS_BLOCK=${forkBlockNumber + 1}\n`,
     );
 }
 
 /**
- * Update networks.json file with the current block number
- * @param {number} forkBlockNumber - The block number to fork from
+ * Update networks.json file with the first block to index
+ * @param {number} startBlockNumber - The block number to start indexing from
  */
-async function updateNetworksFile(forkBlockNumber: number) {
+async function updateNetworksFile(startBlockNumber: number) {
     if (!networkName) {
         console.warn(
             'No NETWORK_NAME environment variable provided. The networks.json file will not be updated.',
@@ -71,11 +74,11 @@ async function updateNetworksFile(forkBlockNumber: number) {
 
         // Check if the specified network exists in the file
         if (networksData[networkName]) {
-            console.log(`Updating startBlock for network '${networkName}' to ${forkBlockNumber}`);
+            console.log(`Updating startBlock for network '${networkName}' to ${startBlockNumber}`);
 
             // Update all startBlock values for the specified network
             Object.keys(networksData[networkName]).forEach((contract) => {
-                networksData[networkName][contract].startBlock = forkBlockNumber;
+                networksData[networkName][contract].startBlock = startBlockNumber;
             });
 
             // Write the updated networks.json file
@@ -96,7 +99,8 @@ async function main() {
     try {
         const forkBlockNumber = await getCurrentBlockNumber();
         await createEnvFiles(forkBlockNumber);
-        await updateNetworksFile(forkBlockNumber);
+        // Index from the first block produced by the local fork
+        await updateNetworksFile(forkBlockNumber + 1);
     } catch (error) {
         console.error(`Error in main process: ${error}`);
         process.exit(1);

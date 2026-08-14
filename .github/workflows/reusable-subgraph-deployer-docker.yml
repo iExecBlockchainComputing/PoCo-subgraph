@@ -18,10 +18,16 @@ on:
       docker-password:
         description: 'Docker registry password or PAT (required unless `dry-run: true`)'
         required: false
+      dockerhub-username:
+        description: 'Docker Hub username used to pull base images (avoids rate limiting)'
+        required: true
+      dockerhub-password:
+        description: 'Docker Hub pull-only token'
+        required: true
 
 jobs:
   docker-publish:
-    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v2.3.1
+    uses: iExecBlockchainComputing/github-actions-workflows/.github/workflows/docker-build.yml@docker-build-v3.5.1
     with:
       image-name: 'iexechub/poco-subgraph-deployer'
       security-scan: false
@@ -31,3 +37,5 @@ jobs:
     secrets:
       username: ${{ secrets.docker-username }}
       password: ${{ secrets.docker-password }}
+      dockerhub-username: ${{ secrets.dockerhub-username }}
+      dockerhub-password: ${{ secrets.dockerhub-password }}

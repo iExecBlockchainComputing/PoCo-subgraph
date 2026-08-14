@@ -1,6 +1,9 @@
 # iexec-poco-subgraph deployer
 
-FROM node:20
+FROM node:20-slim
+
+# Apply latest security patches on top of the base image
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /iexec-poco-subgraph
 

@@ -18,6 +18,8 @@ describe('Integration tests', () => {
     it('should index a newly created app', async () => {
         const provider = new JsonRpcProvider(`http://localhost:8545`);
         const wallet = Wallet.createRandom(provider);
+        // Fund the random wallet with fork native tokens to pay transaction fees
+        await provider.send('anvil_setBalance', [wallet.address, '0x21e19e0c9bab2400000']);
 
         const iexecProxy = IexecInterfaceToken__factory.connect(iexecProxyAddress, wallet);
         const appRegistryAddress = await iexecProxy.appregistry();
