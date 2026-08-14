@@ -4,12 +4,10 @@
 import {
     Address,
     BigInt,
-    dataSource,
     DataSourceContext,
     DataSourceTemplate,
     json,
 } from '@graphprotocol/graph-ts';
-const chainName = dataSource.network();
 
 import {
     AccurateContribution as AccurateContributionEvent,
@@ -64,13 +62,7 @@ import {
 export function handleOrdersMatched(event: OrdersMatchedEvent): void {
     let contract = IexecInterfaceTokenContract.bind(event.address);
     let viewedDeal = contract.viewDeal(event.params.dealid);
-    // The `sponsor` has been introduced on Bellecour for the PoCo v5.5.0 release:
-    // https://blockscout.bellecour.iex.ec/tx/0x71b904f526a9be218d35748f57d74ef6da20d12c88f94cfa1ec5ae2de187cb98
-    // TODO: Use grafting instead, see https://thegraph.com/docs/en/subgraphs/cookbook/grafting/
-    const sponsor =
-        chainName == 'bellecour' && event.block.number < BigInt.fromI32(30277938)
-            ? Address.zero().toHexString()
-            : viewedDeal.sponsor.toHex();
+    const sponsor = viewedDeal.sponsor.toHex();
     fetchAccount(viewedDeal.requester.toHex()).save();
     fetchAccount(viewedDeal.beneficiary.toHex()).save();
     fetchAccount(viewedDeal.callback.toHex()).save();
